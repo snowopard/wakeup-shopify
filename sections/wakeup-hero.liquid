@@ -1,0 +1,291 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Wake Up — Hero (THE NIGHT IS YOURS)
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign eyebrow                        = section.settings.eyebrow -%}
+{%- assign heading                        = section.settings.heading -%}
+{%- assign supporting_text                = section.settings.supporting_text -%}
+{%- assign cta_label                      = section.settings.cta_label -%}
+{%- assign cta_link                       = section.settings.cta_link -%}
+{%- assign cta_aria_label                 = section.settings.cta_aria_label -%}
+
+{%- assign background_image               = section.settings.background_image | default: section.settings.background_image_mobile -%}
+{%- assign background_image_mobile        = section.settings.background_image_mobile -%}
+{%- assign product_image                  = section.settings.product_image | default: section.settings.product_image_mobile -%}
+{%- assign product_image_mobile           = section.settings.product_image_mobile -%}
+{%- assign overlay_strength               = section.settings.overlay_strength -%}
+
+{%- assign section_height                 = section.settings.section_height -%}
+{%- assign product_position               = section.settings.product_position -%}
+{%- assign show_scroll_cue                = section.settings.show_scroll_cue -%}
+
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme                    = section.settings.color_scheme -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- assign enable_lazy_load = true -%}
+{%- assign allow_transparent_header = false -%}
+
+{%- if section.index == 1 -%}
+	{%- assign enable_lazy_load = false -%}
+
+	{%- if template.name == 'index' -%}
+		{%- assign allow_transparent_header = true -%}
+	{%- endif -%}
+{%- endif -%}
+
+{{ 'wakeup-hero.css' | asset_url | stylesheet_tag }}
+
+{%- capture hero_styles -%}
+	--wakeup-hero-min-height: {{ section_height }};
+	--wu-hero-overlay-opacity: {{ overlay_strength | divided_by: 100.0 }};
+{%- endcapture -%}
+
+<section
+	class="wakeup-hero js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} {% if allow_transparent_header %}allow-transparent-header{% endif %} {% if color_scheme != blank %}color-{{ color_scheme.id }}{% endif %}"
+	data-wu-theme="night"
+	data-product-position="{{ product_position }}"
+	style="{{ hero_styles | strip_newlines }}"
+>
+	<div class="wakeup-hero__media" aria-hidden="true">
+		{%- render 'theme-image',
+			image: background_image,
+			mobile_image: background_image_mobile,
+			mobile_breakpoint: '767',
+			img_class: 'wakeup-hero__bg-img',
+			picture_class: 'wakeup-hero__bg-picture',
+			alt: '',
+			lazy: enable_lazy_load,
+			src_width: 1600,
+			src_crop: 'center',
+			breakpoints: '480, 767, 1024, 1440, 1920',
+			widths: '480, 767, 1024, 1440, 1920',
+			svg_placeholder_name: 'lifestyle-1'
+		-%}
+
+		<div class="wakeup-hero__overlay"></div>
+	</div>
+
+	{%- if product_image != blank or product_image_mobile != blank -%}
+		<div class="wakeup-hero__product need-animate">
+			{%- render 'theme-image',
+				image: product_image,
+				mobile_image: product_image_mobile,
+				mobile_breakpoint: '767',
+				img_class: 'wakeup-hero__product-img',
+				picture_class: 'wakeup-hero__product-picture',
+				alt: product_image.alt,
+				lazy: enable_lazy_load,
+				src_width: 700,
+				svg_placeholder_name: 'product-1'
+			-%}
+		</div>
+	{%- endif -%}
+
+	<div class="wakeup-hero__content">
+		<div class="wu-container wakeup-hero__inner">
+			{%- if eyebrow != blank -%}
+				<p class="wu-eyebrow wakeup-hero__eyebrow need-animate">{{- eyebrow -}}</p>
+			{%- endif -%}
+
+			{%- if heading != blank -%}
+				<h1 class="wu-heading wu-heading--display wakeup-hero__heading need-animate">{{- heading -}}</h1>
+			{%- endif -%}
+
+			{%- if supporting_text != blank -%}
+				<div class="wu-body wakeup-hero__text need-animate">{{- supporting_text -}}</div>
+			{%- endif -%}
+
+			{%- if cta_label != blank and cta_link != blank -%}
+				<div class="wakeup-hero__cta need-animate">
+					<a
+						href="{{ cta_link }}"
+						class="button button--primary"
+						{% if cta_aria_label != blank %}
+							aria-label="{{ cta_aria_label | escape }}"
+						{% endif %}
+					>
+						<span class="button__outer"></span>
+						{{- cta_label -}}
+					</a>
+				</div>
+			{%- endif -%}
+		</div>
+	</div>
+
+	{%- if show_scroll_cue -%}
+		<div class="wakeup-hero__scroll-cue" aria-hidden="true">
+			<span class="wakeup-hero__scroll-line"></span>
+		</div>
+	{%- endif -%}
+</section>
+
+{%- schema -%}
+{
+	"name": "Wake Up: Hero",
+	"class": "shopify-section--wakeup-hero",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Content"
+		},
+		{
+			"type": "text",
+			"id": "eyebrow",
+			"label": "Eyebrow / small text",
+			"default": "RIP. SIP. RISE."
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "THE NIGHT IS YOURS"
+		},
+		{
+			"type": "richtext",
+			"id": "supporting_text",
+			"label": "Supporting text",
+			"default": "<p>A premium ritual for nights that don't have to end.</p>"
+		},
+		{
+			"type": "text",
+			"id": "cta_label",
+			"label": "CTA label",
+			"default": "Discover the Ritual"
+		},
+		{
+			"type": "url",
+			"id": "cta_link",
+			"label": "CTA link",
+			"default": "/"
+		},
+		{
+			"type": "text",
+			"id": "cta_aria_label",
+			"label": "CTA aria-label",
+			"info": "Optional. Use for extra context needed by screen reader users."
+		},
+		{
+			"type": "header",
+			"content": "Media"
+		},
+		{
+			"type": "image_picker",
+			"id": "background_image",
+			"label": "Background image (desktop)",
+			"info": "Nightlife / atmosphere image. 2400px width recommended."
+		},
+		{
+			"type": "image_picker",
+			"id": "background_image_mobile",
+			"label": "Background image (mobile)",
+			"info": "Optional. Falls back to the desktop image if not set. 1200px width recommended."
+		},
+		{
+			"type": "image_picker",
+			"id": "product_image",
+			"label": "Product / sachet image",
+			"info": "Kept separate from the background so it can be repositioned or animated independently. Transparent PNG recommended, 1200px width."
+		},
+		{
+			"type": "image_picker",
+			"id": "product_image_mobile",
+			"label": "Product / sachet image (mobile)",
+			"info": "Optional. Falls back to the desktop product image if not set."
+		},
+		{
+			"type": "range",
+			"id": "overlay_strength",
+			"label": "Overlay strength",
+			"min": 0,
+			"max": 90,
+			"step": 5,
+			"unit": "%",
+			"default": 55,
+			"info": "Darkens the background image for text legibility."
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "section_height",
+			"label": "Section height",
+			"options": [
+				{
+					"value": "100svh",
+					"label": "Full screen (recommended)"
+				},
+				{
+					"value": "90svh",
+					"label": "Tall"
+				},
+				{
+					"value": "auto",
+					"label": "Auto (content height)"
+				}
+			],
+			"default": "100svh"
+		},
+		{
+			"type": "select",
+			"id": "product_position",
+			"label": "Product position (desktop)",
+			"info": "On mobile the product image always sits centered above the text.",
+			"options": [
+				{
+					"value": "right",
+					"label": "Right"
+				},
+				{
+					"value": "left",
+					"label": "Left"
+				},
+				{
+					"value": "center",
+					"label": "Center"
+				}
+			],
+			"default": "right"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_scroll_cue",
+			"label": "Show scroll-down cue",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": false,
+			"info": "The Hero uses its own night palette by default. Enable this to force it to follow the theme's main color scheme instead."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1",
+			"info": "Only affects elements that don't already use the Wake Up night palette."
+		}
+	],
+	"presets": [
+		{
+			"name": "Wake Up: Hero"
+		}
+	]
+}
+{%- endschema -%}
