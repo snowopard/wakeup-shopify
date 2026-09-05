@@ -1,0 +1,189 @@
+/* Wake Up Babalaza — design tokens + shared story primitives.
+   Loaded once globally. Reuses theme font/timing vars from
+   custom-variables.css.liquid rather than redefining them. */
+
+:root {
+	/* Night palette */
+	--wu-night-950: #07060c;
+	--wu-night-900: #0d0b16;
+	--wu-night-800: #17132a;
+	--wu-night-700: #241d3d;
+	--wu-night-ink: #f5f3ff;
+	--wu-neon-pink: #ff3d81;
+	--wu-neon-violet: #8b5cf6;
+	--wu-neon-cyan: #4fd6ff;
+
+	/* Morning palette */
+	--wu-morning-050: #fffaf0;
+	--wu-morning-100: #fef1dd;
+	--wu-morning-200: #ffe1b3;
+	--wu-morning-ink: #241d3d;
+	--wu-sunrise-gold: #ffb347;
+	--wu-sunrise-coral: #ff7a59;
+	--wu-sky-blue: #7fd8e8;
+
+	/* Neutrals */
+	--wu-white: #ffffff;
+	--wu-black: #000000;
+
+	/* Spacing scale (4px base) */
+	--wu-space-1: 0.25rem;
+	--wu-space-2: 0.5rem;
+	--wu-space-3: 1rem;
+	--wu-space-4: 1.5rem;
+	--wu-space-5: 2.5rem;
+	--wu-space-6: 4rem;
+	--wu-space-7: 6rem;
+	--wu-space-8: 9rem;
+
+	/* Type scale — fluid, mobile-first (clamp min/preferred/max) */
+	--wu-fs-eyebrow: clamp(0.75rem, 0.65rem + 0.3vw, 0.875rem);
+	--wu-fs-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+	--wu-fs-h3: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
+	--wu-fs-h2: clamp(2rem, 1.6rem + 1.6vw, 3rem);
+	--wu-fs-h1: clamp(2.75rem, 2rem + 3vw, 5.5rem);
+	--wu-fs-display: clamp(3.5rem, 2.4rem + 5vw, 8rem);
+
+	/* Shared component tokens */
+	--wu-container-width: min(100% - 2.5rem, 1200px);
+	--wu-radius: 999px;
+	--wu-radius-soft: 20px;
+	--wu-section-padding-block: var(--wu-space-6) var(--wu-space-6);
+
+	/* Reuse theme timing tokens where available, with fallbacks */
+	--wu-timing-base: var(--timing-base, 0.4s);
+	--wu-timing-long: var(--timing-long, 0.7s);
+	--wu-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 768px) {
+	:root {
+		--wu-section-padding-block: var(--wu-space-8) var(--wu-space-8);
+	}
+}
+
+/* Story sections opt into a palette via [data-wu-theme] rather than the
+   theme's color-scheme settings, since night/morning are fixed narrative
+   states, not merchant-configurable schemes. */
+[data-wu-theme="night"] {
+	--wu-bg: var(--wu-night-900);
+	--wu-bg-alt: var(--wu-night-800);
+	--wu-ink: var(--wu-night-ink);
+	--wu-accent: var(--wu-neon-pink);
+	--wu-accent-2: var(--wu-neon-cyan);
+}
+
+[data-wu-theme="morning"] {
+	--wu-bg: var(--wu-morning-050);
+	--wu-bg-alt: var(--wu-morning-100);
+	--wu-ink: var(--wu-morning-ink);
+	--wu-accent: var(--wu-sunrise-coral);
+	--wu-accent-2: var(--wu-sky-blue);
+}
+
+.wu-section {
+	position: relative;
+	background-color: var(--wu-bg);
+	color: var(--wu-ink);
+	padding-block: var(--wu-section-padding-block);
+	overflow: clip;
+}
+
+.wu-container {
+	width: var(--wu-container-width);
+	margin-inline: auto;
+}
+
+.wu-eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--wu-space-2);
+	font-size: var(--wu-fs-eyebrow);
+	font-family: var(--base-font-family, inherit);
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--wu-accent);
+}
+
+.wu-heading {
+	font-family: var(--heading-font-family, inherit);
+	font-weight: var(--heading-font-weight, 700);
+	line-height: 1.05;
+	margin: 0;
+	color: var(--wu-ink);
+}
+
+.wu-heading--display {
+	font-size: var(--wu-fs-display);
+}
+
+.wu-heading--h1 {
+	font-size: var(--wu-fs-h1);
+}
+
+.wu-heading--h2 {
+	font-size: var(--wu-fs-h2);
+}
+
+.wu-body {
+	font-family: var(--base-font-family, inherit);
+	font-size: var(--wu-fs-body);
+	line-height: 1.6;
+	color: var(--wu-ink);
+	opacity: 0.85;
+}
+
+.wu-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--wu-space-2);
+	padding: 1rem 2rem;
+	border-radius: var(--wu-radius);
+	font-family: var(--button-font-family, inherit);
+	text-transform: var(--button-text-transform, none);
+	font-size: 1rem;
+	font-weight: 600;
+	text-decoration: none;
+	border: 1px solid transparent;
+	cursor: pointer;
+	transition: transform var(--wu-timing-base) var(--wu-ease),
+		background-color var(--wu-timing-base) var(--wu-ease),
+		border-color var(--wu-timing-base) var(--wu-ease);
+}
+
+.wu-btn:hover {
+	transform: translateY(-2px);
+}
+
+.wu-btn--primary {
+	background-color: var(--wu-accent);
+	color: var(--wu-night-950);
+}
+
+.wu-btn--ghost {
+	background-color: transparent;
+	border-color: currentColor;
+	color: var(--wu-ink);
+}
+
+.wu-visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wu-btn,
+	[class*="wu-"] {
+		transition-duration: 0.001ms !important;
+		animation-duration: 0.001ms !important;
+		scroll-behavior: auto !important;
+	}
+}
