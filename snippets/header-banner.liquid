@@ -1,0 +1,237 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header banner
+	Render header banner
+	- back_image: back image
+	- back_image_object_fit: back image object fit (cover / contain)
+	- main_image: main image
+	- main_image_object_fit: main image object fit (cover / contain)
+	- link_label: link label
+	- link: link
+	- enable_lazy_load: enable lazy load
+	- background_color: background color
+	- background_ellipse_color: background ellipse color
+	- border_color: border color
+
+	Usage:
+	{%- render 'header-banner' -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- capture element_styles -%}
+	--header-banner-background-color: {{- background_color -}}; {{-  -}}
+	--header-banner-background-ellipse: {{- background_ellipse_color -}}; {{-  -}}
+	--header-banner-border-color: {{ border_color }}; {{-  -}}
+{%- endcapture -%}
+
+<article class="header-banner" style="{{ element_styles | strip_newlines }}">
+	<div class="header-banner__ellipse"></div>
+
+	{%- if main_image == blank and back_image == blank -%}
+		{%- assign min = 1 -%}
+		{%- assign max = 4 -%}
+		{%- assign diff = max | minus: min -%}
+
+		{%- assign random_number = "now" | date: "%N" | modulo: diff | plus: min -%}
+		{%- assign placeholder_svg_name = 'hero-apparel-' | append: random_number -%}
+
+		{{- placeholder_svg_name | placeholder_svg_tag: 'header-banner__image header-banner__image--main' -}}
+	{%- else -%}
+		{%- assign image_width = image_width | default: 609 -%}
+		{%- assign image_width_2x = image_width | times: 2 -%}
+
+		{%- assign image_width_1500 = image_width_1500 | default: 609 -%}
+		{%- assign image_width_1500_2x = image_width_1500 | times: 2 -%}
+
+		{%- assign image_width_1199 = image_width_1199 | default: 448 -%}
+		{%- assign image_width_1199_2x = image_width_1199 | times: 2 -%}
+
+		{%- assign image_width_991 = image_width_991 | default: 388 -%}
+		{%- assign image_width_991_2x = image_width_991 | times: 2 -%}
+
+		{%- assign image_width_767 = image_width_767 | default: 388 -%}
+		{%- assign image_width_767_2x = image_width_767 | times: 2 -%}
+
+		{%- assign image_width_575 = image_width_575 | default: 388 -%}
+		{%- assign image_width_575_2x = image_width_575 | times: 2 -%}
+
+		{%- assign image_width_380 = image_width_380 | default: 348 -%}
+		{%- assign image_width_380_2x = image_width_380 | times: 2 -%}
+
+		{%- if back_image != blank -%}
+			{%- capture img_styles -%}
+				--img-desktop-pos: {{ back_image.presentation.focal_point }};
+				--img-object-fit: {{ back_image_object_fit }};
+			{%- endcapture -%}
+
+			<picture {% if enable_lazy_load %}class="lazy"{% endif %}>
+				<source
+					{% if enable_lazy_load %}
+						srcset="{{ back_image | image_url: width: 10 }} 1x, {{ back_image | image_url: width: 10 }} 2x"
+						data-srcset="{{ back_image | image_url: width: image_width_380 }} 1x, {{ back_image | image_url: width: image_width_380_2x }} 2x"
+					{% else %}
+						srcset="{{ back_image | image_url: width: image_width_380 }} 1x, {{ back_image | image_url: width: image_width_380_2x }} 2x"
+					{% endif %}
+					media="(max-width: 380px)"
+				>
+				<source
+					{% if enable_lazy_load %}
+						srcset="{{ back_image | image_url: width: 10 }} 1x, {{ back_image | image_url: width: 10 }} 2x"
+						data-srcset="{{ back_image | image_url: width: image_width_575 }} 1x, {{ back_image | image_url: width: image_width_575_2x }} 2x"
+					{% else %}
+						srcset="{{ back_image | image_url: width: image_width_575 }} 1x, {{ back_image | image_url: width: image_width_575_2x }} 2x"
+					{% endif %}
+					media="(max-width: 575px)"
+				>
+				<source
+					{% if enable_lazy_load %}
+						srcset="{{ back_image | image_url: width: 10 }} 1x, {{ back_image | image_url: width: 10 }} 2x"
+						data-srcset="{{ back_image | image_url: width: image_width_767 }} 1x, {{ back_image | image_url: width: image_width_767_2x }} 2x"
+					{% else %}
+						srcset="{{ back_image | image_url: width: image_width_767 }} 1x, {{ back_image | image_url: width: image_width_767_2x }} 2x"
+					{% endif %}
+					media="(max-width: 767px)"
+				>
+				<source
+					{% if enable_lazy_load %}
+						srcset="{{ back_image | image_url: width: 10 }} 1x, {{ back_image | image_url: width: 10 }} 2x"
+						data-srcset="{{ back_image | image_url: width: image_width_991 }} 1x, {{ back_image | image_url: width: image_width_991_2x }} 2x"
+					{% else %}
+						srcset="{{ back_image | image_url: width: image_width_991 }} 1x, {{ back_image | image_url: width: image_width_991_2x }} 2x"
+					{% endif %}
+					media="(max-width: 991px)"
+				>
+				<source
+					{% if enable_lazy_load %}
+						srcset="{{ back_image | image_url: width: 10 }} 1x, {{ back_image | image_url: width: 10 }} 2x"
+						data-srcset="{{ back_image | image_url: width: image_width_1199 }} 1x, {{ back_image | image_url: width: image_width_1199_2x }} 2x"
+					{% else %}
+						srcset="{{ back_image | image_url: width: image_width_1199 }} 1x, {{ back_image | image_url: width: image_width_1199_2x }} 2x"
+					{% endif %}
+					media="(max-width: 1199px)"
+				>
+				<source
+					{% if enable_lazy_load %}
+						srcset="{{ back_image | image_url: width: 10 }} 1x, {{ back_image | image_url: width: 10 }} 2x"
+						data-srcset="{{ back_image | image_url: width: image_width_1500 }} 1x, {{ back_image | image_url: width: image_width_1500_2x }} 2x"
+					{% else %}
+						srcset="{{ back_image | image_url: width: image_width_1500 }} 1x, {{ back_image | image_url: width: image_width_1500_2x }} 2x"
+					{% endif %}
+					media="(min-width: 1500px)"
+				>
+
+				<img
+					class="header-banner__image header-banner__image--back"
+					{% if enable_lazy_load %}
+						data-src="{{ back_image | image_url: width: image_width }}"
+						data-srcset="{{ back_image | image_url: width: image_width }} 1x, {{ back_image | image_url: width: image_width_2x }} 2x"
+						src="{{ back_image | image_url: width: 10 }}"
+						srcset="{{ back_image | image_url: width: 10 }} 1x, {{ back_image | image_url: width: 10 }} 2x"
+					{% else %}
+						src="{{ back_image | image_url: width: image_width }}"
+						srcset="{{ back_image | image_url: width: image_width }} 1x, {{ back_image | image_url: width: image_width_2x }} 2x"
+					{% endif %}
+					alt="{{- back_image.alt | escape -}}"
+					style="{{- img_styles | strip_newlines -}}"
+				/>
+			</picture>
+		{%- endif -%}
+
+		{%- if main_image != blank -%}
+			{%- capture img_styles -%}
+				--img-desktop-pos: {{ main_image.presentation.focal_point }};
+				--img-object-fit: {{ main_image_object_fit }};
+			{%- endcapture -%}
+
+            <picture {% if enable_lazy_load %}class="lazy"{% endif %}>
+                <source
+					{% if enable_lazy_load %}
+                        srcset="{{ main_image | image_url: width: 10 }} 1x, {{ main_image | image_url: width: 10 }} 2x"
+                        data-srcset="{{ main_image | image_url: width: image_width_380 }} 1x, {{ main_image | image_url: width: image_width_380_2x }} 2x"
+					{% else %}
+                        srcset="{{ main_image | image_url: width: image_width_380 }} 1x, {{ main_image | image_url: width: image_width_380_2x }} 2x"
+					{% endif %}
+                        media="(max-width: 380px)"
+                >
+                <source
+					{% if enable_lazy_load %}
+                        srcset="{{ main_image | image_url: width: 10 }} 1x, {{ main_image | image_url: width: 10 }} 2x"
+                        data-srcset="{{ main_image | image_url: width: image_width_575 }} 1x, {{ main_image | image_url: width: image_width_575_2x }} 2x"
+					{% else %}
+                        srcset="{{ main_image | image_url: width: image_width_575 }} 1x, {{ main_image | image_url: width: image_width_575_2x }} 2x"
+					{% endif %}
+                        media="(max-width: 575px)"
+                >
+                <source
+					{% if enable_lazy_load %}
+                        srcset="{{ main_image | image_url: width: 10 }} 1x, {{ main_image | image_url: width: 10 }} 2x"
+                        data-srcset="{{ main_image | image_url: width: image_width_767 }} 1x, {{ main_image | image_url: width: image_width_767_2x }} 2x"
+					{% else %}
+                        srcset="{{ main_image | image_url: width: image_width_767 }} 1x, {{ main_image | image_url: width: image_width_767_2x }} 2x"
+					{% endif %}
+                        media="(max-width: 767px)"
+                >
+                <source
+					{% if enable_lazy_load %}
+                        srcset="{{ main_image | image_url: width: 10 }} 1x, {{ main_image | image_url: width: 10 }} 2x"
+                        data-srcset="{{ main_image | image_url: width: image_width_991 }} 1x, {{ main_image | image_url: width: image_width_991_2x }} 2x"
+					{% else %}
+                        srcset="{{ main_image | image_url: width: image_width_991 }} 1x, {{ main_image | image_url: width: image_width_991_2x }} 2x"
+					{% endif %}
+                        media="(max-width: 991px)"
+                >
+                <source
+					{% if enable_lazy_load %}
+                        srcset="{{ main_image | image_url: width: 10 }} 1x, {{ main_image | image_url: width: 10 }} 2x"
+                        data-srcset="{{ main_image | image_url: width: image_width_1199 }} 1x, {{ main_image | image_url: width: image_width_1199_2x }} 2x"
+					{% else %}
+                        srcset="{{ main_image | image_url: width: image_width_1199 }} 1x, {{ main_image | image_url: width: image_width_1199_2x }} 2x"
+					{% endif %}
+                        media="(max-width: 1199px)"
+                >
+                <source
+					{% if enable_lazy_load %}
+                        srcset="{{ main_image | image_url: width: 10 }} 1x, {{ main_image | image_url: width: 10 }} 2x"
+                        data-srcset="{{ main_image | image_url: width: image_width_1500 }} 1x, {{ main_image | image_url: width: image_width_1500_2x }} 2x"
+					{% else %}
+                        srcset="{{ main_image | image_url: width: image_width_1500 }} 1x, {{ main_image | image_url: width: image_width_1500_2x }} 2x"
+					{% endif %}
+                        media="(min-width: 1500px)"
+                >
+
+                <img
+					class="header-banner__image header-banner__image--main"
+					{% if enable_lazy_load %}
+                        data-src="{{ main_image | image_url: width: image_width }}"
+                        data-srcset="{{ main_image | image_url: width: image_width }} 1x, {{ main_image | image_url: width: image_width_2x }} 2x"
+                        src="{{ main_image | image_url: width: 10 }}"
+                        srcset="{{ main_image | image_url: width: 10 }} 1x, {{ main_image | image_url: width: 10 }} 2x"
+					{% else %}
+                        src="{{ main_image | image_url: width: image_width }}"
+                        srcset="{{ main_image | image_url: width: image_width }} 1x, {{ main_image | image_url: width: image_width_2x }} 2x"
+					{% endif %}
+                        alt="{{- main_image.alt | escape -}}"
+                        style="{{- img_styles | strip_newlines -}}"
+                />
+            </picture>
+		{%- endif -%}
+	{%- endif -%}
+
+	{%- if link != blank and link_label != blank -%}
+		<div class="header-banner__button-container">
+			<a
+				class="button-circle button-circle--transform button-circle--transform-show-text-mob"
+				href="{{- link -}}"
+			>
+				<span class="button-circle__inner">
+					{%- render 'icons', icon: 'circle-decoration' -%}
+					{%- render 'icons', icon: 'plus', class: 'icon-inactive' -%}
+				</span>
+
+				<span class="button-circle__text">
+					{{- link_label -}}
+				</span>
+			</a>
+		</div>
+	{%- endif -%}
+</article>

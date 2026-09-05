@@ -1,0 +1,541 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Image with text
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign image_position        	= section.settings.image_position -%}
+{%- assign text_alignment        	= section.settings.text_alignment -%}
+{%- assign heading_first_line       = section.settings.heading_first_line -%}
+{%- assign heading_second_line      = section.settings.heading_second_line -%}
+{%- assign text      				= section.settings.text -%}
+{%- assign image_main        		= section.settings.image_main -%}
+{%- assign object_fit_main        	= section.settings.object_fit_main -%}
+{%- assign image_secondary        	= section.settings.image_secondary -%}
+{%- assign object_fit_secondary     = section.settings.object_fit_secondary -%}
+{%- assign image_additionally       = section.settings.image_additionally -%}
+{%- assign object_fit_additionally  = section.settings.object_fit_additionally -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 			= section.settings.color_scheme -%}
+{%- assign color_ellipse 			= section.settings.color_ellipse -%}
+{%- assign border_color 		   	= section.settings.border_color -%}
+{%- assign container 				= section.settings.container_width -%}
+{%- assign enable_bottom_rounded_corners = section.settings.enable_bottom_rounded_corners -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{%- capture section_styles -%}
+	--text-alignment: {{ text_alignment | replace: "left", "start" | replace: "right", "end" }}; {{  -}}
+	--color-ellipse: {{ color_ellipse }}; {{  -}}
+	--container-width: {{ container_width }}; {{  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{  -}}
+{%- endcapture -%}
+
+{%- capture class_image_wrapper -%}
+	{% assign is_additional_picture = false %}
+
+	{%- if image_secondary != blank or image_additionally != blank -%}
+		{%- assign is_additional_picture = true -%}
+	{%- endif -%}
+
+	{% if image_main != blank and is_additional_picture -%}
+		image-with-text__image-container--hover
+	{% endif -%}
+
+	{% if image_secondary == blank and image_additionally == blank -%}
+		image-with-text__image-container--full-width
+	{% endif -%}
+{%- endcapture -%}
+
+{%- capture images -%}
+	{%- if image_additionally != blank -%}
+		<div class="image-with-text__image-wrapper image-with-text__image-wrapper--additionally">
+			{% render 'image-with-text-image',
+				image: image_additionally,
+				object_fit: object_fit_additionally,
+				image_width: 260,
+				image_width_2x: 520,
+				delay_step: 0.25
+			%}
+		</div>
+	{%- endif -%}
+
+	<div class="image-with-text__image-wrapper image-with-text__image-wrapper--main">
+		{% render 'image-with-text-image',
+			image: image_main,
+			object_fit: object_fit_main,
+			image_width: 340,
+			image_width_2x: 680,
+			delay_step: 0.5
+		%}
+	</div>
+
+	{%- if image_secondary != blank -%}
+		<div class="image-with-text__image-wrapper image-with-text__image-wrapper--secondary">
+			{% render 'image-with-text-image',
+				image: image_secondary,
+				object_fit: object_fit_secondary,
+				image_width: 291,
+				image_width_2x: 582,
+				delay_step: 0.75
+			%}
+		</div>
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- capture content -%}
+	<div class="image-with-text__content-wrapper">
+		<div class="image-with-text__content">
+			{%- if heading_first_line != blank or heading_second_line != blank -%}
+				<h2 class="image-with-text__heading h2 section-title need-animate">
+					{%- if heading_first_line != blank -%}
+						<span class="section-title__text-container">
+							<span class="section-title__text">
+								{{- heading_first_line -}}
+							</span>
+						</span>
+					{%- endif -%}
+
+					{%- if heading_second_line != blank -%}
+						<span class="section-title__text-container">
+							<span class="section-title__text">
+								{{- heading_second_line -}}
+							</span>
+						</span>
+					{%- endif -%}
+				</h2>
+			{%- endif -%}
+
+			{%- if text != blank -%}
+				<div class="image-with-text__text rte need-animate">
+					{{- text -}}
+				</div>
+			{%- endif -%}
+
+			{%- if section.blocks.size > 0 -%}
+				{%- assign delay_step = 0 -%}
+
+				<ul class="image-with-text__list">
+					{%- for block in section.blocks -%}
+						{%- assign delay_step = delay_step | plus: 0.2 -%}
+
+						<li class="image-with-text__item">
+							{% assign title 		= block.settings.title %}
+							{% assign block_text 	= block.settings.block_text %}
+							{% assign block_icon 	= block.settings.block_icon %}
+
+							{%- if block_icon != blank -%}
+								<div class="image-with-text__item-icon-wrap need-animate"
+									 style="transition-delay: {{ delay_step }}s"
+								>
+									<picture>
+										<source
+											srcset="{{ block_icon | image_url: width: 48 }} 1x,
+												 	{{ block_icon | image_url: width: 96 }} 2x"
+											media="(max-width: 768px)"
+											width="48"
+											height="48"
+										>
+
+										<img class="image-with-text__item-icon"
+											 src="{{ block_icon | image_url: width: 64 }}"
+											 srcset="{{ block_icon | image_url: width: 64 }} 1x,
+												 {{ block_icon | image_url: width: 128 }} 2x"
+											 alt="{{ block_icon.alt }}"
+											 width="64"
+											 height="64"
+											 loading="lazy"
+										>
+									</picture>
+								</div>
+							{%- endif -%}
+
+							{%- if title != blank or block_text != blank -%}
+								<div class="image-with-text__item-inner need-animate"
+									 style="transition-delay: {{ delay_step }}s"
+								>
+									{%- if title != blank -%}
+										<div class="image-with-text__item-heading h5">
+											{{- title -}}
+										</div>
+									{%- endif -%}
+
+									{%- if block_text != blank -%}
+										<div class="image-with-text__item-text rte">
+											{{- block_text -}}
+										</div>
+									{%- endif -%}
+								</div>
+							{%- endif -%}
+						</li>
+					{%- endfor -%}
+				</ul>
+			{%- endif -%}
+		</div>
+	</div>
+{%- endcapture -%}
+
+{%- render 'adastra' with '/src/styles/image-with-text.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 992px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+<section class="image-with-text{% if enable_bottom_rounded_corners %} section-bottom-rounded{% endif %} need-animate js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} color-{{ color_scheme.id }}" style="{{ section_styles }}">
+	<div class="image-with-text__container container">
+		{%- if image_position == 'left' -%}
+			<div class="image-with-text__image-container {{ class_image_wrapper }} need-animate">
+				{{- images -}}
+			</div>
+
+			{{- content -}}
+		{%- else -%}
+			<div class="image-with-text__image-container image-with-text__image-container--mobile {{ class_image_wrapper }} need-animate">
+				{{- images -}}
+			</div>
+
+			{{- content -}}
+
+			<div class="image-with-text__image-container image-with-text__image-container--desktop {{ class_image_wrapper }}">
+				{{- images -}}
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+
+{%- schema -%}
+	{
+		"name": "Image with text",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+			{
+				"id": "image_position",
+				"type": "select",
+				"label": "Image position",
+				"options": [
+					{
+						"value": "left",
+						"label": "Left"
+					},
+					{
+						"value": "right",
+						"label": "Right"
+					}
+				],
+				"default": "left"
+			},
+			{
+				"id": "text_alignment",
+				"type": "select",
+				"label": "Text alignment",
+				"options": [
+					{
+						"value": "left",
+						"label": "Left"
+					},
+					{
+						"value": "center",
+						"label": "Center"
+					},
+					{
+						"value": "right",
+						"label": "Right"
+					}
+				],
+				"default": "left"
+			},
+			{
+				"id": "heading_first_line",
+				"type": "inline_richtext",
+				"label": "Heading (first line)"
+			},
+			{
+				"id": "heading_second_line",
+				"type": "inline_richtext",
+				"label": "Heading (second line)"
+			},
+			{
+				"type": "richtext",
+				"id": "text",
+				"label": "text"
+			},
+			{
+				"type": "header",
+				"content": "Image main"
+			},
+			{
+				"id": "image_main",
+				"type": "image_picker",
+				"label": "Image",
+				"info": "For the best look, 1238 x 1238px is recommended"
+			},
+			{
+				"type": "select",
+				"id": "object_fit_main",
+				"label": "Object fit",
+				"options": [
+					{
+						"value": "cover",
+						"label": "Cover"
+					},
+					{
+						"value": "contain",
+						"label": "Contain"
+					}
+				],
+				"default": "contain"
+			},
+			{
+				"type": "header",
+				"content": "Image secondary"
+			},
+			{
+				"id": "image_secondary",
+				"type": "image_picker",
+				"label": "Image",
+				"info": "For the best look, 1238 x 1238px is recommended"
+			},
+			{
+				"type": "select",
+				"id": "object_fit_secondary",
+				"label": "Object fit",
+				"options": [
+					{
+						"value": "cover",
+						"label": "Cover"
+					},
+					{
+						"value": "contain",
+						"label": "Contain"
+					}
+				],
+				"default": "contain"
+			},
+			{
+				"type": "header",
+				"content": "Image additionally"
+			},
+			{
+				"id": "image_additionally",
+				"type": "image_picker",
+				"label": "Image",
+				"info": "For the best look, 1238 x 1238px is recommended"
+			},
+			{
+				"type": "select",
+				"id": "object_fit_additionally",
+				"label": "Object fit",
+				"options": [
+					{
+						"value": "cover",
+						"label": "Cover"
+					},
+					{
+						"value": "contain",
+						"label": "Contain"
+					}
+				],
+				"default": "contain"
+			},
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"default": true,
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"label": "Color scheme",
+				"default": "scheme-1"
+			},
+			{
+				"type": "color",
+				"id": "color_ellipse",
+				"label": "Ellipse",
+				"default": "#3674EB"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "select",
+				"id": "container_width",
+				"label": "Container width",
+				"options": [
+					{
+						"value": "1560px",
+						"label": "Default - 1440px"
+					},
+					{
+						"value": "2040px",
+						"label": "Large - 1920px"
+					},
+					{
+						"value": "100%",
+						"label": "Full width"
+					},
+					{
+						"value": "inherit",
+						"label": "Inherit of general setting"
+					}
+				],
+				"default": "inherit",
+				"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_bottom_rounded_corners",
+				"label": "Enable bottom rounded corners",
+				"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+				"default": false
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 50
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 50
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset top",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset bottom",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset top",
+				"default": 32
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset bottom",
+				"default": 32
+			}
+		],
+		"blocks": [
+			{
+				"type": "additional_content",
+				"name": "Additional content",
+				"settings": [
+					{
+						"type": "text",
+						"id": "title",
+						"label": "Heading",
+						"default": "Block heading"
+					},
+					{
+						"type": "richtext",
+						"id": "block_text",
+						"label": "Text",
+						"default": "<p>Block text</p>"
+					},
+					{
+						"type": "image_picker",
+						"id": "block_icon",
+						"label": "Icon",
+						"info": " 64 x 64px .svg recommended."
+					}
+				]
+			}
+		],
+		"presets": [
+			{
+				"name": "Image with text",
+				"settings": {
+					"heading_first_line": "<em>Text heading</em>",
+					"heading_second_line": "<strong>Second text heading</strong>",
+					"text": "<p>Combine an image with text to highlight a specific product, collection, or blog post of your choice. Enhance the content by including information on its availability, style, or possibly a review.</p>"
+				}
+			}
+		]
+	}
+{%- endschema -%}

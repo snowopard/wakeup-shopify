@@ -1,0 +1,85 @@
+.list-collections {
+  padding-top: var(--inner-offset-top-mobile);
+  padding-bottom: var(--inner-offset-bottom-mobile);
+  background-color: var(--color-background);
+}
+.list-collections .list-collections__col.need-animate,
+.list-collections .list-collections-card__header.need-animate {
+  opacity: 0;
+  transition-property: opacity, transform;
+}
+.list-collections .list-collections__col.need-animate {
+  transform: translateY(100px);
+}
+.list-collections .list-collections-card__header.need-animate {
+  transform: translateY(50px);
+}
+.list-collections .list-collections__text.need-animate {
+  opacity: 0;
+  transition-property: opacity;
+}
+.list-collections .list-collections-card__button.need-animate {
+  opacity: 0;
+  transform: scale(1.5);
+  transition-property: opacity, transform;
+}
+.list-collections .list-collections__col.need-animate {
+  transition-delay: var(--card-transition-delay);
+}
+.list-collections .list-collections-card__header.need-animate {
+  transition-delay: calc(var(--header-transition-delay) / 2);
+}
+.list-collections .list-collections-card__button.need-animate {
+  transition-delay: var(--button-transition-delay);
+}
+.list-collections.animated .list-collections__col.need-animate,
+.list-collections.animated .list-collections-card__header.need-animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+.list-collections.animated .list-collections-card__button.need-animate {
+  opacity: 1;
+  transform: scale(1);
+}
+.list-collections.animated .list-collections__text.need-animate {
+  opacity: 1;
+}
+.list-collections .list-collections__text {
+  margin-top: 16px;
+  max-width: 960px;
+  justify-self: center;
+  text-align: center;
+}
+.list-collections .list-collections__row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 32px;
+  gap: 32px;
+}
+.list-collections .list-collections__col {
+  width: 100%;
+}
+.list-collections .list-collections__pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+@media (min-width: 768px) {
+  .list-collections {
+    padding-top: var(--inner-offset-top-desktop);
+    padding-bottom: var(--inner-offset-bottom-desktop);
+  }
+  .list-collections .list-collections__row {
+    margin-top: 80px;
+    flex-direction: row;
+    gap: 48px 24px;
+  }
+  .list-collections .list-collections__col {
+    width: calc(50% - 12px);
+  }
+  .list-collections .list-collections__pagination-wrapper {
+    margin-top: 64px;
+  }
+}

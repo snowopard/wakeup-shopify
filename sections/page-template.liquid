@@ -1,0 +1,186 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Default page template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- render 'adastra' with '/src/styles/page-default.scss' -%}
+
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme                    = section.settings.color_scheme -%}
+{%- assign enable_bottom_rounded_corners   = section.settings.enable_bottom_rounded_corners -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% capture section_style %}
+	--banner-background: {{- section.settings.banner_background -}}; {{- -}}
+	--banner-color: {{- section.settings.banner_color -}}; {{- -}}
+	--ellipse-background: {{- section.settings.ellipse_background -}}; {{- -}}
+	--inner-offset-top-desktop: {{- section.settings.inner_offset_top_desktop -}}px; {{- -}}
+	--inner-offset-bottom-desktop: {{- section.settings.inner_offset_bottom_desktop -}}px; {{- -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{- -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{- -}}
+{% endcapture %}
+
+<section class="page-default color-{{ color_scheme.id }}" style="{{ section_style }}">
+	<div class="page-default__container {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %}">
+		<div class="page-default__banner">
+			<h1 class="page-default__title h1">{{- page.title -}}</h1>
+		</div>
+
+		{% if page.content != blank %}
+			<div class="page-default__rte rte container">
+				{{- page.content -}}
+			</div>
+		{% endif %}
+	</div>
+</section>
+
+{% schema %}
+{
+	"name": "Page",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "color_background",
+			"id": "banner_background",
+			"label": "Banner background",
+			"default": "linear-gradient(#080606, #080606)"
+		},
+		{
+			"type": "color",
+			"id": "banner_color",
+			"label": "Banner text",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "ellipse_background",
+			"label": "Ellipse background",
+			"default": "#C43898"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 40
+		}
+	]
+}
+{%- endschema -%}

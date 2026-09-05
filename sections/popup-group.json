@@ -1,0 +1,14 @@
+{
+	"type": "custom.popup",
+	"name": "Popups group",
+	"sections": {
+		"newsletter-popup": {
+			"type": "newsletter-popup",
+			"disabled": true,
+			"settings": {}
+		}
+	},
+	"order": [
+		"newsletter-popup"
+	]
+}

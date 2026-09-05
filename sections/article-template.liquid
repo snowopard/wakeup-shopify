@@ -1,0 +1,417 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Section: Article template
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{% assign show_author 					  = section.settings.show_author %}
+{% assign show_date               		  = section.settings.show_date %}
+{% assign show_comments_count 			  = section.settings.show_comments_count %}
+{% assign decor_image_first 			  = section.settings.decor_image_first %}
+{% assign decor_image_second 			  = section.settings.decor_image_second %}
+{% assign text_color                      = section.settings.text_color %}
+{% assign background_color                = section.settings.background_color %}
+{% assign ellipse_background              = section.settings.ellipse_background %}
+{% assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance %}
+{% assign color_scheme 					  = section.settings.color_scheme %}
+{% assign enable_bottom_rounded_corners   = section.settings.enable_bottom_rounded_corners %}
+
+{% assign is_show_author 				  = false %}
+{% assign is_show_comments_count  		  = false %}
+
+{% if enable_color_scheme_inheritance %}
+	{% assign color_scheme = settings.main_color_scheme %}
+{% endif %}
+
+{% if show_author and article.author != blank %}
+	{% assign is_show_author = true %}
+{% endif %}
+
+{% if article.comments_enabled? and show_comments_count %}
+	{% assign is_show_comments_count = true %}
+{% endif %}
+
+{%- assign min = 1 -%}
+{%- assign max = 6 -%}
+{%- assign diff = max | minus: min -%}
+
+{%- render 'adastra' with '/src/styles/article.scss' -%}
+
+{% capture style %}
+	--banner-text-color: {{ text_color }};
+	--banner-background-color: {{ background_color }};
+	--ellipse-background-color: {{ ellipse_background }};
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px; {{- -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{- -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{- -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px;
+{% endcapture %}
+
+<div
+	class="article js-article {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %} color-{{ color_scheme.id }}"
+	style="{{ style }}">
+	<section class="article-banner" style="{{ style }}">
+		<div
+			class="article-banner__background {% if article.image == blank %}article-banner__background--full-height{% endif %} js-image-mouse-move-wrapper">
+			{% if decor_image_first != blank or decor_image_second != blank %}
+				{% if decor_image_first != blank %}
+					<div
+						class="article-banner__decor-image-wrapper article-banner__decor-image-wrapper--first js-image-mouse-move">
+						<picture>
+							<img class="page-404__decor-image"
+								 src="{{ decor_image_first | image_url: width: 140, height: 140 }}"
+								 srcset="{{ decor_image_first | image_url: width: 140, height: 140 }}1x, {{ decor_image_first | image_url: width: 280, height: 280 }}2x"
+								 alt="{{ decor_image_first.alt | escape }}">
+						</picture>
+					</div>
+				{% endif %}
+
+				{% if decor_image_second != blank %}
+					<div
+						class="article-banner__decor-image-wrapper article-banner__decor-image-wrapper--second is-reverse-translate js-image-mouse-move">
+						<picture>
+							<img class="page-404__decor-image"
+								 src="{{ decor_image_second | image_url: width: 181, height: 181 }}"
+								 srcset="{{ decor_image_second | image_url: width: 181, height: 181 }}1x, {{ decor_image_second | image_url: width: 362, height: 362 }}2x"
+								 alt="{{ decor_image_second.alt | escape }}">
+						</picture>
+					</div>
+				{% endif %}
+			{% endif %}
+
+			{% if ellipse_background != blank %}
+				<span class="article-banner__ellipse article-banner__ellipse--left"></span>
+				<span class="article-banner__ellipse article-banner__ellipse--right"></span>
+			{% endif %}
+		</div>
+
+		<div class="article-banner__container container">
+			<div
+				class="article-banner__heading-block js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}">
+				<h1 class="article-banner__title h2">
+					{{ article.title }}
+				</h1>
+
+				{% if is_show_author or show_date or is_show_comments_count %}
+					<div class="article-banner__subheading">
+						{% if is_show_author %}
+							<span class="article-banner__author">
+								<span class="visually-hidden">{{- 'blogs.article.author' | t -}}</span>
+
+								{{ article.author }}
+							</span>
+						{% endif %}
+
+						{% if show_date %}
+							<span class="article-banner__date">
+								<span class="visually-hidden">{{ "blogs.article.published_at" | t }}</span>
+
+								{{ article.published_at | date: format: 'abbreviated_date' }}
+							</span>
+						{% endif %}
+
+						{% if is_show_comments_count %}
+							<span>
+								<span class="visually-hidden">
+									{{- 'blogs.article.comments_count' | t -}}
+								</span>
+
+								{{ article.comments_count }} {% if article.comments_count != 1 %}{{ 'blogs.article.many_comments' | t }}{% else %}{{ 'blogs.article.one_comment' | t }}{% endif %}
+							</span>
+						{% endif %}
+					</div>
+				{% endif %}
+			</div>
+
+			{% if article.image != blank %}
+				<div class="article-banner__image-container">
+					<picture>
+						<source
+							srcset="{{ article.image | image_url: width: 343 }} 1x, {{ article.image | image_url: width: 686 }} 2x"
+							media="(max-width: 375px)"
+							width="343"
+							height="343"
+						/>
+
+						<source
+							srcset="{{ article.image | image_url: width: 388 }} 1x, {{ article.image | image_url: width: 776 }} 2x"
+							media="(max-width: 420px)"
+							width="388"
+							height="388"
+						/>
+
+						<source
+							srcset="{{ article.image | image_url: width: 543 }} 1x, {{ article.image | image_url: width: 1086 }} 2x"
+							media="(max-width: 575px)"
+							width="543"
+							height="543"
+						/>
+
+						<source
+							srcset="{{ article.image | image_url: width: 735 }} 1x, {{ article.image | image_url: width: 1470 }} 2x"
+							media="(max-width: 767px)"
+							width="735"
+							height="735"
+						/>
+
+						<source
+							srcset="{{ article.image | image_url: width: 959 }} 1x, {{ article.image | image_url: width: 1918 }} 2x"
+							media="(max-width: 991px)"
+							width="959"
+							height="454"
+						/>
+
+						<img
+							src="{{ article.image | image_url: width: 10 }}"
+							srcset="{{ article.image | image_url: width: 1140 }} 1x, {{ article.image | image_url: width: 2280 }} 2x"
+							alt="{{ article.image.alt }}"
+							class="article-banner__image js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+							width="1140"
+							height="540"
+						/>
+					</picture>
+				</div>
+			{% endif %}
+		</div>
+	</section>
+
+	<div class="article__content">
+		<div class="container">
+			<div class="article__inner article__inner--full-width">
+				<section class="article-main">
+					{% if article.content != blank %}
+						<div class="rte">
+							{{ article.content }}
+						</div>
+					{% endif %}
+
+					<div class="article-main__socials">
+						{% if show_date %}
+							<div class="article-main__socials-inner">
+								<span class="article-main__socials-item">
+									<span class="visually-hidden">{{ "blogs.article.published_at" | t }}</span>
+
+									{{ article.published_at | date: format: 'abbreviated_date' }}
+								</span>
+							</div>
+						{% endif %}
+
+						<input id="share-input-{{ section.id }}" class="is-hidden" type="text"
+							   value="{{ shop.url | append: article.url }}">
+
+						<div class="article-main__share">
+							<span class="article-main__share-text">{{ 'general.social.share_button' | t }}</span>
+
+							<button
+								class="button-social article-main__share-button focus-visible-outline js-social-share"
+								data-share-title="{{ article.title | escape }}"
+								data-share-url="{{ shop.url | append: article.url }}"
+								data-input-fallback="share-input-{{ section.id }}"
+								aria-label="{{ 'general.social.share_button' | t }}"
+							>
+								<span class="tooltip js-share-tooltip">{{ 'general.social.share_success' | t }}</span>
+
+								<div class="button-circle">
+									<span class="button-circle__inner">
+										{%- render 'icons', icon: 'circle-decoration' -%}
+										{%- render 'icons', icon: "share-stroke" -%}
+									</span>
+								</div>
+							</button>
+						</div>
+					</div>
+				</section>
+
+				{% render 'comment-form' %}
+			</div>
+		</div>
+	</div>
+</div>
+
+{%- render 'adastra' with '/src/scripts/template-article.js' -%}
+
+<script type="application/ld+json">
+  {{- article | structured_data -}}
+</script>
+
+{% schema %}
+	{
+		"name": "Article main",
+		"settings": [
+			{
+				"type": "header",
+				"content": "Banner"
+			},
+			{
+				"type": "checkbox",
+				"id": "show_date",
+				"label": "Show date",
+				"default": true
+			},
+			{
+				"type": "checkbox",
+				"id": "show_author",
+				"label": "Show author",
+				"default": true
+			},
+			{
+				"type": "checkbox",
+				"id": "show_comments_count",
+				"label": "Show comments count",
+				"default": false
+			},
+			{
+				"type": "image_picker",
+				"id": "decor_image_first",
+				"label": "Decor image first",
+				"info": "420 x 280px recommended"
+			},
+			{
+				"type": "image_picker",
+				"id": "decor_image_second",
+				"label": "Decor image second",
+				"info": "644 x 362px recommended"
+			},
+			{
+				"type": "color",
+				"id": "text_color",
+				"label": "Text color",
+				"default": "#FFFFFF"
+			},
+			{
+				"type": "color",
+				"id": "background_color",
+				"label": "Background",
+				"default": "#000000"
+			},
+			{
+				"type": "color",
+				"id": "ellipse_background",
+				"label": "Ellipse background",
+				"default": "#C43898"
+			},
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings.",
+				"default": true
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"label": "Color scheme",
+				"default": "scheme-1"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_bottom_rounded_corners",
+				"label": "Enable bottom rounded corners",
+				"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+				"default": false
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset top",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset bottom",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset top",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset bottom",
+				"default": 25
+			}
+		]
+	}
+{% endschema %}

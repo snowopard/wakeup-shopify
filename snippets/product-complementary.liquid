@@ -1,0 +1,50 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product Complementary
+------------------------------------------------------------------------------
+{% endcomment %}
+
+<div class="complementary-products no-js-hidden js-complementary-products"
+	 style="{{ styles }}"
+	 data-url="{{- routes.product_recommendations_url -}}?section_id={{- section_id -}}&product_id={{- product.id -}}&intent=complementary"
+>
+	{%- if recommendations.performed and recommendations.products_count > 0 -%}
+		<div class="complementary-products-content js-complementary-products-content">
+			{%- if heading != blank or recommendations.products_count > 1  -%}
+				<div class="complementary-products__header">
+					{%- if heading != blank -%}
+						<h2 class="complementary-products__title h4">
+							{{- heading -}}
+						</h2>
+					{%- endif -%}
+
+					{% if recommendations.products_count > 1 -%}
+						<div class="complementary-products__controls">
+							{% render 'swiper-button', class: 'js-complementary-products-slider-prev', direction: 'prev' %}
+							{% render 'swiper-button', class: 'js-complementary-products-slider-next', direction: 'next' %}
+						</div>
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+
+			<div class="{% if recommendations.products_count > 1 -%}swiper{% endif %}">
+				<div class="complementary-products__slider-wrapper {% if recommendations.products_count > 1 -%}swiper-wrapper{% endif %}">
+					{%- for product in recommendations.products -%}
+						<div class="complementary-products__slider-slide js-complementary-item {% if recommendations.products_count > 1 -%}swiper-slide{%- endif -%}">
+							{%- render 'product-card-mini',
+								product: product,
+								enable_lazy_load: true
+							-%}
+						</div>
+					{%- endfor -%}
+				</div>
+			</div>
+		</div>
+	{% else %}
+		{%- render 'adastra' with '/src/styles/product-complementary.scss' -%}
+
+		<div class="complementary-products-content js-complementary-products-content"></div>
+
+		{%- render 'adastra' with '/src/scripts/component-product-complementary.js' -%}
+	{%- endif -%}
+</div>

@@ -1,0 +1,186 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header menu item
+	Render header menu item
+	- first_level_link: first_level_link object (required)
+	- blocks: header blocks
+	- menu: menu object (required)
+	- index: block index (required)
+	- animation_delay: Animation delay
+
+	Usage:
+	{%- render "header-mobile-menu-item", first_level_link: first_level_link, blocks: blocks, menu: menu, index: forloop.index, animation_delay: animation_delay -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign has_megamenu = false -%}
+{%- assign megamenu_object = "" -%}
+
+{%- for block in blocks -%}
+	{%- assign menu_handle = block.settings.menu_handle | handleize -%}
+
+	{%- if first_level_link.handle == menu_handle -%}
+		{% if block.type == 'megamenu' %}
+			{%- if first_level_link.links.size > 0 -%}
+				{%- assign has_megamenu = true -%}
+				{%- assign megamenu_object = block -%}
+				{%- break -%}
+			{%- endif -%}
+		{%- else -%}
+			{%- assign has_megamenu = true -%}
+			{%- assign megamenu_object = block -%}
+			{%- break -%}
+		{%- endif -%}
+	{%- endif -%}
+{%- endfor -%}
+
+<li class="header-mobile__menu-list-item header-mobile__menu-list-item--medium-offset">
+	{%- if first_level_link.links.size > 0 or has_megamenu == true -%}
+		<div class="header-mobile__animate header-mobile__animate--main need-animate" style="--animation-delay: {{ animation_delay }}s">
+			<button
+				class="header-navigation-item js-mobile-header-menu-toggler"
+				type="button"
+				data-target="headerMobileMenu:{{- menu.handle -}}-{{- index -}}-{{- first_level_link.title | handleize -}}"
+				aria-controls="headerMobileMenu:{{- menu.handle -}}-{{- index -}}-{{- first_level_link.title | handleize -}}"
+				aria-expanded="false"
+			>
+				<span class="header-navigation-item__text">
+					{{- first_level_link.title | escape -}}
+				</span>
+
+				<span class="header-navigation-item__toggle-icon">
+					{%- render 'icons', icon: 'arrow-right-bold' -%}
+				</span>
+			</button>
+		</div>
+
+		{%- assign animation_delay_nested = 0 -%}
+
+		<div
+			id="headerMobileMenu:{{- menu.handle -}}-{{- index -}}-{{- first_level_link.title | handleize -}}"
+			data-menu-type="nested"
+			class="header-mobile__menu-nested-drawer header-mobile__menu-nested-drawer--nested js-mobile-header-menu is-hidden"
+		>
+			<div class="header-mobile__menu">
+				<div class="header-mobile__menu-header">
+					<div class="header-mobile__menu-header-column">
+						<button
+							class="button-icon-circle header-mobile__menu-button js-mobile-header-menu-toggler"
+							type="button"
+							data-target="headerMobileMenu:{{- menu.handle -}}-{{- index -}}-{{- first_level_link.title | handleize -}}"
+							aria-controls="headerMobileMenu:{{- menu.handle -}}-{{- index -}}-{{- first_level_link.title | handleize -}}"
+							aria-expanded="false"
+							aria-label="{{- first_level_link.title -}}"
+						>
+							{%- render 'icons', icon: 'circle-decoration-border-2', class: 'icon icon-circle-decoration-border' -%}
+							{%- render 'icons', icon: 'arrow-left-bold' -%}
+						</button>
+					</div>
+
+					<div class="header-mobile__menu-header-column">
+						<span class="header-mobile__menu-heading">
+							{{- first_level_link.title -}}
+						</span>
+					</div>
+
+					<div class="header-mobile__menu-header-column">
+						<button
+							class="button-icon-circle header-mobile__menu-button"
+							type="button"
+							data-target="headerDrawerMenu"
+							data-js-toggle="headerToggleMenuDrawer"
+							aria-expanded="false"
+							aria-controls="headerDrawerMenu"
+							aria-label="{{- "layout.navigation.close_drawer_menu" | t | escape -}}"
+						>
+							{%- render 'icons', icon: 'circle-decoration-border-2', class: 'icon icon-circle-decoration-border' -%}
+							{%- render 'icons', icon: 'menu-close' -%}
+						</button>
+					</div>
+				</div>
+
+				<div class="header-mobile__menu-container header-mobile__menu-container--nested js-mobile-header-menu-scroll-container">
+					{%- capture megamenu -%}
+						{%- if megamenu_object.type == 'megamenu' and has_megamenu == true -%}
+							{%- render 'header-mobile-mega-menu', megamenu_object: megamenu_object, first_level_link: first_level_link -%}
+						{%- endif -%}
+
+						{%- if megamenu_object.type == 'megamenu-products-grid' and has_megamenu == true -%}
+							{%- render 'header-mobile-mega-menu-products-grid', megamenu_object: megamenu_object -%}
+						{%- endif -%}
+
+						{%- if megamenu_object.type == 'megamenu-media' and has_megamenu == true -%}
+							{%- render 'header-mobile-mega-menu-media-grid', megamenu_object: megamenu_object -%}
+						{%- endif -%}
+					{%- endcapture -%}
+
+					{%- if megamenu != blank and has_megamenu == true -%}
+						{{- megamenu -}}
+					{%- else -%}
+						<div class="header-mobile__menu-container-inner header-mobile__menu-container-inner--small-offset">
+							<ul class="header-mobile__menu-list">
+								{%- for second_level_link in first_level_link.links -%}
+									<li class="header-mobile__menu-list-item {% if second_level_link.links.size > 0 %}header-mobile__menu-list-item--big-offset{%- else -%}header-mobile__menu-list-item--small-offset{%- endif -%}">
+										<div class="header-navigation-block">
+											{%- if second_level_link.links.size > 0 -%}
+												<div class="header-navigation-block_item header-mobile__animate header-mobile__animate--nested need-animate" style="--animation-delay: {{ animation_delay_nested }}s">
+													{%- if second_level_link.url != '#' -%}
+														<a class="header-navigation-item header-navigation-item--medium" href="{{- second_level_link.url -}}" {% if second_level_link.current %}aria-current="page"{% endif %}>
+															<span class="header-navigation-item__text">
+																{{- second_level_link.title | escape -}}
+															</span>
+														</a>
+													{%- else -%}
+														<p class="header-navigation-item header-navigation-item--no-hover header-navigation-item--medium">
+															<span class="header-navigation-item__text">
+																{{- second_level_link.title | escape -}}
+															</span>
+														</p>
+													{%- endif -%}
+												</div>
+
+												{%- assign animation_delay_nested = animation_delay_nested | plus: 0.06 -%}
+
+												<ul class="header-navigation-block__list">
+													{%- for third_level_link in second_level_link.links -%}
+														<li class="header-navigation-block__list-item header-mobile__animate header-mobile__animate--nested need-animate" style="--animation-delay: {{ animation_delay_nested }}s">
+															<a class="header-navigation-item header-navigation-item--small" href="{{- third_level_link.url -}}" {% if third_level_link.current %}aria-current="page"{% endif %}>
+																<span class="header-navigation-item__text">
+																	{{- third_level_link.title | escape -}}
+																</span>
+															</a>
+														</li>
+
+														{%- assign animation_delay_nested = animation_delay_nested | plus: 0.06 -%}
+													{%- endfor -%}
+												</ul>
+											{%- else -%}
+												<div class="header-navigation-block_item header-mobile__animate header-mobile__animate--nested need-animate" style="--animation-delay: {{ animation_delay_nested }}s">
+													<a class="header-navigation-item header-navigation-item--medium" href="{{- second_level_link.url -}}" {% if second_level_link.current %}aria-current="page"{% endif %}>
+														<span class="header-navigation-item__text">
+															{{- second_level_link.title | escape -}}
+														</span>
+													</a>
+												</div>
+
+												{%- assign animation_delay_nested = animation_delay_nested | plus: 0.06 -%}
+											{%- endif -%}
+										</div>
+									</li>
+								{%- endfor -%}
+							</ul>
+						</div>
+					{%- endif -%}
+				</div>
+			</div>
+		</div>
+	{%- else -%}
+		<div class="header-mobile__animate header-mobile__animate--main need-animate" style="--animation-delay: {{ animation_delay }}s">
+			<a class="header-navigation-item" href="{{- first_level_link.url -}}" {% if first_level_link.current %}aria-current="page"{% endif %}>
+				<span class="header-navigation-item__text">
+					{{- first_level_link.title | escape -}}
+				</span>
+			</a>
+		</div>
+	{%- endif -%}
+</li>

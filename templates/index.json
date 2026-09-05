@@ -1,0 +1,958 @@
+{
+	"sections": {
+		"slideshow_pTnEUa": {
+			"type": "slideshow",
+			"blocks": {
+				"image_36KGnR": {
+					"type": "image",
+					"settings": {
+						"hide_middle_image_mobile": false,
+						"heading": "BRING HOME <em>the</em> BOBA",
+						"description": "<p>Satisfy your top obsession with the range of new arrivals</p>",
+						"button_text": "Shop now",
+						"button_aria_label": "",
+						"open_in_new_tab": false,
+						"text_alignment_inside_block_desktop": "center",
+						"text_alignment_inside_block_mobile": "center",
+						"content_alignment_horizontal_desktop": "center",
+						"content_alignment_vertical_desktop": "middle",
+						"content_alignment_vertical_mobile": "middle",
+						"background_color": "#000000",
+						"heading_color": "#ffffff",
+						"description_color": "#ffffff",
+						"button_text_color": "#ffffff",
+						"button_background_color": "rgba(255, 255, 255, 0.12)",
+						"button_border_color": "#ffffff",
+						"button_border_outer_color": "#ffffff",
+						"button_text_color_hover": "#000000",
+						"button_background_color_hover": "#F9F9F9",
+						"button_border_color_hover": "#f9f9f9",
+						"button_border_outer_color_hover": "#f9f9f9",
+						"overlay_color": "",
+						"backlight_color": "rgba(196, 56, 152, 1)",
+						"backlight_type": "left_right_bottom_ellipse"
+					}
+				}
+			},
+			"block_order": [
+				"image_36KGnR"
+			],
+			"name": "Slideshow",
+			"settings": {
+				"enable_loop": true,
+				"enable_autoplay": false,
+				"autoplay_speed": 5,
+				"animation_speed": 1.2,
+				"animation_type": "fade",
+				"show_scroll_down_icon": true,
+				"scroll_down_icon_text": "",
+				"enable_scroll_down_action": false,
+				"show_slider_controls": true,
+				"hide_mobile_backlight": false,
+				"ui_color": "#ffffff",
+				"container_width": "100%",
+				"height_desktop": 100,
+				"height_mobile": 100,
+				"subtract_header_height": false,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0
+			}
+		},
+		"best_sellers_MHXzpn": {
+			"type": "best-sellers",
+			"blocks": {
+				"product_item_BgxyMW": {
+					"type": "product_item",
+					"settings": {
+						"background": "linear-gradient(180deg, rgba(196, 56, 152, 1), rgba(8, 6, 6, 1) 100%)",
+						"accent_color": "#c94aa1"
+					}
+				},
+				"product_item_irHPqp": {
+					"type": "product_item",
+					"settings": {
+						"background": "linear-gradient(180deg, rgba(255, 182, 0, 1), rgba(8, 6, 6, 1) 100%)",
+						"accent_color": "#ffb600"
+					}
+				},
+				"product_item_PAfrbM": {
+					"type": "product_item",
+					"settings": {
+						"background": "linear-gradient(180deg, rgba(86, 194, 136, 1), rgba(8, 6, 6, 1) 100%)",
+						"accent_color": "#56c288"
+					}
+				},
+				"product_item_gYxPzV": {
+					"type": "product_item",
+					"settings": {
+						"background": "linear-gradient(180deg, rgba(241, 161, 106, 1), rgba(8, 6, 6, 1) 100%)",
+						"accent_color": "#f1a16a"
+					}
+				}
+			},
+			"block_order": [
+				"product_item_BgxyMW",
+				"product_item_irHPqp",
+				"product_item_PAfrbM",
+				"product_item_gYxPzV"
+			],
+			"name": "Best sellers",
+			"settings": {
+				"heading_first_line": "<em>Bobabam. Instant</em> Boba Drink Kit",
+				"heading_second_line": "",
+				"text": "Satisfy your top obsession with the range of new arrivals. Satisfy your top obsession with the range of new arrivals",
+				"color_text": "#ffffff",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top": 0,
+				"inner_offset_bottom": 0,
+				"inner_offset_top_mobile": 55,
+				"inner_offset_bottom_mobile": 57
+			}
+		},
+		"banner_QJrNNx": {
+			"type": "banner",
+			"blocks": {
+				"full_width_FhkhFz": {
+					"type": "full_width",
+					"settings": {
+						"enable_slice_animation": false,
+						"desktop_image_height": "600px",
+						"mobile_image_height": "350px",
+						"media_type": "image",
+						"heading_first_line": "<em>My favorite</em> BOBA",
+						"heading_second_line": "",
+						"text": "<p>Instant Boba Drink Kits by BOBABAM Is literally my new favorite Boba drink. It is very easy to make and I love the different flavor options.</p>",
+						"button_text": "Shop now",
+						"button_aria": "",
+						"enable_countdown_timer": false,
+						"timer_month": "0",
+						"timer_day": "1",
+						"timer_hour": "0",
+						"timer_timezone": "+0",
+						"external_video_url_desktop": "",
+						"external_video_url_mobile": "",
+						"content_alignment": "center",
+						"content_alignment_mobile": "center",
+						"block_alignment": "center"
+					}
+				}
+			},
+			"block_order": [
+				"full_width_FhkhFz"
+			],
+			"name": "Banner",
+			"settings": {
+				"section_background": "rgba(0,0,0,0)",
+				"content_background": "rgba(255,255,255, 0.2)",
+				"enable_glass_effect": false,
+				"text_color": "#ffffff",
+				"link_color": "#ffffff",
+				"button_background": "#ffffff1f",
+				"button_color": "#ffffff",
+				"button_border": "rgba(0,0,0,0)",
+				"button_border_outer": "#ffffff",
+				"button_background_hover": "#fff",
+				"button_color_hover": "#000000",
+				"button_border_hover": "rgba(0,0,0,0)",
+				"button_border_outer_hover": "#ffffff",
+				"overlay": "rgba(0,0,0, 0.3)",
+				"container_width": "100%",
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0
+			}
+		},
+		"featured_products_zzxfYA": {
+			"type": "featured-products",
+			"name": "Featured collection",
+			"settings": {
+				"heading_first_line": "",
+				"heading_second_line": "",
+				"layout": "4",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top_desktop": 80,
+				"inner_offset_bottom_desktop": 80,
+				"inner_offset_top_mobile": 40,
+				"inner_offset_bottom_mobile": 40
+			}
+		},
+		"products_slideshow_fVnRtf": {
+			"type": "products-slideshow",
+			"blocks": {
+				"product_jCjVp8": {
+					"type": "product",
+					"settings": {
+						"main_heading": "MANGO DRINK",
+						"product_subheading": "TROPICAL SWEET JUICY",
+						"product_description": "<p>Paradise is found in your freezer. Bursting with tropical tiki flavors, this sunkissed stunna is vacation vibes in your glass.</p>",
+						"button_label": "Shop now",
+						"rotate_product_image": true,
+						"ellipse": "#ffb600"
+					}
+				},
+				"product_BrDVVU": {
+					"type": "product",
+					"settings": {
+						"main_heading": "STRAWBERRY",
+						"product_subheading": "JUICY SUMMER SWEET",
+						"product_description": "<p>Suck up the summertime with this perfectly ripened, rosy treat that’s begging to play hooky and picnic in the park. It’s giving gingham.</p>",
+						"button_label": "Shop now",
+						"rotate_product_image": true,
+						"ellipse": "#c43898"
+					}
+				},
+				"product_C3eMtd": {
+					"type": "product",
+					"settings": {
+						"main_heading": "COFFEE DRINK",
+						"product_subheading": "ROASTED SWEET CREAMY",
+						"product_description": "<p>Because bouncy boba and creamy coffee have teamed up to make your day.</p>",
+						"button_label": "Shop now",
+						"rotate_product_image": true,
+						"ellipse": "#236bff"
+					}
+				},
+				"product_aVKpWd": {
+					"type": "product",
+					"settings": {
+						"main_heading": "MATCHA DRINK",
+						"product_subheading": "MELLOW EARTHY SWEET",
+						"product_description": "<p>Floral yet savory, lush yet earthy, this green queen contains multitudes.</p>",
+						"button_label": "Shop now",
+						"rotate_product_image": true,
+						"ellipse": "#2aaf00"
+					}
+				}
+			},
+			"block_order": [
+				"product_jCjVp8",
+				"product_BrDVVU",
+				"product_C3eMtd",
+				"product_aVKpWd"
+			],
+			"name": "Products slideshow",
+			"settings": {
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"container_width": "100%",
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top": 64,
+				"inner_offset_bottom": 64,
+				"inner_offset_top_mobile": 32,
+				"inner_offset_bottom_mobile": 32
+			}
+		},
+		"promo_banners_nAD3Ea": {
+			"type": "promo-banners",
+			"blocks": {
+				"promo_banner_pfzPTq": {
+					"type": "promo_banner",
+					"settings": {
+						"heading": "Green Apple",
+						"text": "Not too sweet, not too tart, Green Apple is the perfect balance of refreshing goodness. Overflowing with real apple juice and a touch of pineapple to make your taste buds tingle with every sip.",
+						"button_label": "Shop",
+						"main_image_object_fit": "contain",
+						"make_big_heading": false,
+						"background": "linear-gradient(135deg, rgba(23, 21, 19, 1) 75%, rgba(165, 203, 101, 1) 100%)"
+					}
+				},
+				"promo_banner_HRCNpb": {
+					"type": "promo_banner",
+					"settings": {
+						"heading": "Peach Mango",
+						"text": "Peach Mango delivers juicy tropical flavor — like sunshine in every sip.",
+						"button_label": "Shop",
+						"main_image_object_fit": "contain",
+						"make_big_heading": false,
+						"background": "linear-gradient(84deg, rgba(23, 21, 19, 1), rgb(70 53 15) 100%)"
+					}
+				},
+				"promo_banner_TnBGRh": {
+					"type": "promo_banner",
+					"settings": {
+						"heading": "Refreshers",
+						"text": "Not too sweet, not too tart, Green Apple is the perfect balance of refreshing goodness.",
+						"button_label": "Button label",
+						"button_link": "",
+						"main_image_object_fit": "contain",
+						"make_big_heading": false,
+						"background": "linear-gradient(84deg, rgba(23, 21, 19, 1), rgb(70 53 15) 100%)"
+					}
+				},
+				"promo_banner_JBTQPN": {
+					"type": "promo_banner",
+					"settings": {
+						"heading": "Juicy Grape",
+						"text": "Juicy Grape brings a fresh twist on a classic. Add sparkling water for that nostalgic purple fizz.",
+						"button_label": "Shop",
+						"main_image_object_fit": "contain",
+						"make_big_heading": false,
+						"background": "linear-gradient(128deg, rgba(23, 21, 19, 1) 68%, rgba(248, 57, 155, 1) 100%)"
+					}
+				}
+			},
+			"block_order": [
+				"promo_banner_pfzPTq",
+				"promo_banner_HRCNpb",
+				"promo_banner_TnBGRh",
+				"promo_banner_JBTQPN"
+			],
+			"name": "Promo banners",
+			"settings": {
+				"heading_first_line": "<em>Bobabam. Instant</em>",
+				"heading_second_line": "Boba Drink Kit",
+				"grid_layout": "one-landscape-two-small-one-big",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"container_width": "100%",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top": 64,
+				"inner_offset_bottom": 64,
+				"inner_offset_top_mobile": 32,
+				"inner_offset_bottom_mobile": 61
+			}
+		},
+		"our_features_VAXWwz": {
+			"type": "our-features",
+			"blocks": {
+				"feature_qGi8a4": {
+					"type": "feature",
+					"settings": {
+						"title": "100% VEGAN"
+					}
+				},
+				"feature_8467PA": {
+					"type": "feature",
+					"settings": {
+						"title": "NUT FREE"
+					}
+				},
+				"feature_CJ7n4n": {
+					"type": "feature",
+					"settings": {
+						"title": "ALL NATURAL"
+					}
+				},
+				"feature_89G7fg": {
+					"type": "feature",
+					"settings": {
+						"title": "NON GMO"
+					}
+				},
+				"feature_HcQwxp": {
+					"type": "feature",
+					"settings": {
+						"title": "HALAL & KOSHER"
+					}
+				},
+				"feature_6Cf6hC": {
+					"type": "feature",
+					"settings": {
+						"title": "Gluten-Free"
+					}
+				}
+			},
+			"block_order": [
+				"feature_qGi8a4",
+				"feature_8467PA",
+				"feature_CJ7n4n",
+				"feature_89G7fg",
+				"feature_HcQwxp",
+				"feature_6Cf6hC"
+			],
+			"name": "Our features",
+			"settings": {
+				"make_not_active_text_bold": false,
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top": 64,
+				"inner_offset_bottom": 64,
+				"inner_offset_top_mobile": 32,
+				"inner_offset_bottom_mobile": 32
+			}
+		},
+		"promo_products_9RyPPN": {
+			"type": "promo-products",
+			"blocks": {
+				"product_YeUtnx": {
+					"type": "product",
+					"settings": {
+						"subheading": "",
+						"text": "",
+						"color_background": "linear-gradient(0deg, rgba(6, 6, 6, 1) 78%, rgba(255, 182, 0, 0.86) 100%)"
+					}
+				},
+				"product_Gb3qrd": {
+					"type": "product",
+					"settings": {
+						"subheading": "",
+						"text": "",
+						"color_background": "linear-gradient(0deg, rgba(0, 0, 0, 1) 78%, rgba(86, 194, 136, 0.86) 100%)"
+					}
+				},
+				"product_cqnfBx": {
+					"type": "product",
+					"settings": {
+						"subheading": "",
+						"text": "",
+						"color_background": "linear-gradient(0deg, rgba(0, 0, 0, 1) 78%, rgba(219, 76, 118, 0.86) 100%)"
+					}
+				},
+				"product_qjHmmi": {
+					"type": "product",
+					"settings": {
+						"subheading": "",
+						"text": "",
+						"color_background": "linear-gradient(0deg, rgba(0, 0, 0, 1) 78%, rgba(133, 22, 206, 0.86) 100%)"
+					}
+				},
+				"product_ypb96U": {
+					"type": "product",
+					"settings": {
+						"subheading": "",
+						"text": "",
+						"color_background": "linear-gradient(0deg, rgba(0, 0, 0, 1) 78%, rgba(60, 119, 236, 0.86) 100%)"
+					}
+				}
+			},
+			"block_order": [
+				"product_YeUtnx",
+				"product_Gb3qrd",
+				"product_cqnfBx",
+				"product_qjHmmi",
+				"product_ypb96U"
+			],
+			"name": "Promo products",
+			"settings": {
+				"heading_first_line": "<em>New Refreshers </em>",
+				"heading_second_line": "Boba Drink Kit",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top_desktop": 75,
+				"inner_offset_bottom_desktop": 100,
+				"inner_offset_top_mobile": 44,
+				"inner_offset_bottom_mobile": 20
+			}
+		},
+		"featured_blog_BPhExd": {
+			"type": "featured-blog",
+			"name": "Blog posts",
+			"settings": {
+				"heading_first_line": "<em>Recipes. </em>",
+				"heading_second_line": "<strong>Pick Your Meal</strong>",
+				"link_text": "View All Recipes",
+				"link_aria_label_text": "Link to blog",
+				"layout": "secondary",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "schema-2",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top_desktop": 100,
+				"inner_offset_bottom_desktop": 100,
+				"inner_offset_top_mobile": 40,
+				"inner_offset_bottom_mobile": 40
+			}
+		},
+		"faq_simple_HqUbWV": {
+			"type": "faq-simple",
+			"blocks": {
+				"faq_item_dhdDPE": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "I made a mistake in the shipping address. Can I change it?",
+						"text": "<p>If you notice a mistake in your shipping address, please contact us as soon as possible. We can update the address if your order hasn’t been processed yet. Once it has been shipped, we’re unable to make changes, but you may be able to update delivery details directly with the carrier.</p>"
+					}
+				},
+				"faq_item_eTnUtj": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "I am purchasing a gift. Can you exclude price information?",
+						"text": "<p>Our warehouse takes pride in shipping items out as soon as possible. Many of the orders will be processed within 2 hours after you place the order. We are unable to make any changes once an order begins processing, but we do accepts returns and exchanges at any time, and would be happy to reship your order if it is undeliverable as addressed.</p>"
+					}
+				},
+				"faq_item_nQbhFQ": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "Can I make a change to my order?",
+						"text": "<p>We’re happy to help with changes if your order hasn’t been processed yet. Please reach out to us as quickly as possible, and we’ll do our best to update it. Once an order has been shipped, we’re unable to make modifications.</p>"
+					}
+				},
+				"faq_item_xNGQx8": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "How do I prepare my boba drink set?",
+						"text": "<p>Each set comes with easy step-by-step instructions. Simply cook the boba pearls, mix with the included tea or flavor base, add ice or milk if you like, and enjoy your café-style drink at home in just a few minutes.</p>"
+					}
+				},
+				"faq_item_FVLeB6": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "Do you ship internationally?",
+						"text": "<p>Yes! We ship to many countries worldwide. Shipping rates and delivery times vary depending on your location, and you’ll see the exact options available at checkout. If your country isn’t listed, feel free to contact us and we’ll do our best to help.</p>"
+					}
+				},
+				"faq_item_9mpcrW": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "What currencies do you accept?",
+						"text": "<p>We accept payments in multiple currencies. Your local currency will usually display automatically based on your location. At checkout, you’ll see the available currency options before completing your order.</p>"
+					}
+				}
+			},
+			"block_order": [
+				"faq_item_dhdDPE",
+				"faq_item_eTnUtj",
+				"faq_item_nQbhFQ",
+				"faq_item_xNGQx8",
+				"faq_item_FVLeB6",
+				"faq_item_9mpcrW"
+			],
+			"name": "FAQ",
+			"settings": {
+				"heading_first_line": "<em>Frequently Asked</em>",
+				"heading_second_line": "<strong>Questions</strong>",
+				"text": "<p>Savor the taste. Discover the artistry. Espresso made simple.</p>",
+				"button_label": "View All FAQs",
+				"button_aria_label": "",
+				"button_link": "/",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "schema-2",
+				"container_width": "100%",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top_desktop": 51,
+				"inner_offset_bottom_desktop": 64,
+				"inner_offset_top_mobile": 32,
+				"inner_offset_bottom_mobile": 32
+			}
+		},
+		"featured_product_DHbRgT": {
+			"type": "featured-product",
+			"blocks": {
+				"vendor_3xXAMB": {
+					"type": "vendor",
+					"disabled": true,
+					"settings": {
+						"show_sku": false,
+						"sku_text": "Art: {SKU}",
+						"show_vendor": true,
+						"make_vendor_link": true,
+						"offset_top_desktop": 16,
+						"offset_bottom_desktop": 16,
+						"offset_top_mobile": 12,
+						"offset_bottom_mobile": 12
+					}
+				},
+				"title_cKT6Fk": {
+					"type": "title",
+					"settings": {
+						"offset_top_desktop": 16,
+						"offset_bottom_desktop": 16,
+						"offset_top_mobile": 12,
+						"offset_bottom_mobile": 12
+					}
+				},
+				"description_M4k3cU": {
+					"type": "description",
+					"settings": {
+						"read_more_label": "",
+						"offset_top_desktop": 16,
+						"offset_bottom_desktop": 16,
+						"offset_top_mobile": 12,
+						"offset_bottom_mobile": 12
+					}
+				},
+				"options_nq6b6g": {
+					"type": "options",
+					"settings": {
+						"variant_picker": "radio",
+						"color_swatch_type": "square",
+						"offset_top_desktop": 16,
+						"offset_bottom_desktop": 16,
+						"offset_top_mobile": 12,
+						"offset_bottom_mobile": 12
+					}
+				},
+				"badges_3J8xY3": {
+					"type": "badges",
+					"settings": {
+						"offset_top_mobile": 0,
+						"offset_bottom_mobile": 12
+					}
+				},
+				"price_and_quantity_TenxHN": {
+					"type": "price_and_quantity",
+					"settings": {
+						"offset_top_desktop": 10,
+						"offset_bottom_desktop": 10,
+						"offset_top_mobile": 10,
+						"offset_bottom_mobile": 10
+					}
+				},
+				"inventory_status_e6ykRh": {
+					"type": "inventory_status",
+					"settings": {
+						"inv_low_stock_text": "Low stock",
+						"inv_high_stock_text": "In stock, ready to ship",
+						"low_stock_threshold": 10,
+						"show_inventory_quantity": true,
+						"offset_top_desktop": 10,
+						"offset_bottom_desktop": 10,
+						"offset_top_mobile": 10,
+						"offset_bottom_mobile": 10
+					}
+				},
+				"countdown_timer_ipqcwT": {
+					"type": "countdown_timer",
+					"settings": {
+						"text": "Sale ends in:",
+						"offset_top_desktop": 16,
+						"offset_bottom_desktop": 16,
+						"offset_top_mobile": 12,
+						"offset_bottom_mobile": 12
+					}
+				},
+				"add_to_cart_rgjTRd": {
+					"type": "add_to_cart",
+					"settings": {
+						"show_additional_buttons": true,
+						"show_gift_card_recipient": true,
+						"add_to_card_button_text_color": "#ffffff",
+						"add_to_card_button_background_color": "#538bf6",
+						"add_to_card_button_border_color": "rgba(0,0,0,0)",
+						"add_to_card_button_text_color_hover": "#000000",
+						"add_to_card_button_background_color_hover": "#ffffff",
+						"add_to_card_button_border_color_hover": "rgba(0,0,0,0)",
+						"buy_now_button_text_color": "#000000",
+						"buy_now_button_background_color": "#ffffff",
+						"buy_now_button_border_color": "rgba(0,0,0,0)",
+						"buy_now_button_text_color_hover": "#000000",
+						"buy_now_button_background_color_hover": "#d8d8d8",
+						"buy_now_button_border_color_hover": "#d8d8d8",
+						"compare_button_text_color": "#ffffff",
+						"compare_button_background_color": "#ffffff20",
+						"compare_button_border_color": "rgba(0,0,0,0)",
+						"compare_button_text_color_hover": "#000000",
+						"compare_button_background_color_hover": "#ffffff",
+						"compare_button_border_color_hover": "rgba(0,0,0,0)",
+						"offset_top_desktop": 8,
+						"offset_bottom_desktop": 24,
+						"offset_top_mobile": 8,
+						"offset_bottom_mobile": 24
+					}
+				},
+				"pickup_availability_D8mWj3": {
+					"type": "pickup_availability",
+					"disabled": true,
+					"settings": {}
+				},
+				"socials_MAgp93": {
+					"type": "socials",
+					"settings": {
+						"show_facebook": true,
+						"show_twitter": true,
+						"show_pinterest": true,
+						"offset_top_desktop": 10,
+						"offset_bottom_desktop": 10,
+						"offset_top_mobile": 10,
+						"offset_bottom_mobile": 10
+					}
+				},
+				"drawers_TBdUJm": {
+					"type": "drawers",
+					"settings": {
+						"drawer_content_1": "",
+						"drawer_toggle_text_1": "Drawer 1",
+						"drawer_title_1": "Drawer 1",
+						"drawer_content_2": "shipping-returns",
+						"drawer_toggle_text_2": "Shipping and Returns",
+						"drawer_title_2": "Shipping and Returns",
+						"drawer_content_3": "",
+						"drawer_toggle_text_3": "Drawer 3",
+						"drawer_title_3": "Drawer 3",
+						"drawer_content_4": "",
+						"drawer_toggle_text_4": "Drawer 4",
+						"drawer_title_4": "Drawer 4"
+					}
+				}
+			},
+			"block_order": [
+				"vendor_3xXAMB",
+				"title_cKT6Fk",
+				"description_M4k3cU",
+				"options_nq6b6g",
+				"badges_3J8xY3",
+				"price_and_quantity_TenxHN",
+				"inventory_status_e6ykRh",
+				"countdown_timer_ipqcwT",
+				"add_to_cart_rgjTRd",
+				"pickup_availability_D8mWj3",
+				"socials_MAgp93",
+				"drawers_TBdUJm"
+			],
+			"name": "Featured product",
+			"settings": {
+				"media_layout": "carousel",
+				"media_height": "full_size",
+				"image_object_fit": "cover",
+				"is_enable_media_scroller": true,
+				"enable_sticky_scrollbar": true,
+				"enable_blurred_background_sticky_scrollbar": true,
+				"show_taxes_included": true,
+				"show_pay_installments": true,
+				"show_size_guide": true,
+				"size_guide_button_text": "Size guide",
+				"size_guide_drawer_title": "Size guide",
+				"size_guide_tab_general_name": "Dimensions",
+				"size_guide_tab_model_name": "Model parameters",
+				"enable_product_complementary": true,
+				"product_complementary_title": "Pairs nicely with",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"ui_button_color": "#ffffff",
+				"ui_button_background_color": "#ffffff",
+				"ui_button_border_color": "#e9e9e9",
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top_desktop": 100,
+				"inner_offset_bottom_desktop": 40,
+				"inner_offset_top_mobile": 43,
+				"inner_offset_bottom_mobile": 24
+			}
+		},
+		"promo_banners_KU4gmc": {
+			"type": "promo-banners",
+			"blocks": {
+				"promo_banner_we9kwU": {
+					"type": "promo_banner",
+					"settings": {
+						"heading": "Sip, Read & Enjoy",
+						"text": "Explore recipes, trends, and behind-the-scenes insights on all things boba.",
+						"button_label": "Read more",
+						"main_image_object_fit": "contain",
+						"make_big_heading": false,
+						"background": "linear-gradient(270deg, rgba(0, 0, 0, 1) 81%, rgba(215, 176, 18, 1) 95%)"
+					}
+				},
+				"promo_banner_7zLNtq": {
+					"type": "promo_banner",
+					"settings": {
+						"heading": "REFRESHERS",
+						"text": "Sip something new! Fresh blends made to brighten your day.",
+						"button_label": "Shp new",
+						"main_image_object_fit": "contain",
+						"make_big_heading": false,
+						"background": "linear-gradient(135deg, rgba(241, 169, 192, 1), rgba(23, 21, 19, 1) 41%)"
+					}
+				},
+				"promo_banner_dCXtmc": {
+					"type": "promo_banner",
+					"settings": {
+						"heading": "REFRESHERS",
+						"text": "A burst of crisp green apple — refreshing, light, and perfectly balanced.",
+						"button_label": "Shop",
+						"main_image_object_fit": "contain",
+						"make_big_heading": false,
+						"background": "linear-gradient(135deg, rgba(143, 248, 57, 0.5) 3%, rgba(23, 21, 19, 1) 36%)"
+					}
+				},
+				"promo_banner_k4L4Lz": {
+					"type": "promo_banner",
+					"settings": {
+						"heading": "Juicy Sweet BOBA",
+						"text": "",
+						"button_label": "Shop all",
+						"main_image_object_fit": "contain",
+						"make_big_heading": true,
+						"background": "linear-gradient(135deg, rgba(203, 101, 171, 1), rgba(23, 21, 19, 1) 30%, rgba(23, 22, 19, 1) 70%, rgba(203, 101, 171, 1) 100%)"
+					}
+				}
+			},
+			"block_order": [
+				"promo_banner_we9kwU",
+				"promo_banner_7zLNtq",
+				"promo_banner_dCXtmc",
+				"promo_banner_k4L4Lz"
+			],
+			"name": "Promo banners",
+			"settings": {
+				"heading_first_line": "<em>Bobabam. Instant</em>",
+				"heading_second_line": "<strong>Boba Drink Kit</strong>",
+				"grid_layout": "one-landscape-two-small-one-big",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top": 64,
+				"inner_offset_bottom": 64,
+				"inner_offset_top_mobile": 32,
+				"inner_offset_bottom_mobile": 32
+			}
+		},
+		"featured_products_m3nrRp": {
+			"type": "featured-products",
+			"name": "Featured collection",
+			"settings": {
+				"heading_first_line": "<em>New Refreshers</em>",
+				"heading_second_line": "<strong>Boba Drink Kit</strong>",
+				"layout": "3",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top_desktop": 40,
+				"inner_offset_bottom_desktop": 40,
+				"inner_offset_top_mobile": 40,
+				"inner_offset_bottom_mobile": 40
+			}
+		},
+		"gallery_hNRLzm": {
+			"type": "gallery",
+			"blocks": {
+				"image_3TPQgc": {
+					"type": "image",
+					"settings": {
+						"open_in_new_tab": true
+					}
+				},
+				"image_EcgMBw": {
+					"type": "image",
+					"settings": {
+						"open_in_new_tab": true
+					}
+				},
+				"image_BVKcqf": {
+					"type": "image",
+					"settings": {
+						"open_in_new_tab": true
+					}
+				},
+				"image_H69gbe": {
+					"type": "image",
+					"settings": {
+						"open_in_new_tab": true
+					}
+				}
+			},
+			"block_order": [
+				"image_3TPQgc",
+				"image_EcgMBw",
+				"image_BVKcqf",
+				"image_H69gbe"
+			],
+			"name": "Image gallery",
+			"settings": {
+				"heading_first_line": "<em>FOLLOW US ON</em>",
+				"heading_second_line": "OUR INSTAGRAM",
+				"button_label": "@drinkbobabam",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"enable_bottom_rounded_corners": true,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top": 0,
+				"inner_offset_bottom": 64,
+				"inner_offset_top_mobile": 0,
+				"inner_offset_bottom_mobile": 32
+			}
+		},
+		"newsletter_3f6bGN": {
+			"type": "newsletter",
+			"name": "Newsletter",
+			"settings": {
+				"label": "",
+				"heading_first": "<strong>SIGN UP AND</strong>",
+				"heading_second": "<em>GET 10% OFF</em>",
+				"text": "<p>Sign up for early sale access, new in, promotions and more</p>",
+				"success_message": "Thanks for subscribing",
+				"email_placeholder": "Enter email address...",
+				"color_section_background": "",
+				"color_background": "#dc9d00",
+				"color_text": "#ffffff",
+				"color_button_background": "#ffffff",
+				"color_button": "#000000",
+				"color_button_background_hover": "#000000",
+				"color_button_hover": "#ffffff",
+				"container_width": "inherit",
+				"offset_top_desktop": 50,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 25,
+				"offset_bottom_mobile": 25,
+				"inner_offset_top": 0,
+				"inner_offset_bottom": 0,
+				"inner_offset_top_mobile": 0,
+				"inner_offset_bottom_mobile": 0
+			}
+		}
+	},
+	"order": [
+		"slideshow_pTnEUa",
+		"best_sellers_MHXzpn",
+		"banner_QJrNNx",
+		"featured_products_zzxfYA",
+		"products_slideshow_fVnRtf",
+		"promo_banners_nAD3Ea",
+		"our_features_VAXWwz",
+		"promo_products_9RyPPN",
+		"featured_blog_BPhExd",
+		"faq_simple_HqUbWV",
+		"featured_product_DHbRgT",
+		"promo_banners_KU4gmc",
+		"featured_products_m3nrRp",
+		"gallery_hNRLzm",
+		"newsletter_3f6bGN"
+	]
+}

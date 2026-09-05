@@ -1,0 +1,447 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+  Snippet: Product options
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign enable_variant_images  		= settings.is_images_swatches_enabled -%}
+{%- assign is_color_swatches_enabled	= settings.is_color_swatches_enabled -%}
+{%- assign swatch_option				= settings.color_swatches_option | default: 'Color' | downcase -%}
+{%- assign swatches 					= swatch_option | split: ',' -%}
+{%- assign variants_type 				= block.settings.variant_picker -%}
+{%- assign swatch_type 					= block.settings.color_swatch_type -%}
+
+{%- capture styles -%}
+	--offset-top-desktop: {{ block.settings.offset_top_desktop }}px; {{-  -}}
+	--offset-bottom-desktop: {{ block.settings.offset_bottom_desktop }}px; {{-  -}}
+	--offset-top-mobile: {{ block.settings.offset_top_mobile }}px; {{-  -}}
+	--offset-bottom-mobile: {{ block.settings.offset_bottom_mobile }}px;
+{%- endcapture -%}
+
+{% case swatch_type %}
+	{% when 'rectangle' %}
+		{% assign swatch_container_class	= 'product-options__swatch-container product-options__swatch-container--small-gap' %}
+		{% assign swatch_class 				= 'radio-option-swatch-rectangle' %}
+		{% assign swatch_label_class 		= 'radio-option-swatch-rectangle__label' %}
+		{% assign swatch_size 				= 64 %}
+	{% when 'square' %}
+		{% assign swatch_container_class	= 'product-options__swatch-container' %}
+		{% assign swatch_class 				= 'radio-option-swatch-square' %}
+		{% assign swatch_label_class 		= 'radio-option-swatch-square__label' %}
+		{% assign swatch_size 				= 80 %}
+{% endcase %}
+
+{% if variants_type == "select" %}
+	{% assign swatch_size = 80 %}
+{% endif %}
+
+<div
+	class="product-variants {% if product.has_only_default_variant %}is-hidden{% endif %}"
+	style="{{ styles }}"
+	data-js-product-variant
+>
+	<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+	{% if product.has_only_default_variant %}
+		<script type="application/json" data-selected-variant>
+			{{ product.selected_or_first_available_variant | json }}
+		</script>
+	{% endif %}
+</div>
+
+{%- unless product.has_only_default_variant -%}
+	<div class="product-options js-accordion-container" style="{{ styles }}">
+		<div class="js-product-options">
+			{%- for option in product.options_with_values -%}
+				{%- assign downcased_option = option.name | downcase -%}
+				{%- assign handleized_option = option.name | handleize -%}
+				{%- assign swatch_count = option.values | map: 'swatch' | compact | size -%}
+
+				{% for swatch in swatches %}
+					{% assign swatch_string = swatch | strip %}
+
+					{% if downcased_option == swatch_string %}
+						{% assign swatch_option = swatch_string %}
+					{% endif %}
+				{% endfor %}
+
+				{%- comment -%}
+					Swatch options
+				{%- endcomment -%}
+				{%- capture swatch_options -%}
+					{% if variants_type == "radio" %}
+						<div class="product-options__accordion-item {% if forloop.last %}product-options__accordion-item--last{% endif %} js-accordion-item is-active">
+							<button
+								type="button"
+								class="product-options__accordion-head accordion__title focus-visible-outline js-accordion-control"
+								aria-expanded="true"
+								aria-controls="product-option-accordion-{{ section.id }}-{{- option.position -}}"
+								aria-label="{{ 'accordions.show' | t | escape }}"
+							>
+								<span class="product-options__swatch-wrapper">
+									<span class="product-options__swatch-label">{{- option.name -}}:</span>
+
+									<span class="product-options__swatch-value js-swatch-label-name"
+										  data-swatch-name="{{ option.name }}"
+										  data-swatch-position="{{ option.position }}"
+									>
+										{{- option.selected_value -}}
+									</span>
+								</span>
+
+								<span class="product-options__accordion-icon" aria-hidden="true">
+									{%- render 'icons', icon: 'arrow-down', class: 'icon-arrow-down' -%}
+								</span>
+							</button>
+
+							<div id="product-option-accordion-{{ section.id }}-{{- option.position -}}"
+								 class="product-options__accordion-content-animate accordion__content accordion__content--animate js-accordion-content" style="height: auto;"
+							>
+								<div class="product-options__accordion-content js-accordion-inner">
+									<div class="product-options__swatch-container {% if enable_variant_images %} product-options__swatch-container--images{% endif %}">
+										{%- for value in option.values  -%}
+											{%- assign handleized_value = value | handleize -%}
+
+											{%- capture swatch_styles -%}
+												{% assign image_name = value | handle | prepend: 'swatch-' | append: '.png' %}
+												{% assign swatch_color_fallback = value | split: ' ' | last | handle %}
+
+												{% assign variant_image = blank %}
+
+												{% if enable_variant_images %}
+													{% assign variant_image = value.variant.featured_image | default: value.variant.image %}
+												{% endif %}
+
+												{% assign swatch_image = variant_image | default: value.swatch.image | default: images[image_name] %}
+												{% assign swatch_color = value.swatch.color | default: swatch_color_fallback %}
+
+												style="
+													{%- if swatch_image != blank -%}
+														--swatch-image: url(
+															{%- if enable_variant_images -%}
+																{{- swatch_image | image_url: width: 80, height: 80 -}}
+															{%- else -%}
+																{{- swatch_image | image_url: width: swatch_size, height: swatch_size -}}
+															{%- endif -%}
+														);
+													{%- else -%}
+														--swatch-color: {{ swatch_color }};
+													{%- endif -%}
+												"
+											{%- endcapture -%}
+
+											<div class="radio-container {{ swatch_class }}" {{- swatch_styles -}}>
+												{%- assign is_disabled = true -%}
+
+												{% if value.available %}
+													{%- assign is_disabled = false -%}
+												{% endif %}
+
+												<input
+													id="section-{{- section.id -}}-product-{{- product.id -}}-option-{{- handleized_option -}}-value-{{- handleized_value -}}"
+													type="radio"
+													class="visually-hidden radio-input"
+													value="{{- value -}}"
+													name="option{{- option.position -}}"
+													{% if value.selected %}
+														checked
+													{% endif %}
+													data-option="{{- option.name -}}"
+													data-option-value-id="{{ value.id }}"
+												/>
+
+												<label
+													for="section-{{- section.id -}}-product-{{- product.id -}}-option-{{- handleized_option -}}-value-{{- handleized_value -}}"
+													class="{{ swatch_label_class }} {% if is_disabled %}is-disabled{% endif %}"
+												>
+													<span class="visually-hidden">{{- value -}}</span>
+												</label>
+											</div>
+										{%- endfor -%}
+									</div>
+								</div>
+							</div>
+						</div>
+					{% else %}
+						<div class="product-options__dropdown custom-dropdown js-custom-dropdown">
+							<style>
+								{%- for value in option.values  -%}
+								.custom-dropdown:has(#product-option-{{ section.id }}-{{- value | handle -}}-{{ handleized_option }}:checked) #product-option-{{ section.id }}-{{- value | handle -}}-{{ handleized_option }}-trigger {
+									display: flex;
+								}
+								{% endfor %}
+							</style>
+
+							<span class="custom-dropdown__label">{{ option.name }}</span>
+
+							<button class="custom-dropdown__trigger js-custom-dropdown-trigger" type="button">
+								{%- for value in option.values  -%}
+									{%- capture swatch_styles -%}
+										{% assign image_name = value | handle | prepend: 'swatch-' | append: '.png' %}
+										{% assign swatch_color_fallback = value | split: ' ' | last | handle %}
+
+										{% assign variant_image = blank %}
+
+										{% if enable_variant_images %}
+											{% assign variant_image = value.variant.featured_image | default: value.variant.image %}
+										{% endif %}
+
+										{% assign swatch_image = variant_image | default: value.swatch.image | default: images[image_name] %}
+										{% assign swatch_color = value.swatch.color | default: swatch_color_fallback %}
+
+										style="
+											{%- if swatch_image != blank -%}
+												--swatch-image: url({{- swatch_image | image_url: width: swatch_size, height: swatch_size -}});
+											{%- else -%}
+												--swatch-color: {{ swatch_color }};
+											{%- endif -%}
+										"
+									{%- endcapture -%}
+
+									<span class="custom-dropdown__trigger-content custom-dropdown__trigger-content--color-swatch" id="product-option-{{ section.id }}-{{- value | handle -}}-{{ handleized_option }}-trigger"
+										{{ swatch_styles }}
+									>
+										{{- value -}}
+									</span>
+								{% endfor %}
+
+								{%- render 'icons', icon: 'arrow-down', class: 'custom-dropdown__trigger-icon' -%}
+							</button>
+
+							<div class="custom-dropdown__options">
+								{%- for value in option.values  -%}
+									{%- assign is_disabled = true -%}
+
+									{% if value.available %}
+										{%- assign is_disabled = false -%}
+									{% endif %}
+
+									{%- capture swatch_styles -%}
+										{% assign image_name = value | handle | prepend: 'swatch-' | append: '.png' %}
+										{% assign swatch_color_fallback = value | split: ' ' | last | handle %}
+
+										{% assign variant_image = blank %}
+
+										{% if enable_variant_images %}
+											{% assign variant_image = value.variant.featured_image | default: value.variant.image %}
+										{% endif %}
+
+										{% assign swatch_image = variant_image | default: value.swatch.image | default: images[image_name] %}
+										{% assign swatch_color = value.swatch.color | default: swatch_color_fallback %}
+
+										style="
+											{%- if swatch_image != blank -%}
+												--swatch-image: url({{- swatch_image | image_url: width: swatch_size, height: swatch_size -}});
+											{%- else -%}
+												--swatch-color: {{ swatch_color }};
+											{%- endif -%}
+										"
+									{%- endcapture -%}
+
+									<label
+										class="custom-dropdown__option custom-dropdown__option--color-swatch {% if is_disabled %}is-disabled{% endif %}"
+										for="product-option-{{ section.id }}-{{- value | handle -}}-{{ handleized_option }}"
+										{{ swatch_styles }}
+									>
+										<input
+											id="product-option-{{ section.id }}-{{- value | handle -}}-{{ handleized_option }}"
+											type="radio"
+											class="visually-hidden radio-input"
+											value="{{- value -}}"
+											name="option{{- option.position -}}"
+											{% if value.selected %}
+												checked
+											{% endif %}
+											data-option="option{{- option.position -}}"
+											data-option-value-id="{{ value.id }}"
+										/>
+										{{- value -}}
+									</label>
+								{%- endfor -%}
+							</div>
+						</div>
+					{% endif %}
+				{%- endcapture -%}
+
+				{%- comment -%}
+					Default options
+				{%- endcomment -%}
+				{%- capture other_options -%}
+					{% if variants_type == "radio" %}
+						<div class="product-options__accordion-item {% if forloop.last %}product-options__accordion-item--last{% endif %} js-accordion-item is-active">
+							<button
+								type="button"
+								class="product-options__accordion-head accordion__title focus-visible-outline js-accordion-control"
+								aria-expanded="true"
+								aria-controls="product-option-accordion-{{ section.id }}-{{- option.position -}}"
+								aria-label="{{ 'accordions.show' | t | escape }}"
+							>
+								<span class="product-options__swatch-wrapper">
+									<span class="product-options__swatch-label">{{- option.name -}}:</span>
+
+									<span class="product-options__swatch-value js-swatch-label-name"
+										  data-swatch-name="{{ option.name }}"
+										  data-swatch-position="{{ option.position }}"
+									>
+									{{- option.selected_value -}}
+								</span>
+							</span>
+
+								<span class="product-options__accordion-icon" aria-hidden="true">
+									{%- render 'icons', icon: 'arrow-down', class: 'icon-arrow-down' -%}
+								</span>
+							</button>
+
+							<div id="product-option-accordion-{{ section.id }}-{{- option.position -}}"
+								 class="accordion__content accordion__content--animate js-accordion-content"
+								 style="height: auto;"
+							>
+								<div class="product-options__accordion-content js-accordion-inner">
+									<div class="product-options__default">
+										{%- for value in option.values  -%}
+											{%- assign handleized_value = value | handleize -%}
+											{%- assign is_disabled = true -%}
+
+											{% if value.available %}
+												{%- assign is_disabled = false -%}
+											{% endif %}
+
+											<div class="radio-option">
+												<input
+													id="section-{{- section.id -}}-product-{{- product.id -}}-option-{{- handleized_option -}}-value-{{- handleized_value -}}"
+													type="radio"
+													class="visually-hidden radio-input"
+													value="{{- value | escape -}}"
+													name="option{{- option.position -}}"
+													{% if value.selected %}
+														checked
+													{% endif %}
+													data-option="{{- option.name -}}"
+													data-option-value-id="{{ value.id }}"
+												>
+
+												<label
+													for="section-{{- section.id -}}-product-{{- product.id -}}-option-{{- handleized_option -}}-value-{{- handleized_value -}}"
+													class="radio-option__label {% if is_disabled %}is-disabled{% endif %}"
+												>
+													{{- value -}}
+												</label>
+											</div>
+										{%- endfor -%}
+									</div>
+								</div>
+							</div>
+						</div>
+					{% else %}
+						<div class="product-options__dropdown custom-dropdown js-custom-dropdown">
+							<style>
+								{%- for value in option.values  -%}
+								.custom-dropdown:has(#product-option-{{ section.id }}-{{- value | handle -}}-{{ handleized_option }}:checked) #product-option-{{ section.id }}-{{- value | handle -}}-{{ handleized_option }}-trigger {
+									display: flex;
+								}
+								{% endfor %}
+							</style>
+
+							<span class="custom-dropdown__label">{{ option.name }}</span>
+
+							<button class="custom-dropdown__trigger js-custom-dropdown-trigger" type="button">
+								{%- for value in option.values  -%}
+									<span class="custom-dropdown__trigger-content" id="product-option-{{ section.id }}-{{- value | handle -}}-{{ handleized_option }}-trigger">
+										{{- value -}}
+									</span>
+								{% endfor %}
+
+								{%- render 'icons', icon: 'arrow-down', class: 'custom-dropdown__trigger-icon' -%}
+							</button>
+
+							<div class="custom-dropdown__options">
+								{%- for value in option.values  -%}
+									{%- assign is_disabled = true -%}
+
+									{% if value.available %}
+										{%- assign is_disabled = false -%}
+									{% endif %}
+
+									<label class="custom-dropdown__option {% if is_disabled %}is-disabled{% endif %}" for="product-option-{{ section.id }}-{{- value | handle -}}-{{ handleized_option }}">
+										<input
+											id="product-option-{{ section.id }}-{{- value | handle -}}-{{ handleized_option }}"
+											type="radio"
+											class="visually-hidden radio-input"
+											value="{{- value -}}"
+											name="option{{- option.position -}}"
+											{% if value.selected %}
+												checked
+											{% endif %}
+											data-option="option{{- option.position -}}"
+											data-option-value-id="{{ value.id }}"
+										/>
+										{{- value -}}
+									</label>
+								{%- endfor -%}
+							</div>
+						</div>
+					{% endif %}
+				{%- endcapture -%}
+
+				{%- if swatch_count > 0 and is_color_swatches_enabled -%}
+					{{- swatch_options -}}
+				{% elsif downcased_option == swatch_option and is_color_swatches_enabled %}
+					{{- swatch_options -}}
+				{%- else -%}
+					{{- other_options -}}
+				{%- endif -%}
+			{%- endfor -%}
+
+			<script type="application/json" data-selected-variant>
+			  {{ product.selected_or_first_available_variant | json }}
+			</script>
+		</div>
+
+		{%- comment -%}
+			Size guide
+		{%- endcomment -%}
+		{%- assign show_size_guide 				= false -%}
+		{%- assign size_guide_page 				= product.metafields.size_guide.page.value -%}
+
+		{%- if section.settings.show_size_guide
+			and size_guide_page != blank
+			and size_guide_page.content != blank
+		-%}
+			{%- assign show_size_guide = true -%}
+		{%- endif -%}
+
+		{% if show_size_guide %}
+			<div class="product-options__size-guide">
+				<button
+					class="simple-link focus-visible-outline"
+					data-target="productSizeGuideDrawer-{{- section.id -}}"
+					data-js-toggle="productSizeGuideDrawer-{{- section.id -}}"
+					type="button"
+				>
+					{%- assign size_guide_icon = section.settings.size_guide_button_icon -%}
+
+					{%- if size_guide_icon != blank -%}
+						{%- capture img_focal -%}
+							--img-desktop-pos: {{ size_guide_icon.presentation.focal_point }};
+						{%- endcapture -%}
+
+						<img
+							class="simple-link__icon"
+							srcset="{{ size_guide_icon | image_url: width: 24, height: 24 }} 1x,
+									{{ size_guide_icon | image_url: width: 48, height: 48 }} 2x"
+							src="{{- size_guide_icon | image_url: width: 24 -}}"
+							alt="{{- size_guide_icon.alt | escape -}}"
+							aria-hidden="true"
+							width="24"
+							height="24"
+							style="{{ img_focal }}"
+							loading="lazy"
+						/>
+					{%- endif -%}
+
+					{{- section.settings.size_guide_button_text | default: "Size guide" -}}
+				</button>
+			</div>
+		{% endif %}
+	</div>
+{%- endunless -%}

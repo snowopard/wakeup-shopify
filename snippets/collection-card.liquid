@@ -1,0 +1,173 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Snippet: Collection card
+	- collection: Collection object (required)
+	- image: image object
+	- ellipse_background: color of the ellipse background
+	- image_object_fit: image object-fit
+	- is_lazy: boolean, enable lazy-load
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- render 'adastra' with '/src/styles/collection-card.scss' -%}
+
+{%- assign min = 1 -%}
+{%- assign max = 4 -%}
+{%- assign diff = max | minus: min -%}
+
+<a
+	class="focus-visible-outline collection-card"
+	{% if collection != blank %}
+		href="{{- collection.url -}}"
+		aria-label="{{- 'collections.general.collection_card_link_aria_label' | t: title: collection.title | escape -}}"
+	{% endif %}
+	{% if collection == blank %}role="link" aria-disabled="true"{% endif %}
+>
+	<div class="collection-card__image-wrapper">
+		{% if image != blank %}
+			{% if ellipse_background != blank %}
+				<div class="collection-card__ellipse collection-card__ellipse--first"
+					 style="background-color: {{ ellipse_background }}"></div>
+				<div class="collection-card__ellipse collection-card__ellipse--second"
+					 style="background-color: {{ ellipse_background }}"></div>
+			{% endif %}
+
+			{%- capture img_styles -%}
+				--img-object-fit: {{ image_object_fit }};
+				--img-desktop-pos: {{ image.presentation.focal_point }};
+			{%- endcapture -%}
+
+			{% if image_object_fit == 'cover' %}
+				{% assign img_src_380_1x = image | image_url: width: 346, height: 363, crop: 'center' %}
+				{% assign img_src_380_2x = image | image_url: width: 692, height: 726, crop: 'center' %}
+
+				{% assign img_src_420_1x = image | image_url: width: 386, height: 405, crop: 'center' %}
+				{% assign img_src_420_2x = image | image_url: width: 772, height: 810, crop: 'center' %}
+
+				{% assign img_src_767_1x = image | image_url: width: 733, height: 767, crop: 'center' %}
+				{% assign img_src_767_2x = image | image_url: width: 1466, height: 1534, crop: 'center' %}
+
+				{% assign img_src_991_1x = image | image_url: width: 212, height: 274, crop: 'center' %}
+				{% assign img_src_991_2x = image | image_url: width: 424, height: 548, crop: 'center' %}
+
+				{% assign img_src_1500_1x = image | image_url: width: 317, height: 408, crop: 'center' %}
+				{% assign img_src_1500_2x = image | image_url: width: 634, height: 816, crop: 'center' %}
+
+				{% assign img_src_1x = image | image_url: width: 460, height: 591, crop: 'center' %}
+				{% assign img_src_2x = image | image_url: width: 920, height: 1182, crop: 'center' %}
+			{% else %}
+				{% assign img_src_380_1x = image | image_url: width: 346, crop: 'center' %}
+				{% assign img_src_380_2x = image | image_url: width: 692, crop: 'center' %}
+
+				{% assign img_src_420_1x = image | image_url: width: 386, crop: 'center' %}
+				{% assign img_src_420_2x = image | image_url: width: 772, crop: 'center' %}
+
+				{% assign img_src_767_1x = image | image_url: width: 733, crop: 'center' %}
+				{% assign img_src_767_2x = image | image_url: width: 1466, crop: 'center' %}
+
+				{% assign img_src_991_1x = image | image_url: width: 212, crop: 'center' %}
+				{% assign img_src_991_2x = image | image_url: width: 424, crop: 'center' %}
+
+				{% assign img_src_1500_1x = image | image_url: width: 317, crop: 'center' %}
+				{% assign img_src_1500_2x = image | image_url: width: 634, crop: 'center' %}
+
+				{% assign img_src_1x = image | image_url: width: 460, crop: 'center' %}
+				{% assign img_src_2x = image | image_url: width: 920, crop: 'center' %}
+			{% endif %}
+
+			<picture class="{% if is_lazy %}lazy{% endif %} no-js-hidden">
+				<source
+					{% if is_lazy %}
+						data-srcset="{{ img_src_380_1x }} 1x, {{ img_src_380_2x }} 2x"
+						srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+					{% else %}
+						srcset="{{ img_src_380_1x }} 1x, {{ img_src_380_2x }} 2x"
+					{% endif %}
+					media="(max-width: 380px)">
+
+				<source
+					{% if is_lazy %}
+						data-srcset="{{ img_src_420_1x }} 1x, {{ img_src_420_2x }} 2x"
+						srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+					{% else %}
+						srcset="{{ img_src_420_1x }} 1x, {{ img_src_420_2x }} 2x"
+					{% endif %}
+					media="(max-width: 420px)">
+
+				<source
+					{% if is_lazy %}
+						data-srcset="{{ img_src_767_1x }} 1x,{{ img_src_767_2x }} 2x"
+						srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+					{% else %}
+						srcset="{{ img_src_767_1x }} 1x,{{ img_src_767_2x }} 2x"
+					{% endif %}
+					media="(max-width: 767px)">
+
+				<source
+					{% if is_lazy %}
+						data-srcset="{{ img_src_991_1x }} 1x, {{ img_src_991_2x }} 2x"
+						srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+					{% else %}
+						srcset="{{ img_src_991_1x }} 1x, {{ img_src_991_2x }} 2x"
+					{% endif %}
+					media="(max-width: 991px)">
+
+				<source
+					{% if is_lazy %}
+						data-srcset="{{ img_src_1500_1x }} 1x, {{ img_src_1500_2x }} 2x"
+						srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+					{% else %}
+						srcset="{{ img_src_1500_1x }} 1x, {{ img_src_1500_2x }} 2x"
+					{% endif %}
+					media="(max-width: 1500px)">
+
+				<img class="collection-card__image"
+					{% if is_lazy %}
+						src="{{ image | image_url: width: 10 }}"
+						srcset="{{ image | image_url: width: 10 }}"
+						data-src="{{ img_src_1x }}"
+						data-srcset="{{ img_src_1x }} 1x, {{ img_src_2x }} 2x"
+					{% else %}
+						src="{{ img_src_1x }}"
+						srcset="{{ img_src_1x }} 1x, {{ img_src_2x }} 2x"
+					{% endif %}
+					 alt="{{ image.alt | escape }}"
+					{% if img_styles != blank %}
+						style="{{ img_styles }}"
+					{% endif %}
+				>
+			</picture>
+
+			<div class="collection-card__button-wrapper">
+				<div
+					class="collection-card__button button-circle button-circle--transform-show-text-mob button-circle--transform">
+					<span class="button-circle__inner">
+						{%- render 'icons', icon: 'circle-decoration' -%}
+						{%- render 'icons', icon: 'plus', class: 'icon-inactive' -%}
+					</span>
+
+					<span class="button-circle__text">
+						{{ 'sections.collection_list.button_text' | t }}
+					</span>
+				</div>
+			</div>
+		{% else %}
+			{%- assign random_number = "now" | date: "%N" | modulo: diff | plus: min -%}
+			{%- assign placeholder_svg_name = 'collection-apparel-' | append: random_number -%}
+
+			<span aria-hidden="true">
+				{{- placeholder_svg_name | placeholder_svg_tag: 'collection-card__image collection-card__image--placeholder' -}}
+			</span>
+		{% endif %}
+	</div>
+
+	<div class="collection-card__header">
+		<div class="collection-card__title h4" aria-hidden="true">
+			{%- if collection == blank -%}
+				{{ 'sections.collection_list.card_title' | t }}
+			{%- else -%}
+				{{- collection.title -}}
+			{%- endif -%}
+		</div>
+	</div>
+</a>

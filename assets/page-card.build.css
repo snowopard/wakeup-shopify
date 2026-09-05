@@ -1,0 +1,16 @@
+.page-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px 16px 32px;
+  background-color: var(--color-background-secondary);
+  border: 1px solid var(--color-text-primary-alpha);
+  border-radius: calc(var(--global-border-radius) * 1.5);
+}
+.page-card .page-card__title {
+  color: var(--color-text-primary);
+  font-size: calc(var(--body-font-size) * 1.375);
+  font-weight: 600;
+  line-height: 1.5;
+}

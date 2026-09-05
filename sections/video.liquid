@@ -1,0 +1,722 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Video
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/faq-simple.scss' -%}
+{%- render 'adastra' with '/src/styles/video.scss' -%}
+
+{%- assign type      				= section.settings.type -%}
+{%- assign heading_first_line      	= section.settings.heading_first_line -%}
+{%- assign heading_second_line      = section.settings.heading_second_line -%}
+{%- assign text_content 	  = section.settings.text_content -%}
+{%- assign button_label 	  = section.settings.button_label -%}
+{%- assign button_link  	  = section.settings.button_link -%}
+{%- assign decor_image_first  = section.settings.decor_image_first -%}
+{%- assign decor_image_second = section.settings.decor_image_second -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme		  = section.settings.color_scheme -%}
+{%- assign container 		  = section.settings.container_width -%}
+{%- assign enable_bottom_rounded_corners = section.settings.enable_bottom_rounded_corners -%}
+{%- assign close_modal   	  = 'general.accessibility.close_modal' | t -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme	= settings.main_color_scheme -%}
+{%- endif -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{%- assign first_image                 		= section.settings.first_image -%}
+{%- assign first_video_type                 = section.settings.first_video_type -%}
+{%- assign first_html_video_desktop     	= section.settings.first_html_video_desktop -%}
+{%- assign first_html_video_mobile		  	= section.settings.first_html_video_mobile | default: first_html_video_desktop -%}
+{%- assign first_external_video_url_desktop = section.settings.first_external_video_url_desktop -%}
+{%- assign first_external_video_url_mobile  = section.settings.first_external_video_url_mobile | default: first_external_video_url_desktop -%}
+
+{%- assign second_image                 	 = section.settings.second_image -%}
+{%- assign second_video_type                 = section.settings.second_video_type -%}
+{%- assign second_html_video_desktop     	 = section.settings.second_html_video_desktop -%}
+{%- assign second_html_video_mobile		  	 = section.settings.second_html_video_mobile | default: second_html_video_desktop -%}
+{%- assign second_external_video_url_desktop = section.settings.second_external_video_url_desktop -%}
+{%- assign second_external_video_url_mobile  = section.settings.second_external_video_url_mobile | default: second_external_video_url_desktop -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- capture section_styles -%}
+	--container-width: {{ container_width }}; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{  -}}
+{%- endcapture -%}
+
+{%- capture first_video -%}
+	{%- render "video-type",
+		html_video_desktop: first_html_video_desktop,
+		html_video_mobile: first_html_video_mobile,
+		external_video_url_desktop: first_external_video_url_desktop,
+		external_video_url_mobile: first_external_video_url_mobile,
+		type: type,
+		video_type: first_video_type
+	-%}
+{%- endcapture -%}
+
+{%- capture second_video -%}
+	{%- render "video-type",
+		html_video_desktop: second_html_video_desktop,
+		html_video_mobile: second_html_video_mobile,
+		external_video_url_desktop: second_external_video_url_desktop,
+		external_video_url_mobile: second_external_video_url_mobile,
+		type: type,
+		video_type: second_video_type
+	-%}
+{%- endcapture -%}
+
+{%- assign is_two_video = false %}
+{%- assign lazy 		= false -%}
+
+{%- if first_video != blank and second_video != blank -%}
+	{%- assign is_two_video = true %}
+{%- endif -%}
+
+{%- if section.index > 1 -%}
+	{%- assign lazy = true -%}
+{%- endif -%}
+
+<section class="video color-{{ color_scheme.id }}{% if enable_bottom_rounded_corners %} section-bottom-rounded{% endif %} js-video-section js-image-mouse-move-wrapper js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+		 style="{{- section_styles -}}"
+		 data-section-id="{{- section.id -}}"
+		 data-type="{{- type -}}"
+>
+	<div class="video__container container">
+		{%- if heading_first_line != blank or heading_second_line != blank or text_content != blank or button != blank -%}
+			<div class="video__header">
+				{%- if heading_first_line != blank or heading_second_line != blank -%}
+					<h2 class="video__heading section-title need-animate">
+						{%- if heading_first_line != blank -%}
+							<span class="section-title__text-container">
+								<span class="section-title__text">
+									{{- heading_first_line -}}
+								</span>
+							</span>
+						{%- endif -%}
+
+						{%- if heading_second_line != blank -%}
+							<span class="section-title__text-container">
+								<span class="section-title__text">
+									{{- heading_second_line -}}
+								</span>
+							</span>
+						{%- endif -%}
+					</h2>
+				{%- endif -%}
+
+				{%- if text_content != blank -%}
+					<div class="video__text-content rte need-animate">
+						{{- text_content -}}
+					</div>
+				{%- endif -%}
+
+				{% if section.blocks.size > 0 %}
+					<div class="accordion faq-simple js-accordion-container">
+						{%- for block in section.blocks -%}
+							{% assign delay_step = delay_step | plus: 0.2 %}
+
+							{%- assign item_heading = block.settings.heading -%}
+							{%- assign item_text = block.settings.text -%}
+
+							<div class="accordion__item faq-simple__item button-circle-trigger need-animate js-accordion-item" style="transition-delay: {{ delay_step }}s">
+								<h4 class="accordion__title faq-simple__item-title">
+									<button
+										id="control-{{- block.id -}}"
+										class="accordion__control faq-simple__item-control js-accordion-control"
+										aria-controls="content-{{- block.id -}}"
+										aria-expanded="false"
+									>
+										<div class="button-circle">
+											<span class="button-circle__inner">
+												{%- render 'icons', icon: 'circle-decoration' -%}
+												{%- render 'icons', icon: 'plus', class: 'icon-inactive' -%}
+												{%- render 'icons', icon: 'minus', class: 'icon-active' -%}
+											</span>
+										</div>
+
+										<div class="faq-simple__item-title-text">
+											{{- item_heading -}}
+										</div>
+									</button>
+								</h4>
+
+								<div
+									id="content-{{- block.id -}}"
+									class="accordion__content accordion__content--animate faq-simple__item-content js-accordion-content"
+									style="height: 0;"
+									role="region"
+									aria-labelledby="control-{{- block.id -}}"
+								>
+									<div class="faq-simple__item-inner js-accordion-inner rte">
+										{{- item_text -}}
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				{% endif %}
+
+				{% if button_link != blank and button_label != blank %}
+					<div class="video__button-wrapper">
+						<a
+							class="button button--primary featured-blog__link"
+							href="{{- button_link -}}"
+							{% if link_aria_label_text != blank %}
+								aria-label="{{- link_aria_label_text | escape -}}"
+							{% endif %}
+						>
+							<span class="button__outer"></span>
+							{{- button_label -}}
+						</a>
+					</div>
+				{% endif %}
+			</div>
+		{%- endif -%}
+
+		{%- if first_video != blank or second_video != blank -%}
+			<div class="video__media-wrapper">
+				{%- if decor_image_first != blank -%}
+					<picture class="video__decor video__decor--first lazy need-animate{% if is_two_video %} js-video-decor{% endif %}">
+						<img
+							class="video__decor-image js-image-mouse-move"
+							src="{{ decor_image_first | image_url: width: 10, height: 10 }}"
+							srcset="{{ decor_image_first | image_url: width: 10, height: 10 }} 1x,
+									{{ decor_image_first | image_url: width: 10, height: 10 }} 2x"
+							data-src="{{ decor_image_first | image_url: width: 120, height: 120 }}"
+							data-srcset="{{ decor_image_first | image_url: width: 120, height: 120 }} 1x,
+									 	 {{ decor_image_first | image_url: width: 240, height: 240 }} 2x"
+							alt="{{ decor_image_first.alt | escape }}"
+						>
+					</picture>
+				{%- endif -%}
+
+				{%- if decor_image_second != blank -%}
+					<picture class="video__decor video__decor--second lazy need-animate{% if is_two_video %} js-video-decor{% endif %}">
+						<img
+							class="video__decor-image is-reverse-translate js-image-mouse-move"
+							src="{{ decor_image_second | image_url: width: 10, height: 10 }}"
+							srcset="{{ decor_image_second | image_url: width: 10, height: 10 }} 1x,
+									{{ decor_image_second | image_url: width: 10, height: 10 }} 2x"
+							data-src="{{ decor_image_second | image_url: width: 135, height: 135 }}"
+							data-srcset="{{ decor_image_second | image_url: width: 135, height: 135 }} 1x,
+									 	 {{ decor_image_second | image_url: width: 270, height: 270 }} 2x"
+							alt="{{ decor_image_second.alt | escape }}"
+						>
+					</picture>
+				{%- endif -%}
+
+				{%- if first_video != blank -%}
+					<div class="video__media-item need-animate {% if type == 'popup' %} js-video-item{% endif %}">
+						<div
+							class="video__media-container{% if type == 'inline' %} js-video-wrapper js-video-container-first{% endif %}"
+							{%- if type == 'popup' -%}
+								data-target="video-{{- section.id -}}"
+								data-js-toggle="video-{{- section.id -}}"
+							{%- endif -%}
+						>
+							<div class="video__play-button-wrapper">
+								<button
+									class="button-circle js-video-start-button"
+									aria-label="{{- "general.accessibility.video_play" | t | escape -}}"
+								>
+							<span class="button-circle__inner">
+								{%- render 'icons', icon: 'circle-decoration' -%}
+								{%- render 'icons', icon: "play-filled" -%}
+							</span>
+								</button>
+							</div>
+
+							{% render "video-image",
+								image: first_image,
+								size_375: 254,
+								size_420: 289,
+								size_575: 410,
+								size_767: 559,
+								size_991: 733,
+								size_1440: 512,
+								size_1600: 576,
+								size: 703,
+								lazy: lazy
+							%}
+
+							{%- if type == 'inline' -%}
+								{{- first_video -}}
+							{%- endif -%}
+						</div>
+					</div>
+				{%- endif -%}
+
+				{%- if second_video != blank -%}
+					<div class="video__media-item need-animate {% if type == 'popup' %} js-video-item{% endif %}">
+						<div
+							class="video__media-container{% if type == 'inline' %} js-video-wrapper js-video-container-second{% endif %}"
+							{%- if type == 'popup' -%}
+								data-target="video-{{- section.id -}}"
+								data-js-toggle="video-{{- section.id -}}"
+							{%- endif -%}
+						>
+							<div class="video__play-button-wrapper">
+								<button
+									class="button-circle js-video-start-button"
+									aria-label="{{- "general.accessibility.video_play" | t | escape -}}"
+								>
+							<span class="button-circle__inner">
+								{%- render 'icons', icon: 'circle-decoration' -%}
+								{%- render 'icons', icon: "play-filled" -%}
+							</span>
+								</button>
+							</div>
+
+							{% render "video-image",
+								image: second_image,
+								size_375: 172,
+								size_420: 194,
+								size_575: 272,
+								size_767: 368,
+								size_991: 480,
+								size_1440: 335,
+								size_1600: 378,
+								size: 460,
+								lazy: lazy
+							%}
+
+							{%- if type == 'inline' -%}
+								{{- second_video -}}
+							{%- endif -%}
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		{%- endif -%}
+	</div>
+
+	{%- if type == 'popup' -%}
+		<div class="popup video__popup js-video-popup"
+			 id="video-{{- section.id -}}"
+			 role="dialog"
+		>
+			<div class="popup__container video__popup-container js-video-container">
+				<button
+					class="popup-close-icon-button focus-visible-outline video__popup-close-button js-popup-close-icon-button"
+					data-target="video-{{- section.id -}}"
+					data-js-toggle="video-{{- section.id -}}"
+				>
+					{%- render 'icons', icon: 'menu-close' -%}
+				</button>
+
+				<div class="video__media-container js-video-media-container is-hidden">
+					{{- first_video -}}
+				</div>
+
+				<div class="video__media-container js-video-media-container is-hidden">
+					{{- second_video -}}
+				</div>
+			</div>
+		</div>
+	{%- endif -%}
+</section>
+
+{%- render 'adastra' with '/src/scripts/video-section.js' -%}
+
+{%- schema -%}
+{
+	"name": "Video",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"id": "type",
+			"type": "select",
+			"label": "Video type",
+			"options": [
+				{
+					"value": "popup",
+					"label": "Popup"
+				},
+				{
+					"value": "inline",
+					"label": "Inline"
+				}
+			],
+			"default": "popup"
+		},
+		{
+			"id": "heading_first_line",
+			"type": "inline_richtext",
+			"label": "Heading first line"
+		},
+		{
+			"id": "heading_second_line",
+			"type": "inline_richtext",
+			"label": "Heading second line"
+		},
+		{
+			"id": "text_content",
+			"type": "richtext",
+			"label": "Text",
+			"default": "<p>Add a short description to the video so that the customer can better understand what it is about.</p>"
+		},
+		{
+			"id": "button_label",
+			"type": "text",
+			"label": "Button label",
+			"default": "Button label"
+		},
+		{
+			"type": "url",
+			"id": "button_link",
+			"label": "Button link"
+		},
+		{
+			"type": "image_picker",
+			"id": "decor_image_first",
+			"label": "Decor image first",
+			"info": "240 x 240px recommended"
+
+		},
+		{
+			"type": "image_picker",
+			"id": "decor_image_second",
+			"label": "Decor image second",
+			"info": "270 x 270px recommended"
+		},
+		{
+			"type": "header",
+			"content": "First Video"
+		},
+		{
+			"id": "first_image",
+			"type": "image_picker",
+			"label": "Image",
+			"info": "720 x 1120px recommended"
+		},
+		{
+			"id": "first_video_type",
+			"type": "select",
+			"label": "Video type",
+			"options": [
+				{
+					"value": "html",
+					"label": "HTML5"
+				},
+				{
+					"value": "youtube_vimeo",
+					"label": "Youtube/Vimeo"
+				}
+			],
+			"default": "youtube_vimeo"
+		},
+		{
+			"type": "video",
+			"id": "first_html_video_desktop",
+			"label": "HTML5 desktop video",
+			"info": "Only works with 'HTML5 video' media type. 720 x 1120px for Video type: inline, 2000 x 1126px for Video type: popup recommended"
+		},
+		{
+			"type": "video",
+			"id": "first_html_video_mobile",
+			"label": "HTML5 mobile video",
+			"info": "Only works with 'HTML5 video' media type. 720 x 1118px for Video type: inline, 686 x 836px for Video type: popup recommended"
+		},
+		{
+			"type": "video_url",
+			"accept": [
+				"youtube",
+				"vimeo"
+			],
+			"id": "first_external_video_url_desktop",
+			"label": "Youtube/Vimeo desktop video url",
+			"default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+			"info": "Only works with 'Youtube/Vimeo' media type"
+		},
+		{
+			"type": "video_url",
+			"accept": [
+				"youtube",
+				"vimeo"
+			],
+			"id": "first_external_video_url_mobile",
+			"label": "Youtube/Vimeo mobile video url",
+			"default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+			"info": "Only works with 'Youtube/Vimeo' media type"
+		},
+		{
+			"type": "header",
+			"content": "Second video"
+		},
+		{
+			"id": "second_image",
+			"type": "image_picker",
+			"label": "Image",
+			"info": "720 x 1120px recommended"
+		},
+		{
+			"id": "second_video_type",
+			"type": "select",
+			"label": "Video type",
+			"options": [
+				{
+					"value": "html",
+					"label": "HTML5"
+				},
+				{
+					"value": "youtube_vimeo",
+					"label": "Youtube/Vimeo"
+				}
+			],
+			"default": "youtube_vimeo"
+		},
+		{
+			"type": "video",
+			"id": "second_html_video_desktop",
+			"label": "HTML5 desktop video",
+			"info": "Only works with 'HTML5 video' media type. 720 x 1120px for Video type: inline, 2000 x 1126px for Video type: popup recommended"
+		},
+		{
+			"type": "video",
+			"id": "second_html_video_mobile",
+			"label": "HTML5 mobile video",
+			"info": "Only works with 'HTML5 video' media type. 720 x 1118px for Video type: inline, 686 x 836px for Video type: popup recommended"
+		},
+		{
+			"type": "video_url",
+			"accept": [
+				"youtube",
+				"vimeo"
+			],
+			"id": "second_external_video_url_desktop",
+			"label": "Youtube/Vimeo desktop video url",
+			"default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+			"info": "Only works with 'Youtube/Vimeo' media type"
+		},
+		{
+			"type": "video_url",
+			"accept": [
+				"youtube",
+				"vimeo"
+			],
+			"id": "second_external_video_url_mobile",
+			"label": "Youtube/Vimeo mobile video url",
+			"default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+			"info": "Only works with 'Youtube/Vimeo' media type"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"name": "FAQ",
+			"type": "faq_item",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Video",
+			"settings": {
+				"heading_first_line": "<em>Heading primary</em>",
+				"heading_second_line": "Heading secondary",
+				"first_external_video_url_desktop": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+				"second_external_video_url_mobile": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+			},
+			"blocks": [
+				{
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				},
+				{
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				},
+				{
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				},
+				{
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

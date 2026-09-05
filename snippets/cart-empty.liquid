@@ -1,0 +1,30 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Snippet: Cart empty
+	Render empty cart state
+	Usage:
+	{%- render 'cart-empty' -%}
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+<div class="cart-empty">
+	<form id="cart-{{- section.id -}}" class="is-hidden"></form>
+
+	{%- capture default_heading -%}
+		{{- 'cart.general.empty' | t -}}
+	{%- endcapture -%}
+
+	{%- assign cart_type 			= settings.cart_type -%}
+	{%- assign heading 				= settings.empty_cart_heading | default: default_heading -%}
+	{%- assign text 				= settings.empty_cart_text -%}
+
+	<p class="cart-empty__heading h5">
+		{{- heading -}}
+	</p>
+
+	{% if text != blank %}
+		<div class="cart-empty__text rte">
+			{{- text -}}
+		</div>
+	{% endif %}
+</div>

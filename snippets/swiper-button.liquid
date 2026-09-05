@@ -1,0 +1,33 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Render 'swiper-button' component
+
+	Params:
+	- direction: text (required). 'prev' or 'next'. Need to render correct arrows and class.
+	- class: text (optional)
+
+	Usage:
+	{% render 'swiper-button', class: 'extra-class', direction: 'prev' %}
+	{% render 'swiper-button', class: 'extra-class', direction: 'next' %}
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+{% if direction == nil %}
+	{% assign direction = "prev" %}
+{% endif %}
+
+{% assign direction_class = "swiper-button--prev" %}
+
+{% if direction == 'next' %}
+	{% assign direction_class = "swiper-button--next" %}
+{% endif %}
+
+<button class="swiper-button {{ direction_class }} {{ class }}">
+	{% if direction == 'prev' %}
+		{% render 'icons', icon: 'arrow-left', class: 'icon-base' %}
+		{% render 'icons', icon: 'arrow-left', class: 'icon-hover' %}
+	{% elsif direction == 'next' %}
+		{% render 'icons', icon: 'arrow-right', class: 'icon-base' %}
+		{% render 'icons', icon: 'arrow-right', class: 'icon-hover' %}
+	{% endif %}
+</button>

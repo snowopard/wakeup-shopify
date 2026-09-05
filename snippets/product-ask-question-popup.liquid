@@ -1,0 +1,168 @@
+{% assign success_default 		= "newsletter_popup.success" | t %}
+{% assign email_default 		= "products.product.ask_question_form.email" | t %}
+{% assign name_default 			= "products.product.ask_question_form.name" | t %}
+
+{% assign heading 				= block.settings.heading %}
+{% assign name_placeholder 		= block.settings.name_placeholder | default: name_default %}
+{% assign email_placeholder 	= block.settings.email_placeholder | default: email_default %}
+{% assign phone_placeholder 	= block.settings.phone_placeholder %}
+{% assign url_placeholder 		= block.settings.product_url %}
+{% assign message_placeholder 	= block.settings.message_placeholder %}
+{% assign success_message 		= block.settings.success_message | default: success_default %}
+{% assign submit_button_label 	= block.settings.submit_button_label %}
+{% assign id 					= section_id %}
+
+{%- render 'adastra' with '/src/styles/product-ask-question-popup.scss' -%}
+
+<div id="product-ask-question-popup-{{- id -}}"
+	 class="ask-question-popup drawer drawer--left js-ask-question-popup"
+	 role="dialog"
+	{% if heading != blank %}
+		aria-labelledby="ask-question-popup-title-{{- id -}}"
+	{% endif %}
+>
+	<div class="drawer__header">
+		{% if heading != blank %}
+			<h2 class="drawer__title" id="ask-question-popup-title-{{- id -}}">{{- heading -}}</h2>
+		{% endif %}
+
+		<button type="button"
+				class="drawer__close"
+				aria-label="{{- close_modal | escape -}}"
+				data-target="product-ask-question-popup-{{- id -}}"
+				data-js-toggle="product-ask-question-popup-{{- id -}}"
+		>
+			{% render 'icons', icon: 'close' %}
+		</button>
+	</div>
+
+	<div class="drawer__body">
+		{%- assign contact_form_id = 'ProductAskQuestionContactForm--' | append: id -%}
+
+		{%- form "contact", class: "ask-question-popup-form js-ask-question-form", id: contact_form_id -%}
+			<div class="js-ask-question-form-status is-hidden" data-form-status="{%- if form.errors or form.posted_successfully? -%}posted{%- endif -%}"></div>
+
+			<div class="ask-question-popup-form__message-container">
+				{% if form.errors %}
+					<small
+						class="ask-question-popup-form__message ask-question-popup-form__message--error"
+						tabindex="-1"
+					>
+						{% render 'icons', icon: 'close' %}
+
+						{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+					</small>
+				{% endif %}
+
+				{% if form.posted_successfully? %}
+					<p
+						class="ask-question-popup-form__message ask-question-popup-form__message--success"
+						tabindex="-1"
+					>
+						{% render 'icons', icon: 'check' %}
+
+						{{- success_message -}}
+					</p>
+				{% endif %}
+			</div>
+
+			<div class="ask-question-popup-form__field input-wrapper">
+				<input
+					id="ask-question-email-input--{{- id -}}"
+					type="email"
+					name="contact[email]"
+					class="input"
+					value="{{- form.email -}}"
+					aria-required="true"
+					autocapitalize="off"
+					autocomplete="email"
+					placeholder="{{- email_placeholder -}}"
+					required
+				/>
+
+				<label class="input-label input-label--required"
+					   for="ask-question-email-input--{{- id -}}">
+					{{- email_placeholder -}}
+				</label>
+			</div>
+
+			<div class="ask-question-popup-form__field input-wrapper">
+				<input
+					id="ask-question-name-input--{{- id -}}"
+					type="text"
+					name="contact[name]"
+					class="input"
+					aria-required="true"
+					autocapitalize="off"
+					autocomplete="name"
+					placeholder="{{- name_placeholder -}}"
+					required
+				/>
+
+				<label class="input-label input-label--required"
+					   for="ask-question-name-input--{{- id -}}">
+					{{- name_placeholder -}}
+				</label>
+			</div>
+
+			{% if phone_placeholder != blank %}
+				<div class="ask-question-popup-form__field input-wrapper">
+					<input
+						id="ask-question-phone-input--{{- id -}}"
+						type="tel"
+						name="contact[phone]"
+						class="input"
+						autocapitalize="off"
+						placeholder="{{- phone_placeholder -}}"
+					/>
+
+					<label class="input-label"
+						   for="ask-question-phone-input--{{- id -}}">
+						{{- phone_placeholder -}}
+					</label>
+				</div>
+			{% endif %}
+
+			<div class="ask-question-popup-form__field input-wrapper">
+				<input
+					id="ask-question-product-url-input--{{- id -}}"
+					type="text"
+					name="contact[product_url]"
+					class="input"
+					aria-required="true"
+					autocapitalize="off"
+					placeholder="{{- url_placeholder -}}"
+					required
+				/>
+
+				<label class="input-label input-label--required"
+					   for="ask-question-product-url-input--{{- id -}}">
+					{{- url_placeholder -}}
+				</label>
+			</div>
+
+			<div class="ask-question-popup-form__field input-wrapper">
+				<textarea
+					id="ask-question-message-input--{{- id -}}"
+					class="ask-question-popup-form__textarea input"
+					name="contact[body]"
+					placeholder="{{- message_placeholder -}}"
+					aria-required="true"
+					required
+				></textarea>
+
+				<label class="input-label label-input--required"
+					   for="ask-question-message-input--{{- id -}}">
+					{{- message_placeholder -}}
+				</label>
+			</div>
+
+			<div class="ask-question-popup-form__button-wrapper">
+				<button type="submit" class="button button--primary">
+					<span class="button__outer"></span>
+					{{- submit_button_label -}}
+				</button>
+			</div>
+		{%- endform -%}
+	</div>
+</div>

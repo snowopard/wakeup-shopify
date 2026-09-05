@@ -1,0 +1,390 @@
+{% include "adastra" with "/src/styles/support.scss" %}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign heading_first_line 				= section.settings.heading_first_line -%}
+{%- assign heading_second_line 				= section.settings.heading_second_line -%}
+{%- assign decor_image_first 				= section.settings.decor_image_first -%}
+{%- assign button_label 					= section.settings.button_label -%}
+{%- assign button_link 						= section.settings.button_link -%}
+{%- assign button_aria_label 				= section.settings.button_aria_label -%}
+{%- assign decor_image_second 				= section.settings.decor_image_second -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme						= section.settings.color_scheme -%}
+{%- assign enable_bottom_rounded_corners	= section.settings.enable_bottom_rounded_corners -%}
+{%- assign container 						= section.settings.container_width -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme	= settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == "inherit" -%}
+	{% assign container_width = settings.container_width %}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture section_styles -%}
+	--container-width: {{ container_width }}; {{  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{  -}}
+{%- endcapture -%}
+
+<section class="support color-{{ color_scheme.id }}{% if enable_bottom_rounded_corners %} section-bottom-rounded{% endif %} js-animate{% if request.visual_preview_mode or section.index == 1 %} animated{% endif %} js-support js-image-mouse-move-wrapper"
+		 style="{{- section_styles -}}"
+>
+	{% if decor_image_first != blank or decor_image_second != blank %}
+		{% if decor_image_first != blank %}
+			<div class="support__decor-image-wrapper support__decor-image-wrapper--first js-image-mouse-move">
+				<picture class="lazy">
+					<img class="support__decor-image"
+						 src="{{ decor_image_first | image_url: width: 10, height: 10 }}"
+						 srcset="{{ decor_image_first | image_url: width: 10, height: 10 }} 1x,
+								{{ decor_image_first | image_url: width: 10, height: 10 }} 2x"
+						 data-src="{{ decor_image_first | image_url: width: 133, height: 133 }}"
+						 data-srcset="{{ decor_image_first | image_url: width: 133, height: 133 }} 1x,
+									 {{ decor_image_first | image_url: width: 266, height: 266 }} 2x"
+						 alt="{{ decor_image_first.alt | escape }}">
+				</picture>
+			</div>
+		{% endif %}
+
+		{% if decor_image_second != blank %}
+			<div
+				class="support__decor-image-wrapper support__decor-image-wrapper--second is-reverse-translate js-image-mouse-move">
+				<picture class="lazy">
+					<img class="support__decor-image"
+						 src="{{ decor_image_second | image_url: width: 10, height: 10 }}"
+						 srcset="{{ decor_image_second | image_url: width: 10, height: 10 }} 1x,
+								{{ decor_image_second | image_url: width: 10, height: 10 }} 2x"
+						 data-src="{{ decor_image_second | image_url: width: 133, height: 133 }}"
+						 data-srcset="{{ decor_image_second | image_url: width: 133, height: 133 }} 1x,
+									 {{ decor_image_second | image_url: width: 266, height: 266 }} 2x"
+						 alt="{{ decor_image_second.alt | escape }}">
+				</picture>
+			</div>
+		{% endif %}
+	{% endif %}
+	<div class="support container">
+		{%- if heading_first_line != blank or heading_second_line != blank -%}
+			<h2 class="support__heading section-title section-title--center need-animate">
+				{%- if heading_first_line != blank -%}
+					<span class="section-title__text-container">
+						<span class="section-title__text{% if heading_second_line == blank %} text-center{% endif %}">
+							{{- heading_first_line -}}
+						</span>
+					</span>
+				{%- endif -%}
+
+				{%- if heading_second_line != blank -%}
+					<span class="section-title__text-container">
+						<span class="section-title__text{% if heading_first_line == blank %} text-center{% else %} text-right{% endif %}">
+							{{- heading_second_line -}}
+						</span>
+					</span>
+				{%- endif -%}
+			</h2>
+		{%- endif -%}
+
+		{%- if section.blocks.size > 0 -%}
+			{%- assign delay_step = 0 -%}
+
+			<ul class="support__list">
+				{%- for block in section.blocks -%}
+					{%- assign delay_step = delay_step | plus: 0.25 -%}
+
+					{%- assign heading 				= block.settings.heading -%}
+					{%- assign text 				= block.settings.text -%}
+					{%- assign animation_card_color	= block.settings.animation_card_color -%}
+
+					{%- capture block_styles -%}
+						--animation-card-color: {{ animation_card_color }};
+						--delay-step: {{ delay_step }}s;
+					{%- endcapture -%}
+
+					{%- if heading != blank or text != blank -%}
+						<li class="support__item need-animate js-support-item" style="{{ block_styles }}">
+							{% if heading != blank %}
+								<div class="support__item-heading">
+									{{- heading -}}
+								</div>
+							{%- endif -%}
+
+							{% if text != blank %}
+								<div class="support__item-text rte">
+									{{- text -}}
+								</div>
+							{%- endif -%}
+
+							<div class="support__item-flashlight-clipper">
+								<div class="support__item-flashlight-effect js-support-item-flashlight-effect"></div>
+							</div>
+						</li>
+					{%- endif -%}
+				{%- endfor -%}
+			</ul>
+		{%- endif -%}
+
+		{%- if button_label != blank and button_link != blank -%}
+			<div class="support__button-wrapper">
+				<a
+					href="{{ button_link }}"
+					class="button button--primary need-animate"
+					{% if button_aria_label != blank %}
+						aria-label="{{- button_aria_label | escape -}}"
+					{% endif %}
+				>
+					<span class="button__outer"></span>
+					{{ button_label }}
+				</a>
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{% include "adastra" with "/src/scripts/section-support.js" %}
+
+{% schema %}
+{
+	"name": "Support",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"id": "heading_first_line",
+			"type": "inline_richtext",
+			"label": "Heading first line"
+		},
+		{
+			"id": "heading_second_line",
+			"type": "inline_richtext",
+			"label": "Heading second line"
+		},
+		{
+			"id": "button_label",
+			"type": "text",
+			"label": "Button label"
+		},
+		{
+			"type": "text",
+			"id": "button_aria_label",
+			"label": "Button aria-label",
+			"info": "Needed for good accessibility, e.g. 'All news about sports'."
+		},
+		{
+			"id": "button_link",
+			"type": "url",
+			"label": "Button link"
+		},
+		{
+			"type": "image_picker",
+			"id": "decor_image_first",
+			"label": "Decor image first",
+			"info": "266 x 266px recommended"
+		},
+		{
+			"type": "image_picker",
+			"id": "decor_image_second",
+			"label": "Decor image second",
+			"info": "266 x 266px recommended"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"default": "scheme_1",
+			"label": "Color scheme"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"name": "Column",
+			"type": "column",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading",
+					"default": "Column heading"
+				},
+				{
+					"type": "inline_richtext",
+					"id": "text",
+					"label": "Text",
+					"default": "Column text"
+				},
+				{
+					"type": "color",
+					"id": "animation_card_color",
+					"label": "Animation card color",
+					"default": "#F8399B"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Support",
+			"settings": {
+				"heading_first_line": "<em>Heading primary</em>",
+				"heading_second_line": "Heading secondary"
+			},
+			"blocks": [
+				{
+					"type": "column"
+				},
+				{
+					"type": "column"
+				},
+				{
+					"type": "column"
+				},
+				{
+					"type": "column"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

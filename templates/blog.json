@@ -1,0 +1,58 @@
+{
+	"sections": {
+		"blog": {
+			"type": "blog-template",
+			"settings": {
+				"text": "<p><em>Welcome to our blog — your home for drink recipes, tips, and inspiration. From timeless classics to bold new flavors, we share easy guides to help you create café-style experiences right in your own kitchen. Whether you’re experimenting with something new or perfecting your favorite blend, you’ll find plenty of ideas to sip and enjoy.</em></p>",
+				"paginate_by": 9,
+				"pagination_type": "pagination",
+				"show_filter_by_tag": true,
+				"enable_color_scheme_inheritance": true,
+				"color_scheme": "",
+				"ellipse_background": "#c43898",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 24,
+				"offset_bottom_desktop": 48,
+				"offset_top_mobile": 16,
+				"offset_bottom_mobile": 32,
+				"inner_offset_top_desktop": 40,
+				"inner_offset_bottom_desktop": 40,
+				"inner_offset_top_mobile": 30,
+				"inner_offset_bottom_mobile": 30
+			}
+		},
+		"newsletter_UYp3DJ": {
+			"type": "newsletter",
+			"name": "Newsletter",
+			"settings": {
+				"label": "",
+				"heading_first": "<em>SIGN UP AND </em>",
+				"heading_second": "<strong>GET 10% OFF</strong>",
+				"text": "<p>Sign up for early sale access, new in, promotions and more</p>",
+				"success_message": "Thanks for subscribing",
+				"email_placeholder": "Enter email address...",
+				"color_section_background": "",
+				"color_background": "#dc9d00",
+				"color_text": "#ffffff",
+				"color_button_background": "#ffffff",
+				"color_button": "#000000",
+				"color_button_background_hover": "#000000",
+				"color_button_hover": "#ffffff",
+				"container_width": "inherit",
+				"offset_top_desktop": 25,
+				"offset_bottom_desktop": 60,
+				"offset_top_mobile": 25,
+				"offset_bottom_mobile": 25,
+				"inner_offset_top": 0,
+				"inner_offset_bottom": 0,
+				"inner_offset_top_mobile": 0,
+				"inner_offset_bottom_mobile": 0
+			}
+		}
+	},
+	"order": [
+		"blog",
+		"newsletter_UYp3DJ"
+	]
+}

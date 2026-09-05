@@ -1,0 +1,366 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Snippet: Article card
+	- article: Article object (optional)
+	- class: class (optional)
+	- remove_lazy: Remove lazy (optional)
+	- w380: image size at 380px and below (optional)
+	- w420: image size at 420px and below (optional)
+	- w767: image size at 767px and below (optional)
+	- w991: image size at 991px and below (optional)
+	- w1199: image size at 1199px and below (optional)
+	- w1600: image size at 1600px and below (optional)
+	- w_default: image size at 1601px and above (optional)
+
+
+	{%- render 'article-card', article: article -%}
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- assign show_date 		   	= settings.show_date -%}
+{%- assign show_author 		   	= settings.show_author -%}
+{%- assign show_comments_count 	= settings.show_comments_count -%}
+{%- assign show_content 		= settings.show_content -%}
+{%- assign show_tag 		   	= settings.show_tag -%}
+{%- assign is_strip_title      	= settings.is_strip_title -%}
+{%- assign is_strip_content    	= settings.is_strip_content -%}
+{%- assign label_background 	= settings.article_label_background_color -%}
+{%- assign label_text 			= settings.article_label_text_color -%}
+
+
+{%- capture styles -%}
+	--label-background: {{- label_background -}}; {{- -}}
+	--label-text: {{- label_text -}}; {{- -}}
+{%- endcapture -%}
+
+{%- render 'adastra' with '/src/styles/article-card.scss' -%}
+
+<article class="article-card {{ class -}}" style="{{- styles -}}">
+	{%- assign tag 				= article.tags[0] -%}
+	{%- assign article_title 	= article.title | default: 'Article title' -%}
+	{%- assign article_url 		= article.url | default: '#' -%}
+	{%- assign article_image 	= article.image | default: settings.article_default_image -%}
+
+	{%- if article.image == blank and settings.article_default_image != blank -%}
+		{%- capture img_focal -%}
+			--img-desktop-pos: {{ settings.article_default_image.presentation.focal_point }};
+		{%- endcapture -%}
+	{%- endif -%}
+
+	{%- if article == blank -%}
+		{%- capture article_description_exmaple -%}
+			An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description. An example of a blog post description.
+		{%- endcapture -%}
+
+		{%- assign article_date_example 			= 'May 25, 2020' -%}
+		{%- assign article_author_example 			= 'Article author' -%}
+		{%- assign article_tag_example 				= 'Article tag' -%}
+		{%- assign article_comments_count_example	= '0' -%}
+	{%- endif-%}
+
+	<div class="article-card__image-wrapper">
+		{%- if article != blank and article_image != blank -%}
+			{% comment %}
+				Image width map
+			{% endcomment %}
+			{% assign w380 = w380 | default: 348 %}
+			{% assign w380_2x = w380 | times: 2 %}
+			{% assign h380 = w380 | times: 0.58 | round %}
+
+			{% assign w420 = w420 | default: 388 %}
+			{% assign w420_2x = w420 | times: 2 %}
+			{% assign h420 = w420 | times: 0.58 | round %}
+
+			{% assign w767 = w767 | default: 735 %}
+			{% assign w767_2x = w767 | times: 2 %}
+			{% assign h767 = w767 | times: 0.58 | round %}
+
+			{% assign w991 = w991 | default: 959 %}
+			{% assign w991_2x = w991 | times: 2 %}
+			{% assign h991 = w991 | times: 0.61 | round %}
+
+			{% assign w1199 = w1199 | default: 379 %}
+			{% assign w1199_2x = w1199 | times: 2 %}
+			{% assign h1199 = w1199 | times: 0.61 | round %}
+
+			{% assign w1600 = w1600 | default: 472 %}
+			{% assign w1600_2x = w1600 | times: 2 %}
+			{% assign h1600 = w1600 | times: 0.61 | round %}
+
+			{% assign w_default = w_default | default: 579 %}
+			{% assign w_default_2x = w_default | times: 2 %}
+			{% assign h_default = w_default | times: 0.61 | round %}
+
+			{% comment %}
+				End image width map
+			{% endcomment %}
+
+			{% capture image_eager %}
+				{% comment %}Remove lazyload and add fetchpriority{% endcomment %}
+				<picture>
+					<source
+						srcset="{{- article_image | image_url: width: w380 }} 1x, {{ article_image | image_url: width: w380_2x }} 2x"
+						width="{{- w380 -}}"
+						height="{{- h380 -}}"
+						media="(max-width: 380px)"
+					>
+
+					<source
+						srcset="{{- article_image | image_url: width: w420 }} 1x, {{ article_image | image_url: width: w420_2x }} 2x"
+						width="{{- w420 -}}"
+						height="{{- h420 -}}"
+						media="(max-width: 420px)"
+					>
+
+					<source
+						srcset="{{- article_image | image_url: width: w767 }} 1x, {{ article_image | image_url: width: w767_2x }} 2x"
+						width="{{- w767 -}}"
+						height="{{- h767 -}}"
+						media="(max-width: 767px)"
+					>
+
+					<source
+						srcset="{{- article_image | image_url: width: w991 }} 1x, {{ article_image | image_url: width: w991_2x }} 2x"
+						width="{{- w991 -}}"
+						height="{{- h991 -}}"
+						media="(max-width: 991px)"
+					>
+
+					<source
+						srcset="{{- article_image | image_url: width: w1199 }} 1x, {{ article_image | image_url: width: w1199_2x }} 2x"
+						width="{{- w1199 -}}"
+						height="{{- h1199 -}}"
+						media="(max-width: 1199px)"
+					>
+
+					<source
+						srcset="{{- article_image | image_url: width: w1600 }} 1x, {{ article_image | image_url: width: w1600_2x }} 2x"
+						width="{{- w1600 -}}"
+						height="{{- h1600 -}}"
+						media="(max-width: 1600px)"
+					>
+
+					<img
+						class="article-card__image"
+						src="{{- article_image | image_url: width: w_default -}}"
+						srcset="{{- article_image | image_url: width: w_default }} 1x, {{ article_image | image_url: width: w_default_2x }} 2x"
+						alt="{{- article_image.alt -}}"
+						width="{{- w_default -}}"
+						height="{{- h_default -}}"
+						fetchpriority="high"
+						{% if img_focal != blank %}
+							style="{{ img_focal }}"
+						{% endif %}
+					>
+				</picture>
+			{% endcapture %}
+
+			{% if remove_lazy %}
+				{{- image_eager -}}
+			{% else %}
+				<picture class="lazy no-js-hidden">
+					<source
+						data-srcset="{{- article_image | image_url: width: w380 }} 1x, {{ article_image | image_url: width: w380_2x }} 2x"
+						srcset="{{- article_image | image_url: width: 10 }} 1x, {{ article_image | image_url: width: 10 }} 2x"
+						width="{{- w380 -}}"
+						height="{{- h380 -}}"
+						media="(max-width: 380px)"
+					>
+
+					<source
+						data-srcset="{{- article_image | image_url: width: w420 }} 1x, {{ article_image | image_url: width: w420_2x }} 2x"
+						srcset="{{- article_image | image_url: width: 10 }} 1x, {{ article_image | image_url: width: 10 }} 2x"
+						width="{{- w420 -}}"
+						height="{{- h420 -}}"
+						media="(max-width: 420px)"
+					>
+
+					<source
+						data-srcset="{{- article_image | image_url: width: w767 }} 1x, {{ article_image | image_url: width: w767_2x }} 2x"
+						srcset="{{- article_image | image_url: width: 10 }} 1x, {{ article_image | image_url: width: 10 }} 2x"
+						width="{{- w767 -}}"
+						height="{{- h767 -}}"
+						media="(max-width: 767px)"
+					>
+
+					<source
+						data-srcset="{{- article_image | image_url: width: w991 }} 1x, {{ article_image | image_url: width: w991_2x }} 2x"
+						srcset="{{- article_image | image_url: width: 10 }} 1x, {{ article_image | image_url: width: 10 }} 2x"
+						width="{{- w991 -}}"
+						height="{{- h991 -}}"
+						media="(max-width: 991px)"
+					>
+
+					<source
+						data-srcset="{{- article_image | image_url: width: w1199 }} 1x, {{ article_image | image_url: width: w1199_2x }} 2x"
+						srcset="{{- article_image | image_url: width: 10 }} 1x, {{ article_image | image_url: width: 10 }} 2x"
+						width="{{- w1199 -}}"
+						height="{{- h1199 -}}"
+						media="(max-width: 1199px)"
+					>
+
+					<source
+						data-srcset="{{- article_image | image_url: width: w1600 }} 1x, {{ article_image | image_url: width: w1600_2x }} 2x"
+						srcset="{{- article_image | image_url: width: 10 }} 1x, {{ article_image | image_url: width: 10 }} 2x"
+						width="{{- w1600 -}}"
+						height="{{- h1600 -}}"
+						media="(max-width: 1600px)"
+					>
+
+					<img
+						class="article-card__image"
+						src="{{- article_image | image_url: width: 10 -}}"
+						data-src="{{- article_image | image_url: width: w_default -}}"
+						srcset="{{- article_image | image_url: width: 10 }}"
+						data-srcset="{{- article_image | image_url: width: w_default }} 1x, {{ article_image | image_url: width: w_default_2x }} 2x"
+						alt="{{- article_image.alt | escape -}}"
+						width="{{- w_default -}}"
+						height="{{- h_default -}}"
+						{% if img_focal != blank %}
+							style="{{ img_focal }}"
+						{% endif %}
+					>
+				</picture>
+			{% endif %}
+		{%- else -%}
+			{%- assign min	= 1 -%}
+			{%- assign max	= 4 -%}
+			{%- assign diff	= max | minus: min -%}
+
+			{%- assign random_number = "now" | date: "%N" | modulo: diff | plus: min -%}
+			{%- assign placeholder_svg_name = 'blog-apparel-' | append: random_number -%}
+
+			{{- placeholder_svg_name | placeholder_svg_tag: 'article-card__image article-card__image--placeholder' -}}
+		{%- endif -%}
+
+		<a
+			class="article-card__image-link"
+			href="{{- article_url -}}"
+			aria-label="{{- 'blogs.article.learn_more_link_aria' | t: title: article_title | escape -}}"
+		>
+		</a>
+
+		{%- if show_tag -%}
+			{%- if tag != blank or article == blank -%}
+				{%- assign tag_url = "#" -%}
+
+				{%- if article != blank -%}
+					{%- assign blog_url = article.url | split: '/blogs/' | last | split: '/' | first | strip -%}
+					{%- assign tag_handle = tag | handleize -%}
+					{%- assign tag_url = '/blogs/' | append: blog_url | append: '/tagged/' | append: tag_handle -%}
+				{%- endif -%}
+
+				<a
+					class="article-card__info-tag"
+					href="{{- tag_url -}}"
+				>
+					<span class="visually-hidden">
+						{{- 'blogs.article.tag' | t -}}
+					</span>
+
+					{%- if tag != blank -%}
+						{{- tag -}}
+					{%- elsif article == blank -%}
+						{{- article_tag_example -}}
+					{%- endif -%}
+				</a>
+			{%- endif -%}
+		{%- endif -%}
+	</div>
+
+	<div class="article-card__content">
+		<div class="article-card__content-box">
+			{%- if show_date or show_author or show_comments_count -%}
+				<ul class="article-card__info">
+					{%- if show_date -%}
+						<li class="article-card__info-item">
+							<span class="visually-hidden">
+								{{- 'blogs.article.published_at' | t -}}
+							</span>
+
+							{%- if article != blank -%}
+								{{- article.published_at | time_tag: format: 'date' -}}
+							{%- else -%}
+								{{- article_date_example -}}
+							{%- endif -%}
+						</li>
+					{%- endif -%}
+
+					{%- if show_author -%}
+						{%- if article.author != blank or article == blank -%}
+							<li class="article-card__info-item">
+								<span class="visually-hidden">
+									{{- 'blogs.article.author' | t -}}
+								</span>
+
+								{%- if article.author != blank -%}
+									{{- article.author -}}
+								{%- elsif article == blank -%}
+									{{- article_author_example -}}
+								{%- endif -%}
+							</li>
+						{%- endif -%}
+					{%- endif -%}
+
+					{%- if show_comments_count -%}
+						<li class="article-card__info-item">
+							<span>
+								<span class="visually-hidden">
+									{{- 'blogs.article.comments_count' | t -}}
+								</span>
+
+								{%- if article.comments_count != blank -%}
+									{{ article.comments_count }}
+
+									<span class="article-card__comments-count-label">
+										{% if article.comments_count != 1 %}{{ 'blogs.article.many_comments' | t }}{% else %}{{ 'blogs.article.one_comment' | t }}{% endif %}
+									</span>
+								{%- elsif article == blank -%}
+									{{- article_comments_count_example -}}
+
+									<span class="article-card__comments-count-label">
+										{{ 'blogs.article.many_comments' | t }}
+									</span>
+								{%- endif -%}
+							</span>
+						</li>
+					{%- endif -%}
+				</ul>
+			{%- endif -%}
+
+			<a href="{{ article_url }}"
+			   class="article-card__title h4 {% if is_strip_title %} article-card__title--clipped{%- endif -%}"
+			>
+				{{- article_title -}}
+			</a>
+
+			{%- if show_content -%}
+				{%- capture article_description_classes -%}
+					article-card__description {% if is_strip_content %} article-card__description--clipped {%- endif -%}
+				{%- endcapture -%}
+
+				{%- if article.excerpt_or_content != blank or article == blank -%}
+					<div class="{{- article_description_classes | strip_newlines -}}">
+						{%- if article.excerpt_or_content != blank -%}
+							{{- article.excerpt_or_content | strip_html -}}
+						{%- elsif article == blank -%}
+							{{- article_description_exmaple -}}
+						{%- endif -%}
+					</div>
+				{%- endif -%}
+			{%- endif -%}
+		</div>
+
+		<div class="article-card__navigation-box">
+			<a class="button-circle button-circle--small"
+			   href="{{- article_url -}}"
+			   aria-label="{{- 'blogs.article.learn_more_link_aria' | t: title: article_title | escape -}}"
+			>
+				<span class="button-circle__inner">
+					{%- render 'icons', icon: 'circle-decoration' -%}
+					{%- render 'icons', icon: 'arrow-right-secondary' -%}
+				</span>
+			</a>
+		</div>
+	</div>
+</article>

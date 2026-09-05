@@ -1,0 +1,549 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Promo products
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render "adastra" with "/src/styles/promo-products.scss" -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+	padding-top: {{- section.settings.offset_top_mobile -}}px;
+	padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+	#shopify-section-{{- section.id -}} {
+	padding-top: {{- section.settings.offset_top_desktop -}}px;
+	padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+	}
+	}
+{%- endstyle -%}
+
+{%- assign heading_first_line = section.settings.heading_first_line -%}
+{%- assign heading_second_line = section.settings.heading_second_line -%}
+{%- assign blocks = section.blocks -%}
+{%- assign container = section.settings.container_width -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme = section.settings.color_scheme -%}
+{% assign enable_bottom_rounded_corners = section.settings.enable_bottom_rounded_corners %}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{% assign container_width = container %}
+{%- endif -%}
+
+{%- assign min = 1 -%}
+{%- assign max = 5 -%}
+{%- assign diff = max | minus: min -%}
+
+{%- capture style -%}
+	--container-width: {{ container_width -}}; {{- -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px; {{- -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{- -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{- -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{- -}}
+{%- endcapture -%}
+
+<section
+	class="promo-products js-animate {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %} {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} need-animate tr-dur-0-5 color-{{ color_scheme.id }} js-promo-products"
+	style="{{- style -}}" data-section="{{- section.id -}}">
+	{%- if heading_first_line != blank or heading_second_line != blank -%}
+		<h2 class="section-title section-title--center container need-animate h1">
+			{%- if heading_first_line != blank -%}
+				<span
+					class="section-title__text-container {% if heading_second_line == blank %}text-center{% endif %}">
+					<span
+						class="section-title__text">
+						{{- heading_first_line -}}
+					</span>
+				</span>
+			{%- endif -%}
+
+			{%- if heading_second_line != blank -%}
+				<span class="section-title__text-container text-right">
+					<span class="section-title__text">
+						{{- heading_second_line -}}
+					</span>
+				</span>
+			{%- endif -%}
+		</h2>
+	{%- endif -%}
+
+	<div class="promo-products__wrapper">
+		{% for block in blocks %}
+			{% assign color_background = block.settings.color_background %}
+			{% assign background_image = block.settings.background_image %}
+			{% assign big_product_image = block.settings.big_product_image %}
+			{% assign default_first_open = false %}
+
+			{% if forloop.first %}
+				{% assign default_first_open = true %}
+			{% endif %}
+
+			<div
+				id="{{ block.id }}"
+				class="promo-products__background {% unless default_first_open %}promo-products__background--hidden{% endunless %} tr-dur-0-5 js-promo-products-background"
+				style="--background-color: {{ color_background }} ">
+				{% if background_image != blank %}
+					<picture class="promo-products__background-image-wrapper lazy">
+						<source
+							srcset="{{ background_image | image_url: width: 10 }} 1x, {{ background_image | image_url: width: 20 }} 2x"
+							data-srcset="{{ background_image | image_url: width: 1600 }} 1x, {{ background_image | image_url: width: 3200 }} 2x"
+							media="(max-width: 1600px)"
+						>
+
+						<img src="{{ background_image | image_url: width: 10 }}"
+							 srcset="{{ background_image | image_url: width: 10 }} 1x, {{ background_image | image_url: width: 20 }} 2x"
+							 data-src="{{ background_image | image_url: width: 1920 }}"
+							 data-srcset="{{ background_image | image_url: width: 1920 }} 1x, {{ background_image | image_url: width: 3840 }} 2x"
+							 class="promo-products__background-image"
+							 alt="{{ background_image.alt | escape }}">
+					</picture>
+				{% endif %}
+
+				{% if big_product_image != blank %}
+					<div
+						class="promo-products__section-image-wrapper">
+						<picture class="promo-products__section-image-aspect-ratio lazy">
+							<img
+								class="promo-products__section-image"
+								src="{{ big_product_image | image_url: width: 10, height: 10 }}"
+								srcset="{{ big_product_image | image_url: width: 10, height: 10 }} 1x, {{ big_product_image | image_url: width: 20, height: 20 }} 2x"
+								data-src="{{ big_product_image | image_url: width: 759, height: 759 }}"
+								data-srcset="{{ big_product_image | image_url: width: 759, height: 759 }} 1x, {{ big_product_image | image_url: width: 1518, height: 1518 }} 2x"
+								alt="{{ big_product_image.alt | escape }}"
+							>
+						</picture>
+					</div>
+				{% endif %}
+			</div>
+		{% endfor %}
+
+		<div class="promo-products__content-wrapper">
+			<div class="promo-products__container container">
+				<div class="promo-products__content">
+					<ul class="promo-products__accordion-list js-accordion-container" data-single-open>
+						{% assign delay_step = 0.2 %}
+
+						{% for block in blocks %}
+							{% assign placeholder_product_title = 'sections.promo_products.product_title' | t %}
+							{% assign color_background = block.settings.color_background %}
+							{% assign product = block.settings.product %}
+							{% assign product_image = product.featured_image %}
+							{% assign product_title = product.title | default: placeholder_product_title %}
+							{% assign custom_image = block.settings.custom_image %}
+							{% assign image = block.settings.custom_image | default: product_image %}
+							{% assign big_product_image = block.settings.big_product_image %}
+							{% assign mobile_image = block.settings.mobile_image %}
+							{% assign background_image = block.settings.background_image %}
+							{% assign text = block.settings.text %}
+							{% assign subheading = block.settings.subheading %}
+
+							{% assign is_lazy = false %}
+
+							{% unless section.index == 1 and forloop.first %}
+								{% assign is_lazy = true %}
+							{% endunless %}
+
+							{% assign delay_step = delay_step | plus: 0.1 %}
+							{% assign default_first_open = false %}
+
+							{% if forloop.first %}
+								{% assign default_first_open = true %}
+							{% endif %}
+
+							<li id="{{ block.id }}"
+								class="promo-products__accordion-item accordion__item js-promo-products-accordion js-product-card js-accordion-item {% if default_first_open %}is-active{% endif %}"
+								data-variant="{{- product.selected_or_first_available_variant.id -}}"
+								style="transition-delay: {{ delay_step }}s"
+							>
+								<button class="promo-products__control accordion__control button js-accordion-control"
+										aria-expanded="{{ default_first_open }}">
+									{% if image != blank %}
+										<picture class="promo-products__picture lazy">
+											<source
+												srcset="{{ image | image_url: width: 10, height: 10 }} 1x, {{ image | image_url: width: 20, height: 20 }} 2x"
+												data-srcset="{{ image | image_url: width: 64, height: 64 }} 1x, {{ image | image_url: width: 128, height: 128 }} 2x"
+												media="(max-width: 767px)"
+											>
+
+											<img
+												class="promo-products__image"
+												src="{{- image | image_url: width: 10, height: 10 -}}"
+												srcset="{{ image | image_url: width: 10, height: 10, crop: 'center' }} 1x, {{ image | image_url: width: 20, height: 20, crop: 'center' }} 2x"
+												data-src="{{- image | image_url: width: 80, height: 80 -}}"
+												data-srcset="{{ image | image_url: width: 80, height: 80, crop: 'center' }} 1x, {{ image | image_url: width: 160, height: 160, crop: 'center' }} 2x"
+												alt="{{ image.alt | escape }}"
+											>
+										</picture>
+									{% else %}
+										{%- assign random_number = "now" | date: "%N" | modulo: diff | plus: min -%}
+										{%- assign placeholder_svg_name = 'product-' | append: random_number -%}
+
+										{{- placeholder_svg_name | placeholder_svg_tag: "promo-products__image promo-products__image--placeholder" -}}
+									{% endif %}
+
+									<h3 class="promo-products__accordion-title">{{ product_title }}</h3>
+
+									<div
+										class="promo-products__button-circle button-circle button-circle--small js-promo-products-button-circle {% if default_first_open %}is-active{% endif %}"
+										aria-label="{{- "sections.promo_products.button_aria" | t -}}">
+										<span class="button-circle__inner">
+											{%- render 'icons', icon: 'circle-decoration' -%}
+											{%- render 'icons', icon: 'plus', class: 'icon-inactive' -%}
+											{%- render 'icons', icon: 'minus', class: 'icon-active' -%}
+										</span>
+									</div>
+								</button>
+
+								<div
+									class="promo-products__accordion-content accordion__content accordion__content--animate js-accordion-content"
+									{% unless default_first_open %}
+										style="height: 0; padding: 0"
+									{% endunless %}
+								>
+									<div class="promo-products__accordion-inner js-accordion-inner">
+										{% if mobile_image != blank %}
+											<div class="promo-products__section-image-mobile-aspect-ratio">
+												<picture {% if is_lazy %}class="lazy"{% endif %}>
+													<source
+														{% if is_lazy %}
+															srcset="{{ mobile_image | image_url: width: 10, height: 10 }} 1x, {{ mobile_image | image_url: width: 20, height: 20 }} 2x"
+															data-srcset="{{ mobile_image | image_url: width: 317, height: 179 }} 1x, {{ mobile_image | image_url: width: 634, height: 358 }} 2x"
+														{% else %}
+															srcset="{{ mobile_image | image_url: width: 317, height: 179 }} 1x, {{ mobile_image | image_url: width: 634, height: 358 }} 2x"
+														{% endif %}
+														media="(max-width: 375px)">
+
+													<source
+														{% if is_lazy %}
+															srcset="{{ mobile_image | image_url: width: 10, height: 10 }} 1x, {{ mobile_image | image_url: width: 20, height: 20 }} 2x"
+															data-srcset="{{ mobile_image | image_url: width: 362, height: 204 }} 1x, {{ mobile_image | image_url: width: 724, height: 408 }} 2x"
+														{% else %}
+															srcset="{{ mobile_image | image_url: width: 362, height: 204 }} 1x, {{ mobile_image | image_url: width: 724, height: 408 }} 2x"
+														{% endif %}
+														media="(max-width: 420px)">
+
+													<source
+														{% if is_lazy %}
+															srcset="{{ mobile_image | image_url: width: 10, height: 10 }} 1x, {{ mobile_image | image_url: width: 20, height: 20 }} 2x"
+															data-srcset="{{ mobile_image | image_url: width: 517, height: 292 }} 1x, {{ mobile_image | image_url: width: 1034, height: 584 }} 2x"
+														{% else %}
+															srcset="{{ mobile_image | image_url: width: 517, height: 292 }} 1x, {{ mobile_image | image_url: width: 1034, height: 584 }} 2x"
+														{% endif %}
+														media="(max-width: 575px)">
+
+													<source
+														{% if is_lazy %}
+															srcset="{{ mobile_image | image_url: width: 10, height: 10 }} 1x, {{ mobile_image | image_url: width: 20, height: 20 }} 2x"
+															data-srcset="{{ mobile_image | image_url: width: 709, height: 400 }} 1x, {{ mobile_image | image_url: width: 1418, height: 800 }} 2x"
+														{% else %}
+															srcset="{{ mobile_image | image_url: width: 709, height: 400 }} 1x, {{ mobile_image | image_url: width: 1418, height: 800 }} 2x"
+														{% endif %}
+														media="(max-width: 767px)">
+
+
+													<img
+														class="promo-products__mobile-image"
+														{% if is_lazy %}
+															src="{{- mobile_image | image_url: width: 10, height: 10 -}}"
+															srcset="{{ mobile_image | image_url: width: 10, height: 10, crop: 'center' }} 1x, {{ mobile_image | image_url: width: 20, height: 20, crop: 'center' }} 2x"
+															data-src="{{- mobile_image | image_url: width: 901, height: 508 -}}"
+															data-srcset="{{ mobile_image | image_url: width: 901, height: 508, crop: 'center' }} 1x, {{ mobile_image | image_url: width: 1802, height: 1016, crop: 'center' }} 2x"
+														{% else %}
+															src="{{- mobile_image | image_url: width: 901, height: 508 -}}"
+															srcset="{{ mobile_image | image_url: width: 901, height: 508, crop: 'center' }} 1x, {{ mobile_image | image_url: width: 1802, height: 1016, crop: 'center' }} 2x"
+														{% endif %}
+														alt="{{ mobile_image.alt | escape }}"
+													>
+												</picture>
+											</div>
+										{% endif %}
+
+										{% if subheading != blank %}
+											<h4 class="promo-products__subheading h5">{{ subheading }}</h4>
+										{% endif %}
+
+										{% if text != blank %}
+											<div class="promo-products__text rte">
+												{{ text }}
+											</div>
+										{% endif %}
+
+										<div class="promo-products__quick-view-wrapper">
+											{% render 'price', product: product %}
+
+											{% if product != blank %}
+												<button
+													class="promo-products__quick-view-button button-simple button-simple--primary js-product-card-quick-view-button"
+													data-product-card-handle="{{- product.handle -}}"
+													type="button"
+													{% unless product.available %}
+														disabled
+													{% endunless %}
+												>
+													{% if product.available %}
+														{{- 'sections.promo_products.quick_view' | t -}}
+													{% else %}
+														{{- 'sections.promo_products.sold_out' | t -}}
+													{% endif %}
+												</button>
+											{% endif %}
+										</div>
+									</div>
+								</div>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/promo-products.js' -%}
+
+{%- schema -%}
+{
+	"name": "Promo products",
+	"disabled_on": {
+		"groups": [
+			"header",
+			"footer",
+			"custom.popup"
+		]
+	},
+	"settings": [
+		{
+			"type": "inline_richtext",
+			"id": "heading_first_line",
+			"label": "Heading (first line)",
+			"default": "Promo products"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading_second_line",
+			"label": "Heading (second line)"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 100
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 100
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 40
+		}
+	],
+	"blocks": [
+		{
+			"type": "product",
+			"name": "Product",
+			"limit": 5,
+			"settings": [
+				{
+					"type": "product",
+					"id": "product",
+					"label": "Product"
+				},
+				{
+					"type": "image_picker",
+					"id": "custom_image",
+					"label": "Custom image",
+					"info": "Use instead of product image. 160 x 160px recommended"
+				},
+				{
+					"type": "text",
+					"id": "subheading",
+					"label": "Subheading"
+				},
+				{
+					"type": "textarea",
+					"id": "text",
+					"label": "Text"
+				},
+				{
+					"type": "image_picker",
+					"id": "background_image",
+					"label": "Background image",
+					"info": "Desktop only. 3840 x 1646px recommended"
+				},
+				{
+					"type": "image_picker",
+					"id": "big_product_image",
+					"label": "Big product image",
+					"info": "Desktop only. 1518 x 1518px recommended"
+				},
+				{
+					"type": "image_picker",
+					"id": "mobile_image",
+					"label": "Mobile image",
+					"info": "1804 x 1018px recommended"
+				},
+				{
+					"type": "header",
+					"content": "Colors"
+				},
+				{
+					"type": "color_background",
+					"id": "color_background",
+					"label": "Background",
+					"default": "#DB4C76"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Promo products",
+			"blocks": [
+				{
+					"type": "product"
+				},
+				{
+					"type": "product"
+				},
+				{
+					"type": "product"
+				},
+				{
+					"type": "product"
+				},
+				{
+					"type": "product"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

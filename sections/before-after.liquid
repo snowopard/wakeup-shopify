@@ -1,0 +1,436 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Before and after
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign heading_first_line			  = section.settings.heading_first_line -%}
+{%- assign heading_second_line			= section.settings.heading_second_line -%}
+{%- assign desktop_image_height     = section.settings.desktop_image_height -%}
+{%- assign mobile_image_height      = section.settings.mobile_image_height -%}
+{%- assign first_image              = section.settings.first_image -%}
+{%- assign second_image             = section.settings.second_image -%}
+{%- assign full_width               = section.settings.full_width -%}
+{%- assign container                = section.settings.container_width -%}
+
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme = section.settings.color_scheme -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--desktop-image-height: {{- desktop_image_height -}}; {{-  -}}
+	--mobile-image-height: {{- mobile_image_height -}}; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{-  -}}
+	--container-width: {{- container_width -}};
+{%- endcapture -%}
+
+{%- capture first_image_focal -%}
+	--first-img-pos: {{- first_image.presentation.focal_point -}};
+{%- endcapture -%}
+
+{%- capture second_image_focal -%}
+	--second-img-pos: {{- second_image.presentation.focal_point -}};
+{%- endcapture -%}
+
+{%- render 'adastra' with '/src/styles/before-after.scss' -%}
+
+<section
+	class="before-after container js-animate color-{{ color_scheme.id }} {% if request.visual_preview_mode %}animated{% endif %}"
+	data-section-id="{{- section.id -}}"
+	data-section-type="before-after"
+	style="{{- styles -}}"
+>
+	{%- if heading_first_line != blank or heading_second_line != blank -%}
+		<h2 class="h1 section-title section-title--center need-animate">
+			{%- if heading_first_line != blank -%}
+				<span class="section-title__text-container">
+						<span class="section-title__text {% if heading_second_line == blank %}text-center{% endif %}">
+							{{- heading_first_line -}}
+						</span>
+					</span>
+			{%- endif -%}
+
+			{%- if heading_second_line != blank -%}
+				<span class="section-title__text-container">
+						<span class="section-title__text {% if heading_first_line == blank %}text-center{% else %}text-right{% endif %}">
+							{{- heading_second_line -}}
+						</span>
+					</span>
+			{%- endif -%}
+		</h2>
+	{%- endif -%}
+
+	<img-comparison-slider tabindex="0">
+		{%- if first_image != blank -%}
+			<img slot="first"
+				 srcset="{{ first_image | img_url: "1920x" }} 1x , {{ first_image | img_url: "3840x" }} 2x"
+				 alt="{{- first_image.alt -}}"
+				 style="{{- first_image_focal -}}"
+				 class="before-after__image before-after__image--first"
+				{%- if section.index > 1 -%}
+					loading="lazy"
+				{%- endif -%}
+
+			>
+		{%- else -%}
+			<div slot="first" class="before-after__placeholder">
+				{{- 'lifestyle-2' | placeholder_svg_tag: 'before-after__image before-after__image--placeholder' -}}
+			</div>
+		{%- endif -%}
+
+		{%- if second_image != blank -%}
+			<img slot="second"
+				 srcset="{{ second_image | img_url: "1920x" }} 1x , {{ second_image | img_url: "3840x" }} 2x"
+				 alt="{{- first_image.alt -}}"
+				 style="{{- second_image_focal -}}"
+				 class="before-after__image before-after__image--second"
+				{%- if section.index > 1 -%}
+					loading="lazy"
+				{%- endif -%}
+			>
+		{%- else -%}
+			<div slot="second" class="before-after__placeholder">
+				{{- 'lifestyle-2' | placeholder_svg_tag: 'before-after__image before-after__image--placeholder before-after__image--placeholder-compare' -}}
+			</div>
+		{%- endif -%}
+
+		<div class="before-after__button button-circle button-circle--transform" slot="handle">
+			<span class="button-circle__inner">
+				{%- render 'icons', icon: 'circle-decoration' -%}
+				{%- render 'icons', icon: 'slider-arrow-left', class: 'icon icon-inactive' -%}
+				{%- render 'icons', icon: 'slider-arrow-right', class: 'icon icon-inactive' -%}
+			</span>
+
+			<span class="button-circle__text">
+				{%- render 'icons', icon: 'slider-arrow-left', class: "icon-hover" -%}
+				{%- render 'icons', icon: 'slider-arrow-right', class: "icon-hover" -%}
+			</span>
+		</div>
+	</img-comparison-slider>
+</section>
+
+{%- render 'adastra' with '/src/scripts/section-before-after.js' -%}
+
+{%- schema -%}
+{
+	"name": "Before After",
+	"disabled_on": {
+		"groups": [
+			"header",
+			"footer",
+			"custom.popup"
+		]
+	},
+	"settings": [
+		{
+			"type": "inline_richtext",
+			"id": "heading_first_line",
+			"label": "Heading (first line)",
+			"default": "<em>BEFORE</em>"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading_second_line",
+			"label": "Heading (second line)",
+			"default": "AFTER"
+		},
+		{
+			"type": "select",
+			"id": "desktop_image_height",
+			"label": "Desktop image height",
+			"options": [
+				{
+					"value": "200px",
+					"label": "200px"
+				},
+				{
+					"value": "250px",
+					"label": "250px"
+				},
+				{
+					"value": "300px",
+					"label": "300px"
+				},
+				{
+					"value": "350px",
+					"label": "350px"
+				},
+				{
+					"value": "400px",
+					"label": "400px"
+				},
+				{
+					"value": "450px",
+					"label": "450px"
+				},
+				{
+					"value": "500px",
+					"label": "500px"
+				},
+				{
+					"value": "550px",
+					"label": "550px"
+				},
+				{
+					"value": "600px",
+					"label": "600px"
+				},
+				{
+					"value": "650px",
+					"label": "650px"
+				},
+				{
+					"value": "700px",
+					"label": "700px"
+				},
+				{
+					"value": "750px",
+					"label": "750px"
+				},
+				{
+					"value": "800px",
+					"label": "800px"
+				},
+				{
+					"value": "100%",
+					"label": "Fullsize"
+				}
+			],
+			"default": "700px"
+		},
+		{
+			"type": "select",
+			"id": "mobile_image_height",
+			"label": "Mobile image height",
+			"options": [
+				{
+					"value": "200px",
+					"label": "200px"
+				},
+				{
+					"value": "250px",
+					"label": "250px"
+				},
+				{
+					"value": "300px",
+					"label": "300px"
+				},
+				{
+					"value": "350px",
+					"label": "350px"
+				},
+				{
+					"value": "400px",
+					"label": "400px"
+				},
+				{
+					"value": "450px",
+					"label": "450px"
+				},
+				{
+					"value": "500px",
+					"label": "500px"
+				},
+				{
+					"value": "550px",
+					"label": "550px"
+				},
+				{
+					"value": "600px",
+					"label": "600px"
+				},
+				{
+					"value": "650px",
+					"label": "650px"
+				},
+				{
+					"value": "700px",
+					"label": "700px"
+				},
+				{
+					"value": "750px",
+					"label": "750px"
+				},
+				{
+					"value": "800px",
+					"label": "800px"
+				},
+				{
+					"value": "100%",
+					"label": "Fullsize"
+				}
+			],
+			"default": "400px"
+		},
+		{
+			"type": "image_picker",
+			"id": "first_image",
+			"label": "First image",
+			"info": "3840 x 1400px recommended"
+		},
+		{
+			"type": "image_picker",
+			"id": "second_image",
+			"label": "Second image",
+			"info": "Use an image with the same dimensions as the first image. 3840 x 1400px recommended"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 0
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		}
+	],
+	"presets": [
+		{
+			"name": "Before After"
+		}
+	]
+}
+{%- endschema -%}

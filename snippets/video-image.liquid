@@ -1,0 +1,76 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Video image
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{% if image != blank %}
+	{%- assign size_375_2x 		= size_375 | times: 2 -%}
+	{%- assign size_420_2x 		= size_420 | times: 2 -%}
+	{%- assign size_565_2x 		= size_565 | times: 2 -%}
+	{%- assign size_767_2x 		= size_767 | times: 2 -%}
+	{%- assign size_991_2x 		= size_991 | times: 2 -%}
+	{%- assign size_1440_2x 	= size_1440 | times: 2 -%}
+	{%- assign size_1600_2x 	= size_1600 | times: 2 -%}
+	{%- assign size_2x 			= size | times: 2 -%}
+
+	{%- capture img_focal -%}
+		--img-desktop-pos: {{ image.presentation.focal_point }};
+	{%- endcapture -%}
+
+	<picture {% if lazy -%}class="lazy"{%- endif -%}>
+		<source
+			{% if lazy %}data-{%-endif-%}srcset="{{ image | image_url: height: size_375 }} 1x, {{ image | image_url: height: size_375_2x }} 2x"
+			{% if lazy %}srcset="{{ image | image_url: height: 10 }} 1x, {{ image | image_url: height: 10 }} 2x"{%- endif -%}
+			media="(max-width: 375px)"
+		/>
+
+		<source
+			{% if lazy%}data-{%-endif-%}srcset="{{ image | image_url: height: size_420 }} 1x, {{ image | image_url: height: size_420_2x }} 2x"
+			{% if lazy %}srcset="{{ image | image_url: height: 10 }} 1x, {{ image | image_url: height: 10 }} 2x"{%- endif -%}
+			media="(max-width: 420px)"
+		/>
+
+		<source
+			{% if lazy%}data-{%-endif-%}srcset="{{ image | image_url: height: size_575 }} 1x, {{ image | image_url: height: size_575_2x }} 2x"
+			{% if lazy %}srcset="{{ image | image_url: height: 10 }} 1x, {{ image | image_url: height: 10 }} 2x"{%- endif -%}
+			media="(max-width: 575px)"
+		/>
+
+		<source
+			{% if lazy%}data-{%-endif-%}srcset="{{ image | image_url: height: size_767 }} 1x, {{ image | image_url: height: size_767_2x }} 2x"
+			{% if lazy %}srcset="{{ image | image_url: height: 10 }} 1x, {{ image | image_url: height: 10 }} 2x"{%- endif -%}
+			media="(max-width: 767px)"
+		/>
+
+		<source
+			{% if lazy%}data-{%-endif-%}srcset="{{ image | image_url: height: size_991 }} 1x, {{ image | image_url: height: size_991_2x }} 2x"
+			{% if lazy %}srcset="{{ image | image_url: height: 10 }} 1x, {{ image | image_url: height: 10 }} 2x"{%- endif -%}
+			media="(max-width: 991px)"
+		/>
+
+		<source
+			{% if lazy%}data-{%-endif-%}srcset="{{ image | image_url: height: size_1440 }} 1x, {{ image | image_url: height: size_1440_2x }} 2x"
+			{% if lazy %}srcset="{{ image | image_url: height: 10 }} 1x, {{ image | image_url: height: 10 }} 2x"{%- endif -%}
+			media="(max-width: 1440px)"
+		/>
+
+		<source
+			{% if lazy%}data-{%-endif-%}srcset="{{ image | image_url: height: size_1600 }} 1x, {{ image | image_url: height: size_1600_2x }} 2x"
+			{% if lazy %}srcset="{{ image | image_url: height: 10 }} 1x, {{ image | image_url: height: 10 }} 2x"{%- endif -%}
+			media="(max-width: 1600px)"
+		/>
+
+		<img
+			{% if lazy%}data-{%-endif-%}srcset="{{ image | image_url: height: size }} 1x, {{ image | image_url: height: size_2x }} 2x"
+			{% if lazy %}srcset="{{ image | image_url: height: 10 }} 1x, {{ image | image_url: height: 10 }} 2x"{%- endif -%}
+			{% if lazy%}data-{%-endif-%}src="{{ image | image_url: height: size }}"
+			{% if lazy %}src="{{ image | image_url: height: 10 }}"{%- endif -%}
+			alt="{{ image.alt }}"
+			class="video__placeholder-image js-video-placeholder"
+			style="{{ img_focal }}"
+		/>
+	</picture>
+{% else %}
+	{{- "hero-apparel-1" | placeholder_svg_tag: 'video__placeholder-image video__placeholder-image--placeholder js-video-placeholder' -}}
+{% endif %}

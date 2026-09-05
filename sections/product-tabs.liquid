@@ -1,0 +1,403 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Product tabs
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/carousel.scss' -%}
+{%- render 'adastra' with '/src/styles/product-tabs.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign heading_first_line   			= section.settings.heading_first_line -%}
+{%- assign heading_second_line  			= section.settings.heading_second_line -%}
+{%- assign layout       					= section.settings.layout -%}
+
+{%- assign container 						= section.settings.container_width -%}
+{%- assign enable_bottom_rounded_corners   	= section.settings.enable_bottom_rounded_corners -%}
+{%- assign enable_color_scheme_inheritance  = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 				    = section.settings.color_scheme -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{% assign heading_first_line_class = 'text-center' %}
+{% assign heading_second_line_class = 'text-center' %}
+
+{%- if heading_first_line != blank and heading_second_line != blank -%}
+	{% assign heading_first_line_class = '' %}
+	{% assign heading_second_line_class = 'text-right' %}
+{%- endif -%}
+
+{%- capture section_styles -%}
+	--container-width: {{ container_width }}; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px; {{- -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{- -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{- -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px;
+{%- endcapture -%}
+
+{%- if section.blocks.size > 0 -%}
+	<section
+		class="product-tabs color-{{ color_scheme.id }}{% if enable_bottom_rounded_corners %} section-bottom-rounded{% endif %} js-product-tabs js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} need-animate"
+		id="{{- section.id -}}"
+		style="{{ section_styles }}"
+		data-slides-in-row="{{ layout }}"
+	>
+		<div class="container">
+			{%- if heading_first_line != blank or heading_second_line != blank -%}
+				<h2 class="product-tabs__heading h2 section-title section-title--center need-animate">
+					{%- if heading_first_line != blank -%}
+						<span class="section-title__text-container">
+						<span class="section-title__text {{ heading_first_line_class }}">
+							{{- heading_first_line -}}
+						</span>
+					</span>
+					{%- endif -%}
+
+					{%- if heading_second_line != blank -%}
+						<span class="section-title__text-container">
+						<span class="section-title__text {{ heading_second_line_class }}">
+							{{- heading_second_line -}}
+						</span>
+					</span>
+					{%- endif -%}
+				</h2>
+			{%- endif -%}
+
+			<div class="product-tabs__content-wrapper">
+				<div class="product-tabs__tabs-wrapper">
+					<div class="product-tabs__tabs-inner">
+						<ul class="tabs need-animate" data-tabs-container>
+							{% assign animate_delay = 0 %}
+
+							{% for block in section.blocks %}
+								{%- assign tab_heading 		= block.settings.tab_heading | default: "Tab name" -%}
+								{%- assign animate_delay 	= animate_delay | plus: 0.2 -%}
+
+								{% if tab_heading != blank %}
+									<li>
+										<button
+											class="tabs__item focus-visible-outline js-tab-button {% if forloop.first %}is-active{% endif %}"
+											style="transition-delay: {{ animate_delay }}s"
+											data-id="{{ section.id }}-{{ block.id }}"
+										>
+											{{ tab_heading }}
+										</button>
+									</li>
+								{% endif %}
+							{% endfor %}
+
+							<div class="tab__underline js-tab-underline"></div>
+						</ul>
+					</div>
+				</div>
+
+				{%- for block in section.blocks -%}
+					{%- assign product_list = block.settings.product_list -%}
+
+					{%- capture featured_products_row_wrapper_classes -%}
+						product-tabs__slider swiper need-animate tr-dur-0-8{% if forloop.index == 1 %} is-active{% endif %} {{-  -}}
+						js-product-tabs-slider
+					{%- endcapture -%}
+
+					{%- capture featured_product_row_classes -%}
+						{%- if product_list.count <= 2 and product_list != blank -%}
+							product-tabs__row--center-desktop {{- -}}
+						{%- elsif layout == "4" and product_list.count < 4 and product_list != blank -%}
+							product-tabs__row--center-desktop {{- -}}
+						{% endif %}
+
+						{% if product_list.count < 3 and product_list != blank %}
+							product-tabs__row--center-tablet {{- -}}
+						{% endif %}
+
+						product-tabs__row swiper-wrapper {{-  -}}
+					{%- endcapture -%}
+
+					<div
+						class="{{- featured_products_row_wrapper_classes | strip_newlines -}}"
+						id="{{ section.id }}-{{ block.id }}"
+					>
+						<div class="{{- featured_product_row_classes | strip_newlines -}}">
+							{%- if product_list != blank -%}
+								{%- assign image_size = 640 -%}
+								{%- assign image_size_tablet = 382 -%}
+								{%- assign image_size_mobile = 390 -%}
+
+								{%- if layout == '4' -%}
+									{%- assign image_size = 480 -%}
+								{%- endif -%}
+
+								{%- for product in product_list limit: 12 -%}
+									{% assign is_lazy = true %}
+
+									{% if section.index == 1 and forloop.index == 1 %}
+										{% assign is_lazy = false %}
+									{% endif %}
+
+									<div class="product-tabs__col swiper-slide product-tabs__col--{{- layout -}}">
+										{%- render
+											'product-card',
+											product: product,
+											size: image_size,
+											tablet_size: image_size_tablet,
+											mobile_size: image_size_mobile,
+											is_lazy: is_lazy
+										-%}
+									</div>
+								{%- endfor -%}
+							{%- else -%}
+								{%- for i in (1..4) -%}
+									<div class="product-tabs__col swiper-slide product-tabs__col--{{- layout -}}">
+										{%- render 'product-card', product: nil -%}
+									</div>
+								{%- endfor -%}
+							{%- endif -%}
+						</div>
+
+						{%- if product_list.count > 1 or product_list == blank -%}
+							<div class="slider-pagination product-tabs__slider-pagination js-product-tabs-pagination-wrapper">
+								{% render 'swiper-button', direction: 'prev', class: "js-swiper-button-prev" %}
+
+								<div class="custom-swiper-pagination js-product-tabs-pagination"></div>
+
+								{% render 'swiper-button', direction: 'next', class: "js-swiper-button-next" %}
+							</div>
+						{%- endif -%}
+					</div>
+				{%- endfor -%}
+			</div>
+		</div>
+	</section>
+{%- endif -%}
+
+{%- render 'adastra' with '/src/scripts/section-product-tabs.js' -%}
+
+{%- schema -%}
+{
+	"name": "Product tabs",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"id": "heading_first_line",
+			"type": "inline_richtext",
+			"label": "Heading (first line)",
+			"default": "Product tabs"
+		},
+		{
+			"id": "heading_second_line",
+			"type": "inline_richtext",
+			"label": "Heading (second line)"
+		},
+		{
+			"type": "select",
+			"id": "layout",
+			"label": "Layout",
+			"options": [
+				{
+					"value": "3",
+					"label": "3 products per row"
+				},
+				{
+					"value": "4",
+					"label": "4 products per row"
+				}
+			],
+			"default": "4",
+			"info": "Desktop only"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "If you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 40
+		}
+	],
+	"blocks": [
+		{
+			"name": "Tab",
+			"type": "tab",
+			"limit": 3,
+			"settings": [
+				{
+					"type": "text",
+					"id": "tab_heading",
+					"label": "Heading",
+					"default": "Tab name"
+				},
+				{
+					"type": "product_list",
+					"id": "product_list",
+					"label": "Products",
+					"limit": 12
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Product tabs",
+			"blocks": [
+				{
+					"type": "tab"
+				},
+				{
+					"type": "tab"
+				},
+				{
+					"type": "tab"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

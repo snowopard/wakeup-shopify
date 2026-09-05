@@ -1,0 +1,464 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Benefits
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign heading_first_line = section.settings.heading_first_line -%}
+{%- assign heading_second_line = section.settings.heading_second_line -%}
+{%- assign image = section.settings.image -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme = section.settings.color_scheme -%}
+{%- assign color_ellipse = section.settings.color_ellipse -%}
+{%- assign container = section.settings.container_width -%}
+{%- assign enable_bottom_rounded_corners = section.settings.enable_bottom_rounded_corners -%}
+{%- assign is_lazy = false -%}
+
+{%- if section.index > 1 -%}
+	{%- assign is_lazy = true -%}
+{%- endif -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{%- capture section_styles -%}
+	--color-block-bg: {{ color_scheme.settings.color_text_primary | color_modify: 'alpha', 0.08 }}; {{- -}}
+	--color-ellipse: {{ color_ellipse }}; {{- -}}
+	--container-width: {{ container_width }}; {{- -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px; {{- -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px; {{- -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{- -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{- -}}
+{%- endcapture -%}
+
+{%- if section.blocks.size > 0 -%}
+	{%- capture benefits -%}
+		{%- assign counter = 1 -%}
+		{%- assign delay_step_desktop = 0 -%}
+		{%- assign delay_step_mobile = 0 -%}
+
+		{%- for block in section.blocks -%}
+			{%- assign heading = block.settings.heading -%}
+			{%- assign icon = block.settings.icon -%}
+			{%- assign delay_step_desktop = delay_step_desktop | plus: 0.25 -%}
+
+			{%- if counter > 4 -%}
+				{%- assign counter = 1 -%}
+			{%- endif -%}
+
+			<div class="benefits__item-wrapper benefits__item-wrapper--desktop benefits__item-wrapper--{{ counter }}">
+				<div class="benefits__item need-animate js-benefits-item"
+					 style="transition-delay: {{ delay_step_desktop }}s;"
+				>
+					{% if icon != blank %}
+						<div class="benefits__icon-wrapper">
+							<img
+								class="benefits__icon"
+								srcset="{{ icon | image_url: width: 64, height: 64, crop: 'center' }} 1x,
+											{{ icon | image_url: width: 128, height: 128, crop: 'center' }} 2x"
+								src="{{- icon | image_url: 64, height: 64, crop: 'center' -}}"
+								alt="{{- icon.alt | escape -}}"
+								style="transition-delay: {{ delay_step | plus: 0.2 }}s;"
+								loading="lazy"
+							>
+						</div>
+					{% endif %}
+
+					{% if heading != blank %}
+						<div class="benefits__item-heading">
+							{{- heading -}}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+
+			{%- assign counter = counter | plus: 1 -%}
+		{%- endfor -%}
+
+		<div class="benefits__list benefits__list--mobile">
+			{%- for block in section.blocks -%}
+				{%- assign heading = block.settings.heading -%}
+				{%- assign icon = block.settings.icon -%}
+				{%- assign delay_step_mobile = delay_step_mobile | plus: 0.25 -%}
+
+				<div class="benefits__item-wrapper">
+					<div class="benefits__item need-animate"
+						 style="transition-delay: {{ delay_step_mobile }}s;"
+					>
+						{% if icon != blank %}
+							<div class="benefits__icon-wrapper">
+								<img
+									class="benefits__icon"
+									srcset="{{ icon | image_url: width: 64, height: 64, crop: 'center' }} 1x,
+												{{ icon | image_url: width: 128, height: 128, crop: 'center' }} 2x"
+									src="{{- icon | image_url: 64, height: 64, crop: 'center' -}}"
+									alt="{{- icon.alt | escape -}}"
+									style="transition-delay: {{ delay_step | plus: 0.2 }}s;"
+									loading="lazy"
+								>
+							</div>
+						{% endif %}
+
+						{%- if heading != blank -%}
+							<div class="benefits__item-heading">
+								{{- heading -}}
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			{%- endfor -%}
+		</div>
+	{%- endcapture -%}
+{%- endif -%}
+
+{%- if benefits != blank -%}
+	{%- render 'adastra' with '/src/styles/benefits.scss' -%}
+
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_desktop -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+		}
+	{%- endstyle -%}
+
+	<section
+		class="benefits{% if enable_bottom_rounded_corners %} section-bottom-rounded{% endif %} color-{{ color_scheme.id }} js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} js-benefits"
+		style="{{- section_styles -}}">
+		<div class="benefits__container container">
+			<div class="benefits__content">
+				{%- if heading_first_line != blank or heading_second_line != blank -%}
+					<h2 class="ingredients__heading section-title section-title--center need-animate">
+						{%- if heading_first_line != blank -%}
+							<span class="section-title__text-container">
+							<span
+								class="section-title__text{% if heading_second_line == blank %} text-center{% endif %}">
+								{{- heading_first_line -}}
+							</span>
+						</span>
+						{%- endif -%}
+
+						{%- if heading_second_line != blank -%}
+							<span class="section-title__text-container">
+							<span
+								class="section-title__text{% if heading_first_line == blank %} text-center{% else %} text-right{% endif %}">
+								{{- heading_second_line -}}
+							</span>
+						</span>
+						{%- endif -%}
+					</h2>
+				{%- endif -%}
+
+				<div class="benefits__image-box{% if image == blank %} benefits__image-box--no-image{% endif %}">
+					<div class="benefits__image-wrapper need-animate">
+						<div class="benefits__image-inner need-animate">
+							{%- if image != blank -%}
+								<picture class="{% if is_lazy %} lazy{% endif %}">
+									<source
+										{% if is_lazy %}
+											srcset="{{ image | image_url: width: 10, height: 10 }} 1x,
+													{{ image | image_url: width: 20, height: 20 }} 2x"
+											data-srcset="{{ image | image_url: width: 343, height: 343 }} 1x,
+													 	 {{ image | image_url: width: 686, height: 686 }} 2x"
+										{% else %}
+											srcset="{{ image | image_url: width: 343, height: 343 }} 1x,
+													{{ image | image_url: width: 686, height: 686 }} 2x"
+										{% endif %}
+										media="(max-width: 375px)"
+										width="{{ 343 }}"
+										height="{{ 343 }}"
+									>
+
+									<source
+										{% if is_lazy %}
+											srcset="{{ image | image_url: width: 10, height: 10 }} 1x,
+													{{ image | image_url: width: 20, height: 20 }} 2x"
+											data-srcset="{{ image | image_url: width: 388, height: 388 }} 1x,
+													 	 {{ image | image_url: width: 776, height: 776 }} 2x"
+										{% else %}
+											srcset="{{ image | image_url: width: 388, height: 388 }} 1x,
+													{{ image | image_url: width: 776, height: 776 }} 2x"
+										{% endif %}
+										media="(max-width: 420px)"
+										width="{{ 388 }}"
+										height="{{ 388 }}"
+									>
+
+									<source
+										{% if is_lazy %}
+											srcset="{{ image | image_url: width: 10, height: 10 }} 1x,
+													{{ image | image_url: width: 20, height: 20 }} 2x"
+											data-srcset="{{ image | image_url: width: 780, height: 780 }} 1x,
+													 	 {{ image | image_url: width: 1560, height: 1560 }} 2x"
+										{% else %}
+											srcset="{{ image | image_url: width: 780, height: 780 }} 1x,
+													{{ image | image_url: width: 1560, height: 1560 }} 2x"
+										{% endif %}
+										media="(max-width: 991px)"
+										width="{{ 780 }}"
+										height="{{ 780 }}"
+									>
+
+									<img
+										class="benefits__image"
+										{% if is_lazy %}
+											src="{{ image | image_url: width: 10, height: 10 }}"
+											srcset="{{ image | image_url: width: 10, height: 10 }} 1x,
+													{{ image | image_url: width: 20, height: 20 }} 2x"
+											data-src="{{ image | image_url: width: 780, height: 709 }}"
+											data-srcset="{{ image | image_url: width: 780, height: 709 }} 1x,
+													 	 {{ image | image_url: width: 1560, height: 1418 }} 2x"
+										{% else %}
+											src="{{ image | image_url: width: 780, height: 709 }}"
+											srcset="{{ image | image_url: width: 780, height: 709 }} 1x,
+													{{ image | image_url: width: 1560, height: 1418 }} 2x"
+										{% endif %}
+										alt="{{ image.alt | escape }}"
+										width="780"
+										height="709"
+									>
+								</picture>
+							{%- endif -%}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{{- benefits -}}
+		</div>
+	</section>
+
+	{%- include "adastra" with "/src/scripts/benefits.js" -%}
+{%- endif -%}
+
+{%- schema -%}
+{
+	"name": "Benefits",
+	"disabled_on": {
+		"groups": [
+			"header",
+			"footer",
+			"custom.popup"
+		]
+	},
+	"settings": [
+		{
+			"id": "heading_first_line",
+			"type": "inline_richtext",
+			"label": "Heading (first line)"
+		},
+		{
+			"id": "heading_second_line",
+			"type": "inline_richtext",
+			"label": "Heading (second line)"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "Image",
+			"info": "1390 x 1270px recommended"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"default": "scheme_1",
+			"label": "Color scheme"
+		},
+		{
+			"type": "color",
+			"id": "color_ellipse",
+			"label": "Ellipse",
+			"default": "rgba(255, 182, 0, 0.40)"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"type": "benefit",
+			"name": "benefit",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading",
+					"default": "Heading"
+				},
+				{
+					"type": "image_picker",
+					"id": "icon",
+					"label": "Icon",
+					"info": "64 x 64px .svg recommended"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Benefits",
+			"settings": {
+				"heading_first_line": "<em>Heading primary</em>",
+				"heading_second_line": "Heading secondary"
+			},
+			"blocks": [
+				{
+					"type": "benefit"
+				},
+				{
+					"type": "benefit"
+				},
+				{
+					"type": "benefit"
+				},
+				{
+					"type": "benefit"
+				},
+				{
+					"type": "benefit"
+				},
+				{
+					"type": "benefit"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

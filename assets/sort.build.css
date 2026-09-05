@@ -1,0 +1,33 @@
+.sort {
+  margin-bottom: 16px;
+}
+.sort .sort__label {
+  position: absolute;
+  top: -8px;
+  inset-inline-start: 12px;
+  padding: 0 4px;
+  margin-bottom: 0;
+  font-weight: 400;
+  font-size: calc(var(--body-font-size) * 0.875);
+  line-height: 1.42;
+  word-break: break-word;
+  z-index: 1;
+}
+.sort .sort__label::before {
+  content: "";
+  position: absolute;
+  top: calc(50% - 2px);
+  left: -4px;
+  width: calc(100% + 8px);
+  height: 2px;
+  background-color: var(--color-background-popup-drawer-alpha, #000);
+  z-index: -1;
+}
+.sort .sort__select {
+  min-height: 48px;
+  padding-inline-start: 16px;
+  cursor: pointer;
+}
+.sort .sort__select:focus-visible {
+  outline-offset: -2px;
+}

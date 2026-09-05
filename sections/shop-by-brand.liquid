@@ -1,0 +1,464 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Shop by brand
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- if section.blocks.size > 0 -%}
+	{%- render 'adastra' with '/src/styles/shop-by-brand.scss' -%}
+
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+			}
+		}
+	{%- endstyle -%}
+
+	{%- assign heading_first_line 	= section.settings.heading_first_line -%}
+	{%- assign heading_second_line 	= section.settings.heading_second_line -%}
+	{%- assign text 				= section.settings.text -%}
+	{%- assign button_label 		= section.settings.button_label -%}
+	{%- assign button_aria 			= section.settings.button_aria -%}
+	{%- assign button_link 			= section.settings.button_link -%}
+	{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+	{%- assign color_scheme 		= section.settings.color_scheme -%}
+	{%- assign container 			= section.settings.container_width -%}
+	{%- assign enable_bottom_rounded_corners 	= section.settings.enable_bottom_rounded_corners -%}
+	{%- assign blocks 				= section.blocks -%}
+
+	{%- if enable_color_scheme_inheritance -%}
+		{%- assign color_scheme = section.settings.main_color_scheme -%}
+	{%- endif -%}
+
+	{%- if container == 'inherit' -%}
+		{%- assign container_width = settings.container_width -%}
+	{%- else -%}
+		{%- assign container_width = container -%}
+	{%- endif -%}
+
+	{%- capture section_styles -%}
+		--container-width: {{ container_width }}; {{-  -}}
+		--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{-  -}}
+		--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{-  -}}
+		--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{-  -}}
+		--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{-  -}}
+	{%- endcapture -%}
+
+	<section
+		class="shop-by-brand color-{{ color_scheme.id }}{% if enable_bottom_rounded_corners %} section-bottom-rounded{% endif %} js-shop-by-brand-section js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+		id="{{ section.id }}"
+		style="{{- section_styles -}}"
+	>
+		<div class="shop-by-brand__container container">
+			{%- if label != blank or text != blank or button_label != blank and button_link != blank -%}
+				<div class="shop-by-brand__content">
+					<h2 class="shop-by-brand__heading section-title need-animate">
+						{%- if heading_first_line != blank -%}
+							<span class="section-title__text-container">
+								<span class="section-title__text text-center">
+									{{- heading_first_line -}}
+								</span>
+							</span>
+						{%- endif -%}
+
+						{%- if heading_second_line != blank -%}
+							<span class="section-title__text-container">
+								<span class="section-title__text text-center">
+									{{- heading_second_line -}}
+								</span>
+							</span>
+						{%- endif -%}
+					</h2>
+
+					{%- if text != blank -%}
+						<div class="shop-by-brand__text rte need-animate">
+							{{- text -}}
+						</div>
+					{%- endif -%}
+
+					{%- if button_label != blank and button_link != blank -%}
+						<div class="shop-by-brand__button-wrapper need-animate">
+							<a
+								class="button button--primary focus-visible-outline"
+								href="{{- button_link -}}"
+								{% if button_aria != blank %}
+									aria-label="{{- button_aria | escape -}}"
+								{% endif %}
+							>
+								<span class="button__outer"></span>
+								{{- button_label -}}
+							</a>
+						</div>
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+
+			<div class="shop-by-brand__items need-animate swiper js-shop-by-brand-slider">
+				<div class="shop-by-brand__items-container shop-by-brand__items-container--{{ blocks.size }} swiper-wrapper">
+					{%- for block in blocks -%}
+					{%- assign brand_image = block.settings.brand_image -%}
+					{%- assign brand_link  = block.settings.brand_link -%}
+
+					{%- assign enable_lazy_load = true -%}
+
+					{%- if section.index == 1 and forloop.index < 3 -%}
+						{%- assign enable_lazy_load = false -%}
+					{%- endif -%}
+
+					<div class="shop-by-brand__item-wrapper swiper-slide">
+						{%- if brand_link != blank -%}
+							<a href="{{ brand_link }}" class="shop-by-brand__item shop-by-brand__item--link focus-visible-outline">
+						{%- else -%}
+							<div class="shop-by-brand__item">
+						{%- endif -%}
+								<div class="shop-by-brand__item-image-container">
+									{%- if brand_image != blank -%}
+										{% assign size_width_375 	= 122 %}
+										{% assign size_height_375 	= 70 %}
+										{% assign size_width_375_2x 	= size_width_375 | times: 2 %}
+										{% assign size_height_375_2x 	= size_height_375 | times: 2 %}
+
+										{% assign size_width_420 	= 145 %}
+										{% assign size_height_420 	= 83 %}
+										{% assign size_width_420_2x 	= size_width_420 | times: 2 %}
+										{% assign size_height_420_2x 	= size_height_420 | times: 2 %}
+
+										{% assign size_width_991 	= 122 %}
+										{% assign size_height_991 	= 58 %}
+										{% assign size_width_991_2x 	= size_width_991 | times: 2 %}
+										{% assign size_height_991_2x 	= size_height_991 | times: 2 %}
+
+										{% assign size_width_1199 	= 158 %}
+										{% assign size_height_1199 	= 76 %}
+										{% assign size_width_1199_2x 	= size_width_1199 | times: 2 %}
+										{% assign size_height_1199_2x 	= size_height_1199 | times: 2 %}
+
+										{% assign size_width 	= 271 %}
+										{% assign size_height 	= 130 %}
+										{% assign size_width_2x 	= size_width | times: 2 %}
+										{% assign size_height_2x 	= size_height | times: 2 %}
+
+										{%- capture img_focal -%}
+											--img-desktop-pos: {{ brand_image.presentation.focal_point }};
+										{%- endcapture -%}
+
+										{%- capture thumbnail -%}
+											{%- if enable_lazy_load -%}
+												srcset="{{ brand_image | image_url: width: 10, height: 10 }} 1x"
+											{%- endif -%}
+										{%- endcapture -%}
+
+										<picture {% if enable_lazy_load %}class="lazy"{% endif %}>
+											<source
+												{% if enable_lazy_load -%}data-{%- endif -%}srcset="{{ brand_image | image_url: width: size_width_375, height: size_height_375 }} 1x, {{ brand_image | image_url: width: size_width_375_2x, height: size_height_375_2x }} 2x"
+												{{ thumbnail }}
+												media="(max-width: 375px)"
+												width="{{ size_width_375 }}"
+												height="{{ size_height_375 }}"
+											/>
+
+											<source
+												{% if enable_lazy_load -%}data-{%- endif -%}srcset="{{ brand_image | image_url: width: size_width_420, height: size_height_420 }} 1x, {{ brand_image | image_url: width: size_width_420_2x, height: size_height_420_2x }} 2x"
+												{{ thumbnail }}
+												media="(max-width: 420px)"
+												width="{{ size_width_420 }}"
+												height="{{ size_height_420 }}"
+											/>
+
+											<source
+												{% if enable_lazy_load -%}data-{%- endif -%}srcset="{{ brand_image | image_url: width: size_width_991, height: size_height_991 }} 1x, {{ brand_image | image_url: width: size_width_991_2x, height: size_height_991_2x }} 2x"
+												{{ thumbnail }}
+												media="(max-width: 991px)"
+												width="{{ size_width_991 }}"
+												height="{{ size_height_991 }}"
+											/>
+
+											<source
+												{% if enable_lazy_load -%}data-{%- endif -%}srcset="{{ brand_image | image_url: width: size_width_1199, height: size_height_1199 }} 1x, {{ brand_image | image_url: width: size_width_1199_2x, height: size_height_1199_2x }} 2x"
+												{{ thumbnail }}
+												media="(max-width: 1199px)"
+												width="{{ size_width_1199 }}"
+												height="{{ size_height_1199 }}"
+											/>
+
+											<img
+												class="shop-by-brand__item-image"
+												{% if enable_lazy_load -%}data-{%- endif -%}srcset="{{ brand_image | image_url: width: size_width, height: size_height }} 1x, {{ brand_image | image_url: width: size_width_2x, height: size_height_2x }} 2x"
+												{{ thumbnail }}
+												{% if enable_lazy_load -%}data-{%- endif -%}src="{{ brand_image | image_url: width: size_width, height: size_height }}"
+												{% if enable_lazy_load -%}
+													src="{{ brand_image | image_url: width: 10, height: 10, crop: 'center' }}"
+												{%- endif -%}
+												alt="{{ brand_image.alt | escape }}"
+												width="{{ size_width }}"
+												height="130"
+												style="{{ img_focal }}"
+											/>
+										</picture>
+									{%- else -%}
+										{%- assign odd =  forloop.index | modulo: 2 -%}
+
+										{%- if odd  == 1 -%}
+											{{- "hero-apparel-1" | placeholder_svg_tag: "shop-by-brand__item-image shop-by-brand__item-image--placeholder" -}}
+										{%- else -%}
+											{{- "hero-apparel-2" | placeholder_svg_tag: "shop-by-brand__item-image shop-by-brand__item-image--placeholder" -}}
+										{%- endif -%}
+									{%- endif -%}
+								</div>
+						{%- if brand_link != blank -%}
+							</a>
+						{%- else -%}
+							</div>
+						{%- endif -%}
+					</div>
+				{%- endfor -%}
+			</div>
+
+			<div class="slider-pagination shop-by-brand__slider-pagination">
+				{% assign arrow_prev_class = 'js-swiper-button-prev-' | append: section.id %}
+				{% assign arrow_next_class = 'js-swiper-button-next-' | append: section.id %}
+
+				{% render 'swiper-button', direction: 'prev', class: arrow_prev_class %}
+
+				<div class="custom-swiper-pagination js-shop-by-brand-slider-pagination"></div>
+
+				{% render 'swiper-button', direction: 'next', class: arrow_next_class %}
+			</div>
+		</div>
+
+	</section>
+
+	{%- render 'adastra' with '/src/scripts/section-shop-by-brand.js' -%}
+{%- endif -%}
+
+{%- schema -%}
+{
+	"name": "Shop by brand",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"id": "heading_first_line",
+			"type": "inline_richtext",
+			"label": "Heading first line"
+		},
+		{
+			"id": "heading_second_line",
+			"type": "inline_richtext",
+			"label": "Heading second line"
+		},
+		{
+			"type": "richtext",
+			"id": "text",
+			"label": "Text",
+			"default": "<p>Text describing the section and brands.</p>"
+		},
+		{
+			"id": "button_label",
+			"type": "text",
+			"label": "Button label",
+			"default": "Button label"
+		},
+		{
+			"type": "text",
+			"id": "button_aria",
+			"label": "Button aria-label",
+			"info": "Need for good accessibility, e.g. 'Learn more about...'."
+		},
+		{
+			"type": "url",
+			"id": "button_link",
+			"label": "Button link"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"default": "scheme_1",
+			"label": "Color scheme"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 40
+		}
+	],
+	"blocks": [
+		{
+			"name": "Brand",
+			"type": "brand",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "brand_image",
+					"label": "Image",
+					"info": "293 x 141px image recommended"
+				},
+				{
+					"type": "url",
+					"id": "brand_link",
+					"label": "Link"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Shop by brand",
+			"settings": {
+				"heading_first_line": "<em>Heading primary</em>",
+				"heading_second_line": "Heading secondary"
+			},
+			"blocks": [
+				{
+					"type": "brand"
+				},
+				{
+					"type": "brand"
+				},
+				{
+					"type": "brand"
+				},
+				{
+					"type": "brand"
+				},
+				{
+					"type": "brand"
+				},
+				{
+					"type": "brand"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

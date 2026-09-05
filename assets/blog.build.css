@@ -1,0 +1,197 @@
+.blog {
+  position: relative;
+  background-color: var(--color-background);
+  overflow: hidden;
+  padding-top: var(--inner-offset-top-mobile);
+  padding-bottom: var(--inner-offset-bottom-mobile);
+}
+.blog::before, .blog::after {
+  content: "";
+  position: absolute;
+  width: 140px;
+  height: 280px;
+  filter: blur(135px);
+  background-color: var(--ellipse-background);
+  pointer-events: none;
+}
+.blog::before {
+  top: 0;
+  left: 0;
+  border-radius: 0 280px 280px 0;
+}
+.blog::after {
+  top: 220px;
+  right: 0;
+  border-radius: 280px 0 0 280px;
+}
+.blog.need-animate .blog--fade-in {
+  opacity: 0;
+}
+.blog.animated.need-animate .blog--fade-in {
+  opacity: 1;
+}
+.blog.animated.need-animate .blog__col {
+  opacity: 0;
+  animation: fadeInUp var(--timing-base) ease-out forwards;
+}
+.blog .blog__container {
+  position: inherit;
+  z-index: 1;
+}
+.blog .blog__title {
+  font-weight: 700;
+  text-align: center;
+}
+.blog .blog__title.blog__title--empty {
+  margin-top: 60px;
+}
+.blog .blog__text {
+  margin-top: 16px;
+  text-align: center;
+}
+.blog .blog__title,
+.blog .blog__text {
+  max-width: 960px;
+  justify-self: center;
+  margin: 0 auto;
+}
+.blog .blog__filters {
+  display: flex;
+  margin-left: -16px;
+  margin-right: -16px;
+  margin-bottom: 32px;
+  padding: 0 16px;
+  overflow-x: auto;
+}
+.blog .blog__filters-item {
+  display: flex;
+  align-items: center;
+}
+.blog .blog__filters-link {
+  text-decoration: none;
+  white-space: nowrap;
+}
+.blog .blog__filters-link:focus-visible {
+  outline-offset: -2px;
+}
+.blog .blog__filters-link.blog__filters-link--reset:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+}
+.blog .blog__filters-link.blog__filters-link--reset.is-active {
+  cursor: default;
+}
+.blog .blog__filters-link.no-events {
+  pointer-events: none;
+}
+.blog .blog__content {
+  margin-top: 32px;
+}
+.blog .blog__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+.blog .blog__grid .article-card__link-image-wrapper {
+  align-self: auto;
+}
+.blog .blog__col {
+  width: 100%;
+  height: auto;
+}
+.blog .blog__col .article-card {
+  height: 100%;
+}
+.blog .blog__col .article-card .article-card__content {
+  display: flex;
+  gap: 10px;
+  height: calc(100% - 32px);
+}
+.blog .blog__pagination-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.blog .blog__pagination-wrapper:not(:empty) {
+  margin-top: 32px;
+}
+.blog .blog__infinite-scroll {
+  opacity: 0;
+  width: 36px;
+  height: 36px;
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid var(--color-border-primary, #000000);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+.blog .blog__infinite-scroll.is-hidden {
+  display: none;
+}
+.blog .blog__lazy-load-button-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.blog .blog__lazy-load-button {
+  margin-top: 44px;
+}
+.blog .blog__lazy-load-button.is-hidden {
+  display: none;
+}
+.blog .blog__lazy-load-button.no-events {
+  pointer-events: none;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 1199.98px) and (-moz-touch-enabled: 1), (max-width: 1199.98px) and (hover: none), (max-width: 1199.98px) and (pointer: coarse) {
+  .blog .blog__filters {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .blog .blog__filters::-webkit-scrollbar {
+    display: none;
+    height: 7px;
+  }
+  .blog .blog__filters::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  .blog .blog__filters::-webkit-scrollbar-thumb {
+    background-color: rgba(48, 93, 112, 0.3);
+  }
+}
+@media (min-width: 768px) {
+  .blog {
+    padding-top: var(--inner-offset-top);
+    padding-bottom: var(--inner-offset-bottom);
+  }
+  .blog .blog__filters {
+    display: block;
+  }
+  .blog .blog__filters-link {
+    white-space: unset;
+  }
+  .blog .blog__pagination-wrapper:not(:empty) {
+    margin-top: 48px;
+  }
+  .blog .blog__infinite-scroll {
+    margin-top: 48px;
+  }
+}
+@media (min-width: 992px) {
+  .blog .blog__title.blog__title--empty {
+    margin-top: 120px;
+  }
+  .blog .blog__filters {
+    margin-bottom: 64px;
+  }
+  .blog .blog__grid {
+    gap: 48px 32px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

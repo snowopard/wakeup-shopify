@@ -1,0 +1,1475 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Header
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign blocks		 							= section.blocks -%}
+{%- assign logo			 							= section.settings.logo -%}
+{%- assign logo_width	 							= section.settings.logo_width -%}
+{%- assign logo_position 							= section.settings.logo_position -%}
+
+{%- assign menu										= section.settings.menu -%}
+{%- assign menu_type_desktop						= section.settings.menu_type_desktop -%}
+
+{%- assign enable_burger_menu 						= section.settings.enable_burger_menu -%}
+
+{%- if enable_burger_menu -%}
+	{%- assign burger_menu 							= section.settings.burger_menu -%}
+{%- endif -%}
+
+{%- assign header_background_type					= section.settings.header_background_type -%}
+{%- assign header_background_color					= section.settings.header_background_color -%}
+{%- assign header_background						= section.settings.header_background -%}
+
+{%- assign main_menu_background 					= section.settings.main_menu_background -%}
+{%- assign main_menu_text_color 					= section.settings.main_menu_text_color -%}
+{%- assign outer_border 	                        = section.settings.outer_border -%}
+{%- assign main_menu_border_color 					= section.settings.outer_border | color_modify: 'alpha', 0.12 -%}
+{%- assign main_menu_text_color_active 				= section.settings.main_menu_text_color_active -%}
+{%- assign main_menu_text_background_color_active 	= section.settings.main_menu_text_background_color_active -%}
+
+{%- assign menu_background 							= section.settings.menu_background -%}
+{%- assign menu_text_color 							= section.settings.menu_text_color -%}
+{%- assign menu_border_color 						= section.settings.menu_text_color | color_modify: 'alpha', 0.12 -%}
+{%- assign menu_text_background_color_hover 		= section.settings.menu_text_background_color_hover -%}
+
+{%- assign dropdown_background 						= section.settings.dropdown_background | color_modify: 'alpha', 0.9 -%}
+{%- assign dropdown_text_color 						= section.settings.dropdown_text_color -%}
+{%- assign dropdown_border_color 					= section.settings.dropdown_text_color | color_modify: 'alpha', 0.12 -%}
+{%- assign dropdown_text_background_color_hover 	= section.settings.dropdown_text_background_color_hover -%}
+
+{%- assign icon_color						        = section.settings.icon_color -%}
+{%- assign icon_color_hover 						= section.settings.icon_color_hover -%}
+
+{%- assign button_icon_color 						= section.settings.button_icon_color -%}
+{%- assign button_icon_background_color 			= section.settings.button_icon_background_color -%}
+{%- assign button_icon_border_color 				= section.settings.button_icon_border_color -%}
+{%- assign button_icon_border_outer_color 			= section.settings.button_icon_border_outer_color -%}
+{%- assign button_icon_color_hover 					= section.settings.button_icon_color_hover -%}
+{%- assign button_icon_background_color_hover 		= section.settings.button_icon_background_color_hover -%}
+{%- assign button_icon_border_color_hover 			= section.settings.button_icon_border_color_hover -%}
+{%- assign button_icon_border_outer_color_hover 	= section.settings.button_icon_border_outer_color_hover -%}
+
+{%- assign button_icon_color_circle 				= section.settings.button_icon_color_circle -%}
+{%- assign button_background_color_circle 			= section.settings.button_background_color_circle -%}
+{%- assign button_border_color_circle 				= section.settings.button_border_color_circle -%}
+{%- assign button_border_outer_color_circle 		= section.settings.button_border_outer_color_circle -%}
+{%- assign button_icon_color_circle_hover 			= section.settings.button_icon_color_circle_hover -%}
+{%- assign button_background_color_circle_hover 	= section.settings.button_background_color_circle_hover -%}
+{%- assign button_border_color_circle_hover 		= section.settings.button_border_color_circle_hover -%}
+{%- assign button_border_outer_color_circle_hover 	= section.settings.button_border_outer_color_circle_hover -%}
+
+{%- assign count_text_color					        = section.settings.count_text_color -%}
+{%- assign count_text_background				    = section.settings.count_text_background -%}
+
+{%- assign localization_form_background 			= section.settings.localization_form_background -%}
+{%- assign localization_form_text 					= section.settings.localization_form_text -%}
+{%- assign localization_form_border 				= section.settings.localization_form_border -%}
+
+{%- assign price_color 								= section.settings.price_color -%}
+{%- assign sale_price_color 						= section.settings.sale_price_color -%}
+{%- assign regular_price_color 						= section.settings.regular_price_color -%}
+
+{%- assign is_show_language_selector				= section.settings.is_show_language_selector -%}
+{%- assign is_show_country_selector					= section.settings.is_show_country_selector -%}
+{%- assign show_country_full_name 					= section.settings.show_country_full_name -%}
+
+{%- assign header_type 								= section.settings.header_type -%}
+{%- assign enable_sticky_header		 				= true -%}
+{%- if header_type == "static" -%}
+	{%- assign enable_sticky_header					= false -%}
+{%- endif -%}
+
+{%- assign is_enable_search							= settings.enable_search -%}
+{%- assign open_menu_type			 				= section.settings.open_menu_type -%}
+{%- assign enable_first_level_link 				    = section.settings.enable_first_level_link -%}
+{%- assign enable_second_level_links 				= section.settings.enable_second_level_links -%}
+{%- assign burger_menu_label				 		= section.settings.burger_menu_label | default: burger_menu.title -%}
+{%- assign open_burger_menu_enclosed_items_on_mobile 	= section.settings.open_burger_menu_enclosed_items_on_mobile -%}
+{%- assign cart_type								= settings.cart_type -%}
+
+{%- assign is_header_transparent = false -%}
+
+{% if header_background == 'transparent' or header_background == 'rgba(0,0,0,0)' or header_background == blank %}
+	{%- assign is_header_transparent = true -%}
+{% endif %}
+
+<style>
+	:root {
+		--header-background-1: {% unless is_header_transparent %}{{ header_background | color_modify: 'alpha', 0.7 }}{% else %}transparent{% endunless %};
+		--header-background-solid: {{ header_background_color }};
+		--header-active-background: {{ menu_background }};
+		--header-main-menu-background: {{ main_menu_background }};
+		--header-main-menu-text-color: {{ main_menu_text_color }};
+		--header-main-menu-outer-border: {{ outer_border }};
+		--header-main-menu-border-color: {{ main_menu_border_color }};
+		--header-main-menu-text-color-active: {{ main_menu_text_color_active }};
+		--header-main-menu-text-background-active: {{ main_menu_text_background_color_active }};
+		--header-outer-border: {{ menu_background }};
+		--header-menu-background: {{ menu_background }};
+		--header-menu-text-color: {{ menu_text_color }};
+		--header-menu-border-color: {{ menu_border_color }};
+		--header-menu-text-background-color-hover: {{ menu_text_background_color_hover }};
+		--header-menu-dropdown-background: {{ dropdown_background }};
+		--header-menu-dropdown-text-color: {{ dropdown_text_color }};
+		--header-menu-dropdown-border-color: {{ dropdown_border_color }};
+		--header-menu-dropdown-text-background-color-hover: {{ dropdown_text_background_color_hover }};
+		--header-height-sticky: {% if enable_sticky_header == true %}var(--header-height){% else %}0px{% endif %};
+
+		--header-navigation-item-text-color: var(--header-menu-text-color);
+		--header-navigation-item-border-color: var(--header-menu-border-color);
+		--header-navigation-item-text-background-color-hover: var(--header-menu-text-background-color-hover);
+	}
+</style>
+
+{%- capture section_styles -%}
+	--button-icon-circle-text-color: {{- icon_color -}}; {{-  -}}
+	--button-icon-circle-text-color-hover: {{- icon_color_hover -}}; {{-  -}}
+
+	--button-icon-text-color: {{- button_icon_color -}}; {{-  -}}
+	--button-icon-background-color: {{- button_icon_background_color -}}; {{-  -}}
+	--button-icon-border-color: {{- button_icon_border_color -}}; {{-  -}}
+	--button-icon-border-outer-color: {{- button_icon_border_outer_color -}}; {{-  -}}
+	--button-icon-border-outer-alpha-color: {{- button_icon_border_outer_color | color_modify: 'alpha', 0.16 -}}; {{-  -}}
+	--button-icon-counter-text-color: {{- count_text_color -}}; {{-  -}}
+	--button-icon-counter-background-color: {{- count_text_background -}}; {{-  -}}
+
+	--button-icon-text-color-hover: {{- button_icon_color_hover -}}; {{-  -}}
+	--button-icon-background-color-hover: {{- button_icon_background_color_hover -}}; {{-  -}}
+	--button-icon-border-color-hover: {{- button_icon_border_color_hover -}}; {{-  -}}
+	--button-icon-border-outer-color-hover: {{- button_icon_border_outer_color_hover -}}; {{-  -}}
+	--button-icon-border-outer-alpha-color-hover: {{- button_icon_border_outer_color_hover | color_modify: 'alpha', 0.16 -}}; {{-  -}}
+	--button-icon-counter-text-color-hover: {{- count_text_color -}}; {{-  -}}
+	--button-icon-counter-background-color-hover: {{- count_text_background -}}; {{-  -}}
+
+	--button-icon-color-circle: {{- button_icon_color_circle -}};
+	--button-background-color-circle: {{- button_background_color_circle -}};
+	--button-border-color-circle: {{- button_border_color_circle -}};
+	--button-border-outer-color-circle: {{- button_border_outer_color_circle -}};
+
+	--button-icon-color-circle-hover: {{- button_icon_color_circle_hover -}};
+	--button-background-color-circle-hover: {{- button_background_color_circle_hover -}};
+	--button-border-color-circle-hover: {{- button_border_color_circle_hover -}};
+	--button-border-outer-color-circle-hover: {{- button_border_outer_color_circle_hover -}};
+
+	--product-card-mini-background-color: {{- menu_background -}};
+	--product-card-mini-border-color: {{- menu_border_color -}};
+	--product-card-mini-text-color: {{- menu_text_color -}};
+
+	--product-card-title-color: {{- menu_text_color -}};
+	--product-card-vendor-color: {{- menu_text_color -}};
+
+	--price-color: {{ price_color }};
+	--sale-price-color: {{ sale_price_color }};
+	--regular-price-color: {{ regular_price_color }};
+{%- endcapture -%}
+
+{%- if is_show_language_selector == true and localization.available_languages.size > 1 -%}
+	{% assign language_selector = true %}
+{%- endif -%}
+
+{%- if is_show_country_selector == true and localization.available_countries.size > 1 -%}
+	{% assign country_selector = true %}
+{%- endif -%}
+
+{%- capture classes -%}
+	{% if logo_position == 'middle' %} header--menu-left{% elsif logo_position == 'left' %} header--menu-center{% elsif logo_position == 'top' %} header--menu-bottom{% endif %}
+	{%- if header_background_type == "solid" %} header--background-solid{% endif %}
+{%- endcapture -%}
+
+{%- capture logo_shippet -%}
+	<div class="header__logo">
+		<span class="visually-hidden">
+		{{ "layout.header.labels.store_logo" | t }}"
+	</span>
+
+	{%- if request.page_type == 'index' -%}
+		<h1 class="header__heading">
+			{%- endif -%}
+			<a
+				href="{{ routes.root_url }}"
+				class="header__heading-link"
+			>
+				{%- if logo != blank -%}
+					{%- assign logo_alt = logo.alt | default: shop.name | escape -%}
+
+					{%- assign logo_height = logo_width | divided_by: logo.aspect_ratio | round: 0 -%}
+					{%- assign logo_width_x2 = logo_width | times: 2 -%}
+
+					{%- assign logo_height_mobile = logo_height | times: 0.75 -%}
+					{%- assign logo_width_mobile = logo_width | times: 0.75 -%}
+					{%- assign logo_width_x2_mobile = logo_width_x2 | times: 0.75 -%}
+
+					{%- capture img_focal -%}
+						--img-desktop-pos: {{ logo.presentation.focal_point }}; {{- -}}
+					{%- endcapture -%}
+
+					<picture class="header__heading-logo-picture">
+						<source
+							srcset="{{ logo | image_url: width: logo_width_mobile }} 1x, {{ logo | image_url: width: logo_width_x2_mobile }} 2x"
+							media="(max-width: 1199px)"
+							width="{{ logo_width_mobile }}"
+							height="{{ logo_height_mobile }}"
+						>
+
+						<img
+							srcset="{{ logo | image_url: width: logo_width }} 1x, {{ logo | image_url: width: logo_width_x2 }} 2x"
+							src="{{ logo | image_url: width: logo_width }}"
+							alt="{{ logo_alt }}"
+							class="header__heading-logo"
+							height="{{ logo_height }}"
+							width="{{ logo_width }}"
+							style="{{ img_focal }}"
+						/>
+					</picture>
+				{%- else -%}
+					<span class="h4">{{ shop.name }}</span>
+				{%- endif -%}
+			</a>
+			{%- if request.page_type == 'index' -%}
+		</h1>
+		{%- endif -%}
+	</div>
+{%- endcapture -%}
+
+<header
+	class="header {{ classes | strip_newlines }} js-header"
+	data-open-menu-type="{{- open_menu_type -}}"
+	{% if header_type == "sticky_hide" %}
+		data-hide-on-scroll-down
+	{% endif %}
+	{% if header_type == "static" %}
+		data-static-header
+	{% endif %}
+	style="{{- section_styles | strip_newlines -}}"
+>
+	<div
+		class="header__container js-header-container"
+		data-header-container
+		{% if enable_sticky_header == true %}
+			data-header-sticky
+		{% endif %}
+	>
+		{% if logo_position == 'top' %}
+			<div class="header__top-container">
+				<div class="header__top-left-col">
+					{%- if language_selector == true or country_selector == true -%}
+						<div class="header__localization">
+							{%- if country_selector == true -%}
+								{%- render 'country-localization-form',
+									id_prefix: 'header-top',
+									form_id: 'header-top-country-form',
+									type: 'secondary',
+									text_color: localization_form_text,
+									border_color: localization_form_border,
+									background_color: localization_form_background,
+									show_full_name: show_country_full_name
+								-%}
+							{%- endif -%}
+
+							{%- if language_selector == true -%}
+								{%- render
+									'language-localization-form',
+									id_prefix: 'header-top',
+									form_id: 'header-top-localization-form',
+									type: 'secondary',
+									text_color: localization_form_text,
+									border_color: localization_form_border,
+									background_color: localization_form_background
+								-%}
+							{%- endif -%}
+						</div>
+					{% endif %}
+				</div>
+
+				{{- logo_shippet -}}
+
+				<div class="header__utils-top">
+					<div class="header__icons">
+						{%- if is_enable_search -%}
+							<div class="header__icon header__icon--search">
+								<button
+									type="button"
+									class="button-icon-circle js-header-drawer-toggler"
+									data-target="headerDrawerSearch"
+									data-js-toggle="searchToggleDrawer"
+									aria-expanded="false"
+									aria-controls="headerDrawerSearch"
+									aria-label="{{- "layout.navigation.search" | t | escape -}}"
+								>
+									{%- render 'icons', icon: 'circle-decoration-border-2', class: 'icon icon-circle-decoration-border' -%}
+									{%- render 'icons', icon: 'search' -%}
+								</button>
+							</div>
+						{%- endif -%}
+
+						{%- if shop.customer_accounts_enabled -%}
+							<div class="header__icon header__icon--account">
+								<a
+									href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+									class="button-icon-circle header__icon"
+									{% if customer %}
+										aria-label="{{- "layout.customer.account" | t | escape -}}"
+									{% else %}
+										aria-label="{{- "layout.customer.log_in" | t | escape -}}"
+									{% endif %}
+								>
+									{%- render 'icons', icon: 'circle-decoration-border-2', class: 'icon icon-circle-decoration-border' -%}
+									{%- render 'icons', icon: 'account' -%}
+								</a>
+							</div>
+						{%- endif -%}
+
+						{%- if cart_type == 'page' -%}
+							<div class="header__icon header__icon--cart">
+								<a href="{{- routes.cart_url -}}" class="button-icon">
+							<span class="button-icon__inner">
+								{%- render 'icons', icon: 'cart' -%}
+
+								<span class="visually-hidden">
+									{{- "layout.header.labels.cart" | t | escape -}}.
+								</span>
+
+								<span
+									class="button-icon__counter header__cart-count js-header-cart-item-count-wrapper"
+									data-cart-count="{{- cart.item_count -}}"
+								>
+									<span class="visually-hidden">
+										{{ "layout.header.labels.cart_item_count" | t }}
+									</span>
+
+									<span class="js-header-cart-item-count">
+										{%- if cart.item_count > 99 -%}
+											99+
+										{%- else -%}
+											{{- cart.item_count -}}
+										{%- endif -%}
+									</span>
+								</span>
+							</span>
+								</a>
+							</div>
+						{%- else -%}
+							<div class="header__icon header__icon--cart">
+								<button
+									type="button"
+									class="button-icon"
+									data-target="CartDrawer"
+									data-js-toggle="CartDrawer"
+									aria-expanded="false"
+									aria-controls="CartDrawer"
+								>
+							<span class="button-icon__inner">
+								{%- render 'icons', icon: 'cart' -%}
+
+								<span class="visually-hidden">
+									{{- "layout.header.labels.cart_drawer" | t | escape -}}.
+								</span>
+
+								<span
+									class="button-icon__counter header__cart-count js-header-cart-item-count-wrapper"
+									data-cart-count="{{- cart.item_count -}}"
+								>
+									<span class="visually-hidden">
+										{{ "layout.header.labels.cart_item_count" | t }}
+									</span>
+
+									<span class="js-header-cart-item-count">
+										{%- if cart.item_count > 99 -%}
+											99+
+										{%- else -%}
+											{{- cart.item_count -}}
+										{%- endif -%}
+									</span>
+								</span>
+							</span>
+								</button>
+							</div>
+						{%- endif -%}
+					</div>
+				</div>
+			</div>
+		{% endif %}
+
+		<div class="header__burger-menu-button-wrapper">
+			<button
+				class="button-icon js-header-drawer-toggler"
+				type="button"
+				data-target="headerDrawerMenu"
+				data-js-toggle="headerToggleMenuDrawer"
+				aria-expanded="false"
+				aria-controls="headerDrawerMenu"
+				aria-label="{{ "layout.navigation.open_drawer_menu" | t | escape }}"
+			>
+				<span class="button-icon__inner">
+					{%- render 'icons', icon: 'burger-menu' -%}
+				</span>
+			</button>
+		</div>
+
+		{%- if burger_menu != blank and burger_menu.links.size > 0 -%}
+			{%- assign enable_burger_menu = true -%}
+		{%- endif -%}
+
+		{%- if menu != blank and menu.links.size > 0 -%}
+			{%- assign enable_menu = true -%}
+		{%- endif -%}
+
+		{%- if logo_position == 'left' -%}
+			{{- logo_shippet -}}
+		{%- endif -%}
+
+		{%- if enable_menu or enable_burger_menu -%}
+			<div class="header__menu">
+				{%- render 'header-menu',
+					menu: menu,
+					menu_type_desktop: menu_type_desktop,
+					open_menu_type: open_menu_type,
+					enable_first_level_link: enable_first_level_link,
+					enable_second_level_links: enable_second_level_links,
+					burger_menu: burger_menu,
+					burger_menu_label: burger_menu_label,
+					blocks: blocks
+				-%}
+			</div>
+		{%- endif -%}
+
+		{%- if logo_position == 'middle' or logo_position == 'top' -%}
+			{{- logo_shippet -}}
+		{%- endif -%}
+
+		<div class="header__utils">
+			{%- if language_selector == true or country_selector -%}
+				<div class="header__localization">
+					{%- if country_selector == true -%}
+						{%- render 'country-localization-form',
+							id_prefix: 'header',
+							form_id: 'header-country-form',
+							type: 'secondary',
+							text_color: localization_form_text,
+							border_color: localization_form_border,
+							background_color: localization_form_background,
+							show_full_name: show_country_full_name
+						-%}
+					{%- endif -%}
+
+					{%- if language_selector == true -%}
+						{%- render
+							'language-localization-form',
+							id_prefix: 'header',
+							form_id: 'header-localization-form',
+							type: 'secondary',
+							text_color: localization_form_text,
+							border_color: localization_form_border,
+							background_color: localization_form_background
+						-%}
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+
+			<div class="header__icons">
+				{%- if is_enable_search -%}
+					<div class="header__icon header__icon--search">
+						<button
+							type="button"
+							class="button-icon-circle js-header-drawer-toggler"
+							data-target="headerDrawerSearch"
+							data-js-toggle="searchToggleDrawer"
+							aria-expanded="false"
+							aria-controls="headerDrawerSearch"
+							aria-label="{{- "layout.navigation.search" | t | escape -}}"
+						>
+							{%- render 'icons', icon: 'circle-decoration-border-2', class: 'icon icon-circle-decoration-border' -%}
+							{%- render 'icons', icon: 'search' -%}
+						</button>
+					</div>
+				{%- endif -%}
+
+
+				{%- if shop.customer_accounts_enabled -%}
+					<div class="header__icon header__icon--account">
+						<a
+							href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+							class="button-icon-circle header__icon"
+							{% if customer %}
+								aria-label="{{- "layout.customer.account" | t | escape -}}"
+							{% else %}
+								aria-label="{{- "layout.customer.log_in" | t | escape -}}"
+							{% endif %}
+						>
+							{%- render 'icons', icon: 'circle-decoration-border-2', class: 'icon icon-circle-decoration-border' -%}
+							{%- render 'icons', icon: 'account' -%}
+						</a>
+					</div>
+				{%- endif -%}
+
+				{%- if cart_type == 'page' -%}
+					<div class="header__icon header__icon--cart">
+						<a href="{{- routes.cart_url -}}" class="button-icon">
+							<span class="button-icon__inner">
+								{%- render 'icons', icon: 'cart' -%}
+
+								<span class="visually-hidden">
+									{{- "layout.header.labels.cart" | t | escape -}}.
+								</span>
+
+								<span
+									class="button-icon__counter header__cart-count js-header-cart-item-count-wrapper"
+									data-cart-count="{{- cart.item_count -}}"
+								>
+									<span class="visually-hidden">
+										{{ "layout.header.labels.cart_item_count" | t }}
+									</span>
+
+									<span class="js-header-cart-item-count">
+										{%- if cart.item_count > 99 -%}
+											99+
+										{%- else -%}
+											{{- cart.item_count -}}
+										{%- endif -%}
+									</span>
+								</span>
+							</span>
+						</a>
+					</div>
+				{%- else -%}
+					<div class="header__icon header__icon--cart">
+						<button
+							type="button"
+							class="button-icon"
+							data-target="CartDrawer"
+							data-js-toggle="CartDrawer"
+							aria-expanded="false"
+							aria-controls="CartDrawer"
+						>
+							<span class="button-icon__inner">
+								{%- render 'icons', icon: 'cart' -%}
+
+								<span class="visually-hidden">
+									{{- "layout.header.labels.cart_drawer" | t | escape -}}.
+								</span>
+
+								<span
+									class="button-icon__counter header__cart-count js-header-cart-item-count-wrapper"
+									data-cart-count="{{- cart.item_count -}}"
+								>
+									<span class="visually-hidden">
+										{{ "layout.header.labels.cart_item_count" | t }}
+									</span>
+
+									<span class="js-header-cart-item-count">
+										{%- if cart.item_count > 99 -%}
+											99+
+										{%- else -%}
+											{{- cart.item_count -}}
+										{%- endif -%}
+									</span>
+								</span>
+							</span>
+						</button>
+					</div>
+				{%- endif -%}
+			</div>
+		</div>
+	</div>
+</header>
+
+<script>
+	(function() {
+		const selectors = {
+			header: ".header-section"
+		}
+
+		const cssVariables = {
+			headerHeight: "--header-height",
+			headerHeightStatic: "--header-height-static",
+			headerOffsetTop: "--header-offset-top",
+			headerOffsetTopStatic: "--header-offset-top-static",
+			pageHeight: "--page-height",
+		}
+
+		const header = document.querySelector(selectors.header);
+
+		requestAnimationFrame(() => {
+			setHeaderVariables();
+		});
+
+		const observer = new IntersectionObserver((entries) => {
+			for (const entry of entries) {
+				const bounds = entry.boundingClientRect;
+
+				changeCssVariable(cssVariables.headerHeight, ` ${bounds.height}px`);
+				changeCssVariable(cssVariables.headerHeightStatic, ` ${bounds.height}px`);
+				changeCssVariable(cssVariables.headerOffsetTop, ` ${bounds.top}px`);
+				changeCssVariable(cssVariables.headerOffsetTopStatic, ` ${bounds.top}px`);
+			}
+
+			observer.disconnect();
+		});
+
+		observer.observe(header);
+
+		function changeCssVariable(variable, value) {
+			requestAnimationFrame(() => {
+				document.documentElement.style.setProperty(variable, value);
+			});
+		}
+
+		function setHeaderVariables() {
+			changeCssVariable(cssVariables.pageHeight, ` ${window.innerHeight}px`);
+		}
+	})();
+</script>
+
+{%- render
+	'header-mobile-menu',
+	menu: menu,
+	blocks: blocks,
+	section_styles: section_styles,
+	is_show_language_selector: is_show_language_selector,
+	is_show_country_selector: is_show_country_selector,
+	show_country_full_name: show_country_full_name,
+	localization_form_text: localization_form_text,
+	localization_form_border: localization_form_border,
+	localization_form_background: localization_form_background,
+	burger_menu: burger_menu,
+	burger_menu_label: burger_menu_label,
+	open_burger_menu_enclosed_items_on_mobile: open_burger_menu_enclosed_items_on_mobile,
+	is_enable_search: is_enable_search
+-%}
+
+<div class="header-overlay js-header-overlay"></div>
+
+{%- render 'adastra' with '/src/scripts/section-header.js' -%}
+
+{% schema %}
+{
+	"name": "Header",
+	"class": "header-section",
+	"settings": [
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+			"type": "select",
+			"id": "header_type",
+			"label": "Type",
+			"options": [
+				{
+					"value": "static",
+					"label": "Static"
+				},
+				{
+					"value": "sticky",
+					"label": "Sticky"
+				},
+				{
+					"value": "sticky_hide",
+					"label": "Sticky (hide on scroll down)"
+				}
+			],
+			"default": "sticky"
+		},
+		{
+			"id": "is_show_language_selector",
+			"type": "checkbox",
+			"label": "Show language selector",
+			"default": false,
+			"info": "To add a language, go to your [language settings.](/admin/settings/languages)"
+		},
+		{
+			"id": "is_show_country_selector",
+			"type": "checkbox",
+			"label": "Show country/region selector",
+			"default": false,
+			"info": "To add a currency, go to your [currency settings.](/admin/settings/markets)"
+		},
+		{
+			"id": "show_country_full_name",
+			"type": "checkbox",
+			"label": "Show full country name",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "Logo"
+		},
+		{
+			"type": "image_picker",
+			"id": "logo",
+			"label": "Image"
+		},
+		{
+			"type": "range",
+			"id": "logo_width",
+			"min": 20,
+			"max": 200,
+			"step": 5,
+			"default": 150,
+			"unit": "px",
+			"label": "Logo width",
+			"info": "Height will be calculated with image aspect ratio. On the mobile, if there is not enough space, the logo will automatically shrink."
+		},
+		{
+			"type": "select",
+			"id": "logo_position",
+			"options": [
+				{
+					"value": "top",
+					"label": "Top"
+				},
+				{
+					"value": "left",
+					"label": "Left"
+				},
+				{
+					"value": "middle",
+					"label": "Middle"
+				}
+			],
+			"default": "middle",
+			"label": "Desktop position",
+			"info": "Logo position will automatically be centered for mobile."
+		},
+		{
+			"type": "header",
+			"content": "Menu"
+		},
+		{
+			"type": "link_list",
+			"id": "menu",
+			"label": "Main menu",
+			"default": "main-menu"
+		},
+		{
+			"type": "select",
+			"id": "menu_type_desktop",
+			"options": [
+				{
+					"value": "both",
+					"label": "Both"
+				},
+				{
+					"value": "dropdown",
+					"label": "Dropdown"
+				},
+				{
+					"value": "megamenu",
+					"label": "Mega menu"
+				}
+			],
+			"default": "both",
+			"label": "Type",
+			"info": "Used only for desktop."
+		},
+		{
+			"type": "select",
+			"id": "open_menu_type",
+			"options": [
+				{
+					"value": "click",
+					"label": "Click"
+				},
+				{
+					"value": "hover",
+					"label": "Hover"
+				}
+			],
+			"default": "hover",
+			"label": "Open by:",
+			"info": "Setting works only for Main Menu. Burger menu always opens on click."
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_first_level_link",
+			"label": "Make 1st-level menu clickable",
+			"default": false,
+			"info": "Only works with open on hover for desktop, if the menu item has a link."
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_second_level_links",
+			"label": "Make 2st-level menu clickable",
+			"default": true,
+			"info": "Only works with “Open on hover” for desktop, if the second-level menu item has a link."
+		},
+		{
+			"type": "header",
+			"content": "Burger menu"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_burger_menu",
+			"default": false,
+			"label": "Enable"
+		},
+		{
+			"type": "link_list",
+			"id": "burger_menu",
+			"label": "Menu"
+		},
+		{
+			"type": "text",
+			"id": "burger_menu_label",
+			"label": "Burger menu label",
+			"info": "Custom text shown in the burger menu instead of the menu’s admin name."
+		},
+		{
+			"type": "checkbox",
+			"id": "open_burger_menu_enclosed_items_on_mobile",
+			"label": "Open burger menu enclosed items on mobile",
+			"default": false
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "paragraph",
+			"content": "HEADER"
+		},
+		{
+			"type": "select",
+			"id": "header_background_type",
+			"label": "Header background type",
+			"options": [
+				{
+					"value": "solid",
+					"label": "Solid"
+				},
+				{
+					"value": "gradient",
+					"label": "Gradient"
+				}
+			],
+			"info": "Solid setting affects the desktop view only. Solid color only shows on hover.",
+			"default": "gradient"
+		},
+		{
+			"type": "color",
+			"id": "header_background_color",
+			"label": "Background color",
+			"alpha": true,
+			"default": "#000000",
+			"visible_if": "{{ section.settings.header_background_type == 'solid' }}"
+		},
+		{
+			"type": "color",
+			"id": "header_background",
+			"label": "Background gradient",
+			"default": "#000000",
+			"visible_if": "{{ section.settings.header_background_type == 'gradient' }}"
+		},
+		{
+			"type": "paragraph",
+			"content": "MAIN MENU"
+		},
+		{
+			"type": "color_background",
+			"id": "main_menu_background",
+			"label": "Background",
+			"default": "#FFFFFF1F"
+		},
+		{
+			"type": "color",
+			"id": "main_menu_text_color",
+			"label": "Text",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "main_menu_text_color_active",
+			"label": "Text (active)",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "main_menu_text_background_color_active",
+			"label": "Text background (active)",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "outer_border",
+			"label": "Outer border",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "paragraph",
+			"content": "DROPDOWN"
+		},
+		{
+			"type": "color",
+			"id": "dropdown_background",
+			"label": "Background",
+			"default": "#212121"
+		},
+		{
+			"type": "color",
+			"id": "dropdown_text_color",
+			"label": "Text",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "dropdown_text_background_color_hover",
+			"label": "Text background (active)",
+			"default": "#C94AA1"
+		},
+		{
+			"type": "paragraph",
+			"content": "MENU"
+		},
+		{
+			"type": "color",
+			"id": "menu_background",
+			"label": "Background",
+			"alpha": true,
+			"default": "#161414"
+		},
+		{
+			"type": "color",
+			"id": "menu_text_color",
+			"label": "Text",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "menu_text_background_color_hover",
+			"label": "Text background (active)",
+			"default": "#C94AA1"
+		},
+		{
+			"type": "paragraph",
+			"content": "CART COUNT"
+		},
+		{
+			"type": "color",
+			"id": "count_text_color",
+			"label": "Cart count text",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "count_text_background",
+			"label": "Cart count background",
+			"default": "#C94AA1"
+		},
+		{
+			"type": "paragraph",
+			"content": "ICON"
+		},
+		{
+			"type": "color",
+			"id": "icon_color",
+			"label": "Icon",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "icon_color_hover",
+			"label": "Icon (hover)",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "paragraph",
+			"content": "BUTTON ICON"
+		},
+		{
+			"type": "color",
+			"id": "button_icon_color",
+			"label": "Icon",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color_background",
+			"id": "button_icon_background_color",
+			"label": "Background",
+			"default": "#FFFFFF1F"
+		},
+		{
+			"type": "color",
+			"id": "button_icon_border_color",
+			"label": "Border",
+			"default": "transparent"
+		},
+		{
+			"type": "color",
+			"id": "button_icon_border_outer_color",
+			"label": "Border outer",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "button_icon_color_hover",
+			"label": "Icon (hover)",
+			"default": "#000000"
+		},
+		{
+			"type": "color_background",
+			"id": "button_icon_background_color_hover",
+			"label": "Background (hover)",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "button_icon_border_color_hover",
+			"label": "Border (hover)",
+			"default": "transparent"
+		},
+		{
+			"type": "color",
+			"id": "button_icon_border_outer_color_hover",
+			"label": "Border outer (hover)",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "paragraph",
+			"content": "BUTTON CIRCLE"
+		},
+		{
+			"type": "color",
+			"id": "button_icon_color_circle",
+			"label": "Icon",
+			"default": "#ffffff"
+		},
+		{
+			"type": "color_background",
+			"id": "button_background_color_circle",
+			"label": "Background",
+			"default": "#ffffff3d"
+		},
+		{
+			"type": "color",
+			"id": "button_border_color_circle",
+			"label": "Border",
+			"default": "#696868"
+		},
+		{
+			"type": "color",
+			"id": "button_border_outer_color_circle",
+			"label": "Border outer",
+			"default": "transparent"
+		},
+		{
+			"type": "color",
+			"id": "button_icon_color_circle_hover",
+			"label": "Icon (hover)",
+			"default": "#000000"
+		},
+		{
+			"type": "color_background",
+			"id": "button_background_color_circle_hover",
+			"label": "Background (hover)",
+			"default": "#ffffff"
+		},
+		{
+			"type": "color",
+			"id": "button_border_color_circle_hover",
+			"label": "Border (hover)",
+			"default": "#cccccc"
+		},
+		{
+			"type": "color",
+			"id": "button_border_outer_color_circle_hover",
+			"label": "Border outer (hover)",
+			"default": "transparent"
+		},
+		{
+			"type": "paragraph",
+			"content": "LOCALIZATION FORM"
+		},
+		{
+			"type": "color_background",
+			"id": "localization_form_background",
+			"label": "Localization form background",
+			"default": "#212121e6"
+		},
+		{
+			"type": "color",
+			"id": "localization_form_text",
+			"label": "Localization form text",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "localization_form_border",
+			"label": "Localization form border",
+			"default": "#696868"
+		},
+		{
+			"type": "paragraph",
+			"content": "PRODUCT CARD"
+		},
+		{
+			"type": "color",
+			"id": "price_color",
+			"label": "Price",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "sale_price_color",
+			"label": "Sale price",
+			"default": "#FF5053"
+		},
+		{
+			"type": "color",
+			"id": "regular_price_color",
+			"label": "Regular price",
+			"default": "#7B7B7B"
+		}
+	],
+	"blocks": [
+		{
+			"type": "megamenu",
+			"name": "Mega menu",
+			"settings": [
+				{
+					"type": "header",
+					"content": "General"
+				},
+				{
+					"type": "text",
+					"id": "menu_handle",
+					"label": "Link name",
+					"info": "Write a link name to which you want to add a mega menu"
+				},
+				{
+					"type": "header",
+					"content": "Banner"
+				},
+				{
+					"type": "color_background",
+					"id": "banner_background_color",
+					"label": "Background"
+				},
+				{
+					"type": "color",
+					"id": "banner_background_ellipse_color",
+					"label": "Background ellipse",
+					"default": "#CB65AB"
+				},
+				{
+					"type": "color",
+					"id": "banner_border_color",
+					"label": "Border",
+					"default": "#FFFFFF"
+				},
+				{
+					"type": "image_picker",
+					"id": "banner_back_image",
+					"label": "Back image",
+					"info": "Visible if the main image has a transparent background. 752 x 928px recommended"
+				},
+				{
+					"type": "select",
+					"id": "banner_back_image_object_fit",
+					"label": "Back image object-fit",
+					"options": [
+						{
+							"value": "cover",
+							"label": "Cover"
+						},
+						{
+							"value": "contain",
+							"label": "Contain"
+						}
+					],
+					"default": "cover"
+				},
+				{
+					"type": "image_picker",
+					"id": "banner_main_image",
+					"label": "Main image",
+					"info": "Add an image with a transparent background to show the Back image. 752 x 928px recommended"
+				},
+				{
+					"type": "select",
+					"id": "banner_main_image_object_fit",
+					"label": "Main image object-fit",
+					"options": [
+						{
+							"value": "cover",
+							"label": "Cover"
+						},
+						{
+							"value": "contain",
+							"label": "Contain"
+						}
+					],
+					"default": "cover"
+				},
+				{
+					"type": "text",
+					"id": "banner_link_label",
+					"label": "Button label",
+					"default": "Shop now"
+				},
+				{
+					"type": "url",
+					"id": "banner_link",
+					"label": "Button link",
+					"default": "/"
+				}
+			]
+		},
+		{
+			"type": "megamenu-products-grid",
+			"name": "Mega menu products grid",
+			"settings": [
+				{
+					"type": "header",
+					"content": "General"
+				},
+				{
+					"type": "text",
+					"id": "menu_handle",
+					"label": "Link name",
+					"info": "Write a link name to which you want to add a mega menu"
+				},
+				{
+					"type": "product_list",
+					"id": "products",
+					"label": "Products",
+					"limit": 8
+				}
+			]
+		},
+		{
+			"type": "megamenu-media",
+			"name": "Mega menu media",
+			"settings": [
+				{
+					"type": "header",
+					"content": "General"
+				},
+				{
+					"type": "text",
+					"id": "menu_handle",
+					"label": "Link name",
+					"info": "Write a link name to which you want to add a mega menu"
+				},
+				{
+					"type": "header",
+					"content": "Media item 1"
+				},
+				{
+					"type": "image_picker",
+					"id": "media_item_image_1",
+					"label": "Image",
+					"info": "756 x 996px recommended"
+				},
+				{
+					"type": "text",
+					"id": "media_item_heading_1",
+					"label": "Heading",
+					"default": "Heading"
+				},
+				{
+					"type": "text",
+					"id": "media_item_text_1",
+					"label": "Text",
+					"default": "Text content"
+				},
+				{
+					"type": "text",
+					"id": "media_item_link_label_1",
+					"label": "Button label",
+					"default": "Shop now"
+				},
+				{
+					"type": "url",
+					"id": "media_item_link_1",
+					"label": "Button link",
+					"default": "/"
+				},
+				{
+					"type": "product",
+					"id": "media_item_product_1",
+					"label": "Product",
+					"info": "When you choose a product, a product card will appear in place of the image with text."
+				},
+				{
+					"type": "header",
+					"content": "Media item 2"
+				},
+				{
+					"type": "image_picker",
+					"id": "media_item_image_2",
+					"label": "Image",
+					"info": "756 x 996px recommended"
+				},
+				{
+					"type": "text",
+					"id": "media_item_heading_2",
+					"label": "Heading",
+					"default": "Heading"
+				},
+				{
+					"type": "text",
+					"id": "media_item_text_2",
+					"label": "Text",
+					"default": "Text content"
+				},
+				{
+					"type": "text",
+					"id": "media_item_link_label_2",
+					"label": "Button label",
+					"default": "Shop now"
+				},
+				{
+					"type": "url",
+					"id": "media_item_link_2",
+					"label": "Button link",
+					"default": "/"
+				},
+				{
+					"type": "product",
+					"id": "media_item_product_2",
+					"label": "Product",
+					"info": "When you choose a product, a product card will appear in place of the image with text."
+				},
+				{
+					"type": "header",
+					"content": "Media item 3"
+				},
+				{
+					"type": "image_picker",
+					"id": "media_item_image_3",
+					"label": "Image",
+					"info": "756 x 996px recommended"
+				},
+				{
+					"type": "text",
+					"id": "media_item_heading_3",
+					"label": "Heading",
+					"default": "Heading"
+				},
+				{
+					"type": "text",
+					"id": "media_item_text_3",
+					"label": "Text",
+					"default": "Text content"
+				},
+				{
+					"type": "text",
+					"id": "media_item_link_label_3",
+					"label": "Button label",
+					"default": "Shop now"
+				},
+				{
+					"type": "url",
+					"id": "media_item_link_3",
+					"label": "Button link",
+					"default": "/"
+				},
+				{
+					"type": "product",
+					"id": "media_item_product_3",
+					"label": "Product",
+					"info": "When you choose a product, a product card will appear in place of the image with text."
+				},
+				{
+					"type": "header",
+					"content": "Media item 4"
+				},
+				{
+					"type": "image_picker",
+					"id": "media_item_image_4",
+					"label": "Image",
+					"info": "756 x 996px recommended"
+				},
+				{
+					"type": "text",
+					"id": "media_item_heading_4",
+					"label": "Heading",
+					"default": "Heading"
+				},
+				{
+					"type": "text",
+					"id": "media_item_text_4",
+					"label": "Text",
+					"default": "Text content"
+				},
+				{
+					"type": "text",
+					"id": "media_item_link_label_4",
+					"label": "Button label",
+					"default": "Shop now"
+				},
+				{
+					"type": "url",
+					"id": "media_item_link_4",
+					"label": "Button link",
+					"default": "/"
+				},
+				{
+					"type": "product",
+					"id": "media_item_product_4",
+					"label": "Product",
+					"info": "When you choose a product, a product card will appear in place of the image with text."
+				},
+				{
+					"type": "header",
+					"content": "Media item 5"
+				},
+				{
+					"type": "image_picker",
+					"id": "media_item_image_5",
+					"label": "Image",
+					"info": "756 x 996px recommended"
+				},
+				{
+					"type": "text",
+					"id": "media_item_heading_5",
+					"label": "Heading",
+					"default": "Heading"
+				},
+				{
+					"type": "text",
+					"id": "media_item_text_5",
+					"label": "Text",
+					"default": "Text content"
+				},
+				{
+					"type": "text",
+					"id": "media_item_link_label_5",
+					"label": "Button label",
+					"default": "Shop now"
+				},
+				{
+					"type": "url",
+					"id": "media_item_link_5",
+					"label": "Button link",
+					"default": "/"
+				},
+				{
+					"type": "product",
+					"id": "media_item_product_5",
+					"label": "Product",
+					"info": "When you choose a product, a product card will appear in place of the image with text."
+				},
+				{
+					"type": "header",
+					"content": "Media item colors"
+				},
+				{
+					"type": "color",
+					"id": "media_item_text_color",
+					"label": "Text",
+					"default": "#FFFFFF"
+				},
+				{
+					"type": "color",
+					"id": "media_item_overlay",
+					"label": "Overlay",
+					"default": "#000000"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

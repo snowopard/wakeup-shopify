@@ -1,0 +1,68 @@
+{
+	"type": "footer",
+	"name": "Footer group",
+	"sections": {
+		"footer": {
+			"type": "footer",
+			"blocks": {
+				"menu_1": {
+					"type": "menu",
+					"settings": {
+						"menu_heading": "Shop",
+						"menu": "footer"
+					}
+				},
+				"menu_2": {
+					"type": "menu",
+					"settings": {
+						"menu_heading": "Company",
+						"menu": "footer"
+					}
+				},
+				"additional-menu": {
+					"type": "additional-menu",
+					"settings": {
+						"menu": "footer"
+					}
+				},
+				"big-text": {
+					"type": "big-text",
+					"settings": {
+						"big_text_first": "BOBA IS",
+						"big_text_second": "SPRINGY",
+						"desktop_movement_speed": 30,
+						"mobile_movement_speed": 30
+					}
+				}
+			},
+			"block_order": [
+				"menu_1",
+				"menu_2",
+				"additional-menu",
+				"big-text"
+			],
+			"settings": {
+				"is_show_country_selector": true,
+				"is_show_language_selector": true,
+				"copyright_text": "Copyright © %date%.",
+				"show_social_links": true,
+				"enable_follow_on_shop": true,
+				"section_background": "#ffffff",
+				"section_gradient": "linear-gradient(180deg, rgba(248, 57, 155, 0) 54%, rgba(248, 57, 155, 0.5) 100%)",
+				"menu_headings_color": "#9d9d9d",
+				"link_color": "#000000",
+				"link_hover_color": "#7b7b7b",
+				"big_text_color": "#000000",
+				"copyright_text_color": "#000000",
+				"button_icon_color_social": "#000000",
+				"button_icon_color_social_hover": "#000000",
+				"localization_form_background": "#FFFFFFE5",
+				"localization_form_text": "#000000",
+				"localization_form_border": "#d5d5d5"
+			}
+		}
+	},
+	"order": [
+		"footer"
+	]
+}

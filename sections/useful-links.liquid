@@ -1,0 +1,176 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Useuful links
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign text = section.settings.text_color -%}
+{%- assign background = section.settings.background_color -%}
+{%- assign border = section.settings.border_color -%}
+
+{%- assign blocks = section.blocks -%}
+
+{%- capture section_styles -%}
+	--text-color: {{ text }}; {{-  -}}
+	--background-color: {{ background }}; {{-  -}}
+	--border-color: {{ border }}; {{-  -}}
+{%- endcapture -%}
+
+{%- if blocks.size > 0 -%}
+	{%- render 'adastra' with '/src/styles/useful-links.scss' -%}
+
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+			}
+		}
+	{%- endstyle -%}
+
+	<section class="useful-links" style="{{ section_styles }}">
+		<div class="container">
+			<div class="useful-links__items">
+				{% for block in section.blocks %}
+					{% assign link_text = block.settings.link_text %}
+					{% assign link_url 	= block.settings.link_url %}
+
+					{% if link_text != blank %}
+						<a href="{{ link_url }}" class="useful-links__item focus-visible-outline">
+							{{ link_text }}
+
+							{%- render 'icons', icon: 'arrow-right' -%}
+						</a>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+{%- endif -%}
+
+{%- schema -%}
+	{
+		"name": "Useful links",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"max_blocks": 6,
+		"settings": [
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "color",
+				"id": "text_color",
+				"label": "Text",
+				"default": "#000000"
+			},
+			{
+				"type": "color",
+				"id": "background_color",
+				"label": "Background",
+				"default": "#f4f4f4"
+			},
+			{
+				"type": "color",
+				"id": "border_color",
+				"label": "Border",
+				"default": "#d2d2d2"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 0
+			}
+		],
+		"blocks": [
+			{
+				"type": "link",
+				"name": "Link",
+				"settings": [
+					{
+						"type": "text",
+						"id": "link_text",
+						"label": "Text",
+						"default": "Link text"
+					},
+					{
+						"type": "url",
+						"id": "link_url",
+						"label": "Link"
+					}
+				]
+			}
+		],
+		"presets": [
+			{
+				"name": "Useful links",
+				"blocks": [
+					{
+						"type": "link",
+						"settings": {
+							"link_text": "Link text"
+						}
+					},
+					{
+						"type": "link",
+						"settings": {
+							"link_text": "Link text"
+						}
+					},
+					{
+						"type": "link",
+						"settings": {
+							"link_text": "Link text"
+						}
+					}
+				]
+			}
+		]
+	}
+{%- endschema -%}

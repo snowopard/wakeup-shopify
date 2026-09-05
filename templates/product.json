@@ -1,0 +1,554 @@
+{
+	"sections": {
+		"product-template": {
+			"type": "product-template",
+			"blocks": {
+				"title": {
+					"type": "title",
+					"settings": {
+						"offset_top_desktop": 16,
+						"offset_bottom_desktop": 16,
+						"offset_top_mobile": 12,
+						"offset_bottom_mobile": 12
+					}
+				},
+				"description": {
+					"type": "description",
+					"settings": {
+						"read_more_label": "Read More",
+						"offset_top_desktop": 16,
+						"offset_bottom_desktop": 16,
+						"offset_top_mobile": 12,
+						"offset_bottom_mobile": 12
+					}
+				},
+				"vendor": {
+					"type": "vendor",
+					"disabled": true,
+					"settings": {
+						"show_sku": true,
+						"sku_text": "Art: {SKU}",
+						"show_vendor": true,
+						"make_vendor_link": true,
+						"offset_top_desktop": 16,
+						"offset_bottom_desktop": 16,
+						"offset_top_mobile": 12,
+						"offset_bottom_mobile": 12
+					}
+				},
+				"options": {
+					"type": "options",
+					"settings": {
+						"variant_picker": "radio",
+						"color_swatch_type": "square",
+						"offset_top_desktop": 16,
+						"offset_bottom_desktop": 16,
+						"offset_top_mobile": 12,
+						"offset_bottom_mobile": 12
+					}
+				},
+				"badges": {
+					"type": "badges",
+					"settings": {
+						"offset_top_mobile": 0,
+						"offset_bottom_mobile": 12
+					}
+				},
+				"price_and_quantity": {
+					"type": "price_and_quantity",
+					"settings": {
+						"offset_top_desktop": 10,
+						"offset_bottom_desktop": 10,
+						"offset_top_mobile": 10,
+						"offset_bottom_mobile": 10
+					}
+				},
+				"inventory_status_R9X4hj": {
+					"type": "inventory_status",
+					"settings": {
+						"inv_low_stock_text": "Low stock",
+						"inv_high_stock_text": "In stock, ready to ship",
+						"low_stock_threshold": 10,
+						"show_inventory_quantity": true,
+						"offset_top_desktop": 10,
+						"offset_bottom_desktop": 10,
+						"offset_top_mobile": 10,
+						"offset_bottom_mobile": 10
+					}
+				},
+				"countdown_timer_cNwKNY": {
+					"type": "countdown_timer",
+					"settings": {
+						"text": "Sale ends in:",
+						"offset_top_desktop": 16,
+						"offset_bottom_desktop": 16,
+						"offset_top_mobile": 12,
+						"offset_bottom_mobile": 12
+					}
+				},
+				"add_to_cart": {
+					"type": "add_to_cart",
+					"settings": {
+						"show_additional_buttons": true,
+						"show_gift_card_recipient": true,
+						"add_to_card_button_text_color": "#ffffff",
+						"add_to_card_button_background_color": "#538bf6",
+						"add_to_card_button_border_color": "rgba(0,0,0,0)",
+						"add_to_card_button_text_color_hover": "#000000",
+						"add_to_card_button_background_color_hover": "#ffffff",
+						"add_to_card_button_border_color_hover": "#ffffff",
+						"buy_now_button_text_color": "#000000",
+						"buy_now_button_background_color": "#ffffff",
+						"buy_now_button_border_color": "rgba(0,0,0,0)",
+						"buy_now_button_text_color_hover": "#000000",
+						"buy_now_button_background_color_hover": "#d8d8d8",
+						"buy_now_button_border_color_hover": "#d8d8d8",
+						"compare_button_text_color": "#ffffff",
+						"compare_button_background_color": "#ffffff20",
+						"compare_button_border_color": "rgba(0,0,0,0)",
+						"compare_button_text_color_hover": "#000000",
+						"compare_button_background_color_hover": "#ffffff",
+						"compare_button_border_color_hover": "rgba(0,0,0,0)",
+						"offset_top_desktop": 24,
+						"offset_bottom_desktop": 24,
+						"offset_top_mobile": 24,
+						"offset_bottom_mobile": 24
+					}
+				},
+				"notify_me_ay3AXB": {
+					"type": "notify_me",
+					"settings": {
+						"notify_me_button_label": "Email me when available",
+						"notify_me_form_heading": "Notified by email when this product becomes available",
+						"notify_me_form_email_placeholder": "Your email",
+						"notify_me_form_submit_button_label": "Notify me when available",
+						"notify_me_form_success_message": "Email has been successfully sent"
+					}
+				},
+				"pickup_availability": {
+					"type": "pickup_availability",
+					"disabled": true,
+					"settings": {}
+				},
+				"sales_point_JtemFt": {
+					"type": "sales_point",
+					"settings": {
+						"sales_point_text": "Hurry and get your BOBA!",
+						"offset_top_desktop": 15,
+						"offset_bottom_desktop": 15,
+						"offset_top_mobile": 15,
+						"offset_bottom_mobile": 15
+					}
+				},
+				"socials_AKQMag": {
+					"type": "socials",
+					"settings": {
+						"show_facebook": true,
+						"show_twitter": true,
+						"show_pinterest": true,
+						"offset_top_desktop": 10,
+						"offset_bottom_desktop": 10,
+						"offset_top_mobile": 10,
+						"offset_bottom_mobile": 10
+					}
+				},
+				"drawers": {
+					"type": "drawers",
+					"settings": {
+						"drawer_toggle_text_1": "Drawer 1",
+						"drawer_title_1": "Drawer 1",
+						"drawer_toggle_text_2": "Shipping & Returns",
+						"drawer_title_2": "Shipping & Returns",
+						"drawer_toggle_text_3": "Drawer 3",
+						"drawer_title_3": "Drawer 3",
+						"drawer_toggle_text_4": "Drawer 4",
+						"drawer_title_4": "Drawer 4"
+					}
+				},
+				"ask_question_kkhFWd": {
+					"type": "ask_question",
+					"settings": {
+						"button_label": "Ask a question",
+						"heading": "Have a question?",
+						"email_placeholder": "Email",
+						"name_placeholder": "Name",
+						"phone_placeholder": "Phone",
+						"product_url": "Reference URL",
+						"message_placeholder": "Write message",
+						"success_message": "Email has been successfully sent",
+						"submit_button_label": "Submit"
+					}
+				}
+			},
+			"block_order": [
+				"title",
+				"description",
+				"vendor",
+				"options",
+				"badges",
+				"price_and_quantity",
+				"inventory_status_R9X4hj",
+				"countdown_timer_cNwKNY",
+				"add_to_cart",
+				"notify_me_ay3AXB",
+				"pickup_availability",
+				"sales_point_JtemFt",
+				"socials_AKQMag",
+				"drawers",
+				"ask_question_kkhFWd"
+			],
+			"settings": {
+				"is_zoom_enabled": true,
+				"media_layout": "carousel",
+				"media_height": "full_size",
+				"image_object_fit": "contain",
+				"is_enable_media_scroller": true,
+				"enable_sticky_scrollbar": true,
+				"enable_blurred_background_sticky_scrollbar": true,
+				"show_taxes_included": true,
+				"show_pay_installments": true,
+				"show_size_guide": true,
+				"size_guide_button_text": "Size guide",
+				"size_guide_drawer_title": "Size guide",
+				"size_guide_tab_general_name": "Dimensions",
+				"size_guide_tab_model_name": "Model parameters",
+				"enable_product_complementary": true,
+				"product_complementary_title": "Pairs nicely with",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"ui_button_color": "#000000",
+				"ui_button_background_color": "#ffffff",
+				"ui_button_border_color": "#dcdcdc",
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 61,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 16
+			}
+		},
+		"our_features_PGUXYK": {
+			"type": "our-features",
+			"blocks": {
+				"feature_rnxLGM": {
+					"type": "feature",
+					"settings": {
+						"title": "100% VEGAN"
+					}
+				},
+				"feature_EMzbEW": {
+					"type": "feature",
+					"settings": {
+						"title": "NUT FREE"
+					}
+				},
+				"feature_8NDncf": {
+					"type": "feature",
+					"settings": {
+						"title": "ALL NATURAL"
+					}
+				},
+				"feature_VTVqm9": {
+					"type": "feature",
+					"settings": {
+						"title": "NON GMO"
+					}
+				},
+				"feature_8FiiGQ": {
+					"type": "feature",
+					"settings": {
+						"title": "HALAL & KOSHER"
+					}
+				},
+				"feature_FmRT3x": {
+					"type": "feature",
+					"settings": {
+						"title": "Gluten-Free"
+					}
+				}
+			},
+			"block_order": [
+				"feature_rnxLGM",
+				"feature_EMzbEW",
+				"feature_8NDncf",
+				"feature_VTVqm9",
+				"feature_8FiiGQ",
+				"feature_FmRT3x"
+			],
+			"name": "Our features",
+			"settings": {
+				"make_not_active_text_bold": false,
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top": 100,
+				"inner_offset_bottom": 20,
+				"inner_offset_top_mobile": 32,
+				"inner_offset_bottom_mobile": 10
+			}
+		},
+		"ingredients_azKffY": {
+			"type": "ingredients",
+			"blocks": {
+				"big_card_tfiq9X": {
+					"type": "big_card",
+					"settings": {
+						"title": "Water",
+						"block_text": "Our luv letter to all you boba purists. With the silky sweet legen-dairy taste that made boba famous, you’re gonna like this one a latte.",
+						"use_big_heading": false,
+						"animation_card_color": "#538bf6"
+					}
+				},
+				"small_card_fnqAi4": {
+					"type": "small_card",
+					"settings": {
+						"title": "Tapioca starch",
+						"animation_card_color": "#4b7739"
+					}
+				},
+				"small_card_NNcK6Q": {
+					"type": "small_card",
+					"settings": {
+						"title": "Coffee Powder",
+						"animation_card_color": "#7d5b10"
+					}
+				},
+				"small_card_x8z7Fa": {
+					"type": "small_card",
+					"settings": {
+						"title": "Caramel color",
+						"animation_card_color": "#f0a728"
+					}
+				},
+				"small_card_gVcRUq": {
+					"type": "small_card",
+					"settings": {
+						"title": "Cellulose gum",
+						"animation_card_color": "#f8d089"
+					}
+				},
+				"small_card_tcrHBT": {
+					"type": "small_card",
+					"settings": {
+						"title": "Sugar",
+						"animation_card_color": "#62380d"
+					}
+				},
+				"small_card_eAdjCd": {
+					"type": "small_card",
+					"settings": {
+						"title": "Tea Essence",
+						"animation_card_color": "#6c975f"
+					}
+				},
+				"big_card_TUAmFi": {
+					"type": "big_card",
+					"settings": {
+						"title": "Genuine Juice",
+						"block_text": "Every sip is crafted with real, authentic juice for a natural and refreshing taste.",
+						"use_big_heading": true,
+						"animation_card_color": "#ffb600"
+					}
+				}
+			},
+			"block_order": [
+				"big_card_tfiq9X",
+				"small_card_fnqAi4",
+				"small_card_NNcK6Q",
+				"small_card_x8z7Fa",
+				"small_card_gVcRUq",
+				"small_card_tcrHBT",
+				"small_card_eAdjCd",
+				"big_card_TUAmFi"
+			],
+			"name": "Ingredients",
+			"settings": {
+				"heading_first_line": "<em>What’s inside</em>",
+				"heading_second_line": "<strong>Ingredients that matter</strong>",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": true,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 25,
+				"offset_bottom_mobile": 25,
+				"inner_offset_top": 100,
+				"inner_offset_bottom": 100,
+				"inner_offset_top_mobile": 32,
+				"inner_offset_bottom_mobile": 32
+			}
+		},
+		"faq_simple_PCrgtV": {
+			"type": "faq-simple",
+			"blocks": {
+				"faq_item_mrgiQ7": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "I made a mistake in the shipping address. Can I change it?",
+						"text": "<p>If you notice a mistake in your shipping address, please contact us as soon as possible. We can update the address if your order hasn’t been processed yet. Once it has been shipped, we’re unable to make changes, but you may be able to update delivery details directly with the carrier.</p>"
+					}
+				},
+				"faq_item_pmadw4": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "I am purchasing a gift. Can you exclude price information?",
+						"text": "<p>Our warehouse takes pride in shipping items out as soon as possible. Many of the orders will be processed within 2 hours after you place the order. We are unable to make any changes once an order begins processing, but we do accepts returns and exchanges at any time, and would be happy to reship your order if it is undeliverable as addressed.</p>"
+					}
+				},
+				"faq_item_ccB7pp": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "Can I make a change to my order?",
+						"text": "<p>We’re happy to help with changes if your order hasn’t been processed yet. Please reach out to us as quickly as possible, and we’ll do our best to update it. Once an order has been shipped, we’re unable to make modifications.</p>"
+					}
+				},
+				"faq_item_VkfQ4Y": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "How do I prepare my boba drink set?",
+						"text": "<p>Each set comes with easy step-by-step instructions. Simply cook the boba pearls, mix with the included tea or flavor base, add ice or milk if you like, and enjoy your café-style drink at home in just a few minutes.</p>"
+					}
+				},
+				"faq_item_4hXXbU": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "Do you ship internationally?",
+						"text": "<p>Yes! We ship to many countries worldwide. Shipping rates and delivery times vary depending on your location, and you’ll see the exact options available at checkout. If your country isn’t listed, feel free to contact us and we’ll do our best to help.</p>"
+					}
+				},
+				"faq_item_FQgXkY": {
+					"type": "faq_item",
+					"settings": {
+						"heading": "What currencies do you accept?",
+						"text": "<p>We accept payments in multiple currencies. Your local currency will usually display automatically based on your location. At checkout, you’ll see the available currency options before completing your order.</p>"
+					}
+				}
+			},
+			"block_order": [
+				"faq_item_mrgiQ7",
+				"faq_item_pmadw4",
+				"faq_item_ccB7pp",
+				"faq_item_VkfQ4Y",
+				"faq_item_4hXXbU",
+				"faq_item_FQgXkY"
+			],
+			"name": "FAQ",
+			"settings": {
+				"heading_first_line": "<em>Frequently Asked</em>",
+				"heading_second_line": "<strong>Questions</strong>",
+				"text": "<p><em>Got Questions? We’ve Got Answers</em></p>",
+				"button_label": "View All FAQs",
+				"button_aria_label": "",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "schema-2",
+				"container_width": "100%",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 5,
+				"offset_bottom_mobile": 21,
+				"inner_offset_top_desktop": 100,
+				"inner_offset_bottom_desktop": 20,
+				"inner_offset_top_mobile": 32,
+				"inner_offset_bottom_mobile": 10
+			}
+		},
+		"image_with_text_fi7EPm": {
+			"type": "image-with-text",
+			"blocks": {
+				"additional_content_4ALPaC": {
+					"type": "additional_content",
+					"settings": {
+						"title": "Snip",
+						"block_text": "<p><strong>…boba pack + pop in a cup</strong></p>"
+					}
+				},
+				"additional_content_ziKn4C": {
+					"type": "additional_content",
+					"settings": {
+						"title": "Zap",
+						"block_text": "<p><strong>…in microwave for 45-60 seconds</strong></p>"
+					}
+				},
+				"additional_content_LVDNEW": {
+					"type": "additional_content",
+					"settings": {
+						"title": "Pour",
+						"block_text": "<p><strong>…into glass over a cup of ice</strong></p>"
+					}
+				},
+				"additional_content_cVhJUj": {
+					"type": "additional_content",
+					"settings": {
+						"title": "Splash",
+						"block_text": "<p><strong>…in a cup of milk - or just build your own creation</strong></p>"
+					}
+				}
+			},
+			"block_order": [
+				"additional_content_4ALPaC",
+				"additional_content_ziKn4C",
+				"additional_content_LVDNEW",
+				"additional_content_cVhJUj"
+			],
+			"name": "Image with text",
+			"settings": {
+				"image_position": "right",
+				"text_alignment": "left",
+				"heading_first_line": "<em>60 seconds to</em>",
+				"heading_second_line": "<strong>Boba shop bliss</strong>",
+				"text": "<p>To live inspired is to live a life true to your values, a life that’s meaningful, and a life of purpose. To fill with goodness your body, mind, and soul.</p>",
+				"object_fit_main": "contain",
+				"object_fit_secondary": "contain",
+				"object_fit_additionally": "contain",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "schema-2",
+				"color_ellipse": "#3674eb",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": true,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 50,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 25,
+				"inner_offset_top": 20,
+				"inner_offset_bottom": 64,
+				"inner_offset_top_mobile": 10,
+				"inner_offset_bottom_mobile": 32
+			}
+		},
+		"product-recommendations": {
+			"type": "product-recommendations",
+			"settings": {
+				"heading_first_line": "Product recommendations",
+				"heading_second_line": "",
+				"layout": "4",
+				"enable_shopify_recommendations": true,
+				"collection": "",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "schema-1",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": true,
+				"offset_top_desktop": 25,
+				"offset_bottom_desktop": 40,
+				"offset_top_mobile": 25,
+				"offset_bottom_mobile": 20,
+				"inner_offset_top_desktop": 40,
+				"inner_offset_bottom_desktop": 68,
+				"inner_offset_top_mobile": 40,
+				"inner_offset_bottom_mobile": 10
+			}
+		}
+	},
+	"order": [
+		"product-template",
+		"our_features_PGUXYK",
+		"ingredients_azKffY",
+		"faq_simple_PCrgtV",
+		"image_with_text_fi7EPm",
+		"product-recommendations"
+	]
+}

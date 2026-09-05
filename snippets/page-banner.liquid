@@ -1,0 +1,41 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Snippet: Page banner
+
+	{%- render 'page-banner',
+		styles: styles,
+		heading_first_line: text,
+		heading_second_line: text
+	-%}
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- render 'adastra' with '/src/styles/page-banner.scss' -%}
+
+<div class="page-banner need-animate" style="{{ styles }}">
+	<h1 class="section-title h1">
+		{%- if heading_first_line != blank or heading_second_line != blank -%}
+			{%- if heading_first_line != blank -%}
+				<span class="section-title__text-container">
+					<span class="section-title__text">
+						{{- heading_first_line -}}
+					</span>
+				</span>
+			{%- endif -%}
+
+			{%- if heading_second_line != blank -%}
+				<span class="section-title__text-container">
+					<span class="section-title__text">
+						{{- heading_second_line -}}
+					</span>
+				</span>
+			{%- endif -%}
+		{%- else -%}
+			{{ page_title | default: page.title }}
+		{%- endif -%}
+	</h1>
+
+	{% if page.content != blank %}
+		<div class="page-banner__rte rte">{{ page.content }}</div>
+	{% endif %}
+</div>

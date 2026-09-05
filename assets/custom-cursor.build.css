@@ -1,0 +1,28 @@
+html:not(.no-js) body.is-cursor-hidden * {
+  cursor: none !important;
+}
+
+.custom-cursor {
+  position: fixed;
+  will-change: transform, opacity, visibility;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-background, #ffffff);
+  border: 1px solid var(--color-border, #8c8c8c);
+  border-radius: 50%;
+  z-index: 2147483647;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition-property: opacity, visibility;
+  transition-duration: var(--timing-micro);
+}
+
+.custom-cursor.is-hidden {
+  display: none;
+}
+
+.custom-cursor.is-active {
+  visibility: visible;
+  opacity: 1;
+}

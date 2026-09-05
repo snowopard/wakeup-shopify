@@ -1,0 +1,117 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Product Badges
+  ---------------------------
+  Require: product.tags
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- assign is_sale_label_enabled 		= block.settings.is_sale_label_enabled -%}
+{%- assign color_label_sale 			= block.settings.color_label_sale -%}
+{%- assign color_label_sale_background 	= block.settings.color_label_sale_background -%}
+{%- assign show_sale_percentage_label 	= false -%}
+
+{%- if product.variants.size > 1 -%}
+	{%- assign target = product.selected_or_first_available_variant -%}
+{%- else -%}
+	{%- assign target = product -%}
+{%- endif -%}
+
+{%- if target.compare_at_price > target.price and product.available -%}
+	{%- assign show_sale_percentage_label = true -%}
+{% endif %}
+
+{% assign display_sale_label = false %}
+
+{% if show_sale_percentage_label and is_sale_label_enabled %}
+	{% assign display_sale_label = true %}
+{% endif %}
+
+{% if is_preset %}
+	{% assign tags = 'label__new:primary,label__sale:secondary,label__top' | split: ',' %}
+{% else %}
+	{% assign tags = product.tags %}
+{% endif %}
+
+{% if tags.size > 0 or product.available == false or display_sale_label %}
+	{%- capture styles -%}
+		--color-sale-label: {{- color_label_sale -}}; {{-  -}}
+		--color-background-label-sale: {{- color_label_sale_background -}}; {{-  -}}
+		--offset-top-desktop: {{ block.settings.offset_top_desktop }}px; {{-  -}}
+		--offset-bottom-desktop: {{ block.settings.offset_bottom_desktop }}px; {{-  -}}
+		--offset-top-mobile: {{ block.settings.offset_top_mobile }}px; {{-  -}}
+		--offset-bottom-mobile: {{ block.settings.offset_bottom_mobile }}px;
+	{%- endcapture -%}
+
+	<ul
+		class="product-badges"
+		style="{{- styles -}}"
+		aria-label="{{- 'products.product.product_labels' | t | escape -}}"
+	>
+		{%- unless product.available or is_preset -%}
+			<li	class="badge badge--sold-out">
+				<span class="visually-hidden">
+					{{- 'products.product.product_label' | t -}}:
+				</span>
+
+				{{- "products.product.sold_out" | t -}}
+			</li>
+		{%- endunless -%}
+
+		{%- if is_sale_label_enabled -%}
+			{%- if use_variant -%}
+				{%- assign target = product.selected_or_first_available_variant -%}
+			{%- else -%}
+				{%- assign target = product -%}
+			{%- endif -%}
+
+			{%- assign discount_value = target.price | times: 100 | divided_by: target.compare_at_price -%}
+
+			{%- if discount_value < 100 -%}
+				<li class="badge badge--sale{% if product.variants.size > 1 %} js-sale-percentage-badge{% endif %}{% unless show_sale_percentage_label %} is-hidden{% endunless %}">
+					<span class="visually-hidden">
+						{{- 'products.product_card.product_label' | t -}}:
+					</span>
+
+					<span data-sale-percentage>
+						-{{ 100 | minus: discount_value | json }}% {{- "products.product.sale" | t | prepend: ' ' -}}
+					</span>
+				</li>
+			{%- endif -%}
+		{%- endif -%}
+
+		{%- assign tag_index = 1 -%}
+
+		{%- for tag in tags -%}
+			{%- if tag contains 'label__' -%}
+				{%- assign class = 'badge' -%}
+
+				{%- if tag contains ':primary' -%}
+					{%- assign class = class | append: " badge--primary" | strip -%}
+				{%- elsif tag contains ':secondary' -%}
+					{%- assign class = class | append: " badge--secondary" | strip -%}
+				{%- endif -%}
+
+				{%- assign clipped_tag = tag
+					| remove: 'label__'
+					| remove: ':primary'
+					| remove: ':secondary'
+				-%}
+
+				<li	class="{{ class }}">
+					<span class="visually-hidden">
+						{{- 'products.product.product_label' | t -}}:
+					</span>
+
+					{{- clipped_tag -}}
+				</li>
+
+				{%- assign tag_index = tag_index | plus: 1 -%}
+
+				{%- if tag_index > 3 -%}
+					{%- break -%}
+				{%- endif -%}
+			{%- endif -%}
+		{%- endfor -%}
+	</ul>
+{% endif %}

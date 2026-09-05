@@ -1,0 +1,126 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header mega menu
+	Render header mega menu
+	- menu: menu object (required)
+	- forloop: forloop object (required)
+	- first_level_link: first level link object (required)
+	- megamenu_object: blocks object using for output media content (required)
+
+	Usage:
+	{%- render 'header-mega-menu', menu: menu, forloop: forloop, first_level_link: first_level_link, megamenu_object: megamenu_object -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- if first_level_link.links.size > 0 -%}
+	{%- assign back_image    				= megamenu_object.settings.banner_back_image -%}
+	{%- assign back_image_object_fit 		= megamenu_object.settings.banner_back_image_object_fit -%}
+	{%- assign main_image          			= megamenu_object.settings.banner_main_image -%}
+	{%- assign main_image_object_fit		= megamenu_object.settings.banner_main_image_object_fit -%}
+	{%- assign link_label         			= megamenu_object.settings.banner_link_label -%}
+	{%- assign link          				= megamenu_object.settings.banner_link -%}
+	{%- assign background_color       		= megamenu_object.settings.banner_background_color -%}
+	{%- assign background_ellipse_color		= megamenu_object.settings.banner_background_ellipse_color -%}
+	{%- assign border_color					= megamenu_object.settings.banner_border_color | color_modify: 'alpha', 0.12 -%}
+
+	{%- if main_image != blank or main_image != blank -%}
+		{%- assign show_banner = true -%}
+	{%- endif -%}
+
+	<div
+		id="headerMegaMenu:{{- menu.handle -}}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}"
+		class="header-mega-menu js-header-menu is-hidden"
+		data-menu-type="mega-menu"
+		style="height: 0"
+	>
+		<span class="visually-hidden">
+			{{- "layout.navigation.mega_menu" | t -}}
+		</span>
+
+		<div class="header-mega-menu__container js-header-menu-scroll-container">
+			<div class="header-mega-menu__content-container js-header-menu-container">
+				<div class="header-mega-menu__grid">
+					<div class="header-mega-menu__grid-column">
+						<ul class="header-mega-menu__list header-mega-menu__list--main-menu {% if show_banner %}header-mega-menu__list--main-menu-short{%- endif -%}">
+							{%- assign animation_delay 	= 0 -%}
+
+							{%- for second_level_link in first_level_link.links -%}
+								<li class="header-mega-menu__list-item">
+									<div class="header-navigation-block">
+										{%- if second_level_link.links.size > 0 -%}
+											<div class="header-navigation-block_item header-mega-menu__animate need-animate" style="--animation-delay: {{ animation_delay }}s">
+												{%- if second_level_link.url != '#' -%}
+													<a
+														class="header-navigation-item header-navigation-item--medium"
+													   	href="{{- second_level_link.url -}}"
+													   	{% if second_level_link.current %}aria-current="page"{% endif %}
+													>
+														<span class="header-navigation-item__text">
+															{{- second_level_link.title | escape -}}
+														</span>
+													</a>
+												{%- else -%}
+													<p
+														class="header-navigation-item header-navigation-item--no-hover header-navigation-item--medium"
+													>
+														<span class="header-navigation-item__text">
+															{{- second_level_link.title | escape -}}
+														</span>
+													</p>
+												{%- endif -%}
+											</div>
+
+											{%- assign animation_delay = animation_delay | plus: 0.04 -%}
+
+											<ul class="header-navigation-block__list">
+												{%- for third_level_link in second_level_link.links -%}
+													<li class="header-navigation-block__list-item header-mega-menu__animate need-animate" style="--animation-delay: {{ animation_delay }}s">
+														<a class="header-navigation-item header-navigation-item--small" href="{{- third_level_link.url -}}" {% if third_level_link.current %}aria-current="page"{% endif %}>
+															<span class="header-navigation-item__text">
+																{{- third_level_link.title | escape -}}
+															</span>
+														</a>
+													</li>
+
+													{%- assign animation_delay = animation_delay | plus: 0.04 -%}
+												{%- endfor -%}
+											</ul>
+										{%- else -%}
+											<div class="header-navigation-block_item header-mega-menu__animate need-animate" style="--animation-delay: {{ animation_delay }}s">
+												<a class="header-navigation-item header-navigation-item--medium" href="{{- second_level_link.url -}}" {% if second_level_link.current %}aria-current="page"{% endif %}>
+													<span class="header-navigation-item__text">
+														{{- second_level_link.title | escape -}}
+													</span>
+												</a>
+											</div>
+
+											{%- assign animation_delay = animation_delay | plus: 0.04 -%}
+										{%- endif -%}
+									</div>
+								</li>
+							{%- endfor -%}
+						</ul>
+					</div>
+
+					{%- if show_banner -%}
+						<div class="header-mega-menu__grid-column header-mega-menu__grid-column--banner header-mega-menu__animate need-animate" style="--animation-delay: {{ animation_delay }}s">
+							{% render
+								'header-banner',
+								back_image: back_image,
+								back_image_object_fit: back_image_object_fit,
+								main_image: main_image,
+								main_image_object_fit: main_image_object_fit,
+								link_label: link_label,
+								link: link,
+								enable_lazy_load: true,
+								background_color: background_color,
+								background_ellipse_color: background_ellipse_color,
+								border_color: border_color
+							%}
+						</div>
+					{%- endif -%}
+				</div>
+			</div>
+		</div>
+	</div>
+{%- endif -%}

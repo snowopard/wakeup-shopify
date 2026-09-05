@@ -1,0 +1,76 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Product countdown timer
+	- product: Product object (required, object)
+	- text: heading (optional, string)
+	- type: timer mode (required, string)
+		- duration — set a start time and timer length
+		- end_date — set a specific end date
+	- duration: timer duration in hours (optional, number)
+		Used only with timer_type "duration". The entered value will be converted into days and hours.
+	- enable_timer_loop: restart timer automatically after expiration (optional, boolean)
+		Works only with timer_type "duration". If enabled, the timer will automatically restart from the same end date once it expires.
+	- offset_top_desktop: desktop padding top,
+	- offset_bottom_desktop: desktop padding bottom,
+	- offset_top_mobile: mobile padding top,
+	- offset_bottom_mobile: mobile padding bottom
+
+	{%- render 'product-countdown-timer',
+		product: product,
+		text: text,
+		offset_top_desktop: offset_top_desktop,
+		offset_bottom_desktop: offset_bottom_desktop,
+		offset_top_mobile: offset_top_mobile,
+		offset_bottom_mobile: offset_bottom_mobile
+	-%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign promo_deadline 			= product.metafields.custom.promo_timer_date | date: '%s' -%}
+{%- assign promo_deadline_timestamp = promo_deadline | date: '%s' -%}
+{%- assign today_date 				= 'now' | date: '%s' -%}
+
+{%- capture style -%}
+	--offset-top-desktop: {{ offset_top_desktop }}px; {{-  -}}
+	--offset-bottom-desktop: {{ offset_bottom_desktop }}px; {{-  -}}
+	--offset-top-mobile: {{ offset_top_mobile }}px; {{-  -}}
+	--offset-bottom-mobile: {{ offset_bottom_mobile }}px;
+{%- endcapture -%}
+
+{%- assign should_render_timer = true -%}
+
+{%- if type == 'end_date' -%}
+	{%- if promo_deadline_timestamp == blank or promo_deadline_timestamp <= today_date -%}
+		{%- assign should_render_timer = false -%}
+	{%- endif -%}
+{%- endif -%}
+
+{%- if should_render_timer -%}
+	<div class="product-countdown-timer js-product-countdown-timer" style="{{- style -}}">
+		{%- render 'adastra' with '/src/styles/product-countdown-timer.scss' -%}
+
+		{%- if text != blank -%}
+			<p class="product-countdown-timer__heading js-product-countdown-timer-header">
+				{{- text -}}
+			</p>
+		{%- endif -%}
+
+		{% assign promo_year = promo_deadline | date: "%Y" %}
+		{% assign promo_month = promo_deadline | date: "%m" | minus: 1 %}
+		{% assign promo_day = promo_deadline | date: "%d" %}
+		{% assign promo_hour = promo_deadline | date: "%H" %}
+
+		{% render 'countdown-timer',
+			timer_type: timer_type,
+			timer_duration: timer_duration,
+			enable_timer_loop: enable_timer_loop,
+			timer_year: promo_year,
+			timer_month: promo_month,
+			timer_day: promo_day,
+			timer_hour: promo_hour,
+			timer_timezone: '-4',
+			main_extra_class: "small"
+		%}
+	</div>
+{%- endif -%}
+

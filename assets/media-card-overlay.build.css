@@ -1,0 +1,73 @@
+.media-card-overlay {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.media-card-overlay .media-card-overlay__image-wrapper {
+  padding-top: 100%;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--global-border-radius);
+}
+.media-card-overlay .media-card-overlay__image-wrapper a .media-card-overlay__item-image {
+  transition-property: transform;
+  transition-duration: var(--timing-base);
+}
+@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+  .media-card-overlay .media-card-overlay__image-wrapper a .media-card-overlay__item-image:hover {
+    transform: scale(1.15);
+  }
+}
+@media (min-width: 768px) {
+  .media-card-overlay .media-card-overlay__image-wrapper {
+    padding-top: 133.595%;
+  }
+}
+.media-card-overlay .media-card-overlay__content-container {
+  position: absolute;
+  bottom: 0;
+  min-height: 0;
+  max-height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--overlay-bg-color);
+  color: var(--text-color);
+  backdrop-filter: blur(24px);
+  border-radius: inherit;
+  padding: 24px;
+  transition-property: height, min-height, max-height;
+  transition-duration: var(--timing-base);
+  transition-timing-function: ease-in-out;
+}
+.media-card-overlay .media-card-overlay__item-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--img-desktop-pos);
+  vertical-align: middle;
+}
+.media-card-overlay .media-card-overlay__item-image.media-card-overlay__item-image--placeholder {
+  background-color: var(--color-img-placeholder-bg);
+}
+.media-card-overlay .media-card-overlay__item-link {
+  margin-top: 12px;
+  color: var(--text-color);
+  width: fit-content;
+}
+.media-card-overlay .media-card-overlay__item-title {
+  color: var(--text-color);
+}
+@media (max-width: 991.98px) {
+  .media-card-overlay .media-card-overlay__item-title {
+    font-size: calc(var(--body-font-size) * 1.125);
+    font-weight: 600;
+    line-height: 1.44;
+  }
+}

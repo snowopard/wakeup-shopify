@@ -1,0 +1,46 @@
+.filter-list {
+  max-height: 440px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.filter-list .filter-list__item {
+  position: relative;
+  margin-bottom: 16px;
+  text-align: start;
+}
+.filter-list .filter-list__input-label {
+  color: var(--color-text-primary);
+  font-weight: 400;
+  line-height: 1.5;
+  word-break: break-word;
+}
+.filter-list .filter-list__input-label .filter-list__checkbox-box.filter-list__checkbox-box--swatch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  min-width: 40px;
+  width: 40px;
+  margin-inline-end: 8px;
+  background-color: var(--swatch-color, var(--color-accent));
+  background-image: var(--swatch-image);
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 1px solid var(--color-text-primary-alpha);
+}
+.filter-list .filter-list__checkbox {
+  -webkit-tap-highlight-color: transparent;
+}
+.filter-list .filter-list__input-label-count {
+  margin-inline-start: 8px;
+  color: var(--color-text-secondary);
+  word-break: keep-all;
+}
+@media (min-width: 1200px) {
+  .filter-list {
+    max-height: 395px;
+  }
+}

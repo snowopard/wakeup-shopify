@@ -1,0 +1,184 @@
+{
+	"type": "header",
+	"name": "Header group",
+	"sections": {
+		"announcement-bar": {
+			"type": "announcement-bar",
+			"settings": {
+				"layout": "ticker",
+				"enable_autoplay": true,
+				"autoplay_speed": 5,
+				"text_content_desktop": "<p>Announcement bar text</p>",
+				"text_content_mobile": "",
+				"text_desktop": "Set the date for the timer",
+				"text_mobile": "",
+				"timer_month": "0",
+				"timer_day": "1",
+				"timer_hour": "0",
+				"timer_timezone": "+0",
+				"button_text": "",
+				"button_link": "",
+				"ticker_text": "<p>New customers save 10% with the code GET10</p>",
+				"desktop_movement_speed": 20,
+				"mobile_movement_speed": 35,
+				"ticker_text_desktop": "<p>Announcement bar text</p>",
+				"ticker_text_mobile": "<p>Announcement bar text</p>",
+				"additional_menu": "",
+				"show_socials": false,
+				"hide_menu_on_mobile": true,
+				"background_color": "#080606",
+				"text_color": "#ffffff",
+				"link_color": "#ffffff",
+				"text_timer": "#858585",
+				"number_timer": "#ffffff",
+				"button_color": "#ffffff",
+				"button_background": "#1e1e1e",
+				"button_color_hover": "#000000",
+				"button_background_hover": "#757575"
+			}
+		},
+		"header": {
+			"type": "header",
+			"blocks": {
+				"megamenu_YbGbxE": {
+					"type": "megamenu",
+					"settings": {
+						"banner_background_color": "",
+						"banner_background_ellipse_color": "#cb65ab",
+						"banner_border_color": "#ffffff",
+						"banner_back_image_object_fit": "cover",
+						"banner_main_image_object_fit": "cover",
+						"banner_link_label": "Shop now"
+					}
+				},
+				"megamenu_media_znBq64": {
+					"type": "megamenu-media",
+					"settings": {
+						"media_item_heading_1": "Classics",
+						"media_item_text_1": "Timeless flavors you know and love.",
+						"media_item_link_label_1": "Explore Recipes",
+						"media_item_heading_2": "Fruity Blends",
+						"media_item_text_2": "Bright, juicy, and refreshing.",
+						"media_item_link_label_2": "Try Now",
+						"media_item_heading_3": "Creamy Treats",
+						"media_item_text_3": "Smooth, rich, and indulgent.",
+						"media_item_link_label_3": "Taste It",
+						"media_item_heading_4": "Seasonal Specials",
+						"media_item_text_4": "Limited-time seasonal recipes.",
+						"media_item_link_label_4": "See Recipes",
+						"media_item_heading_5": "Refreshers",
+						"media_item_text_5": "Light and energizing flavors.",
+						"media_item_link_label_5": "Get Refreshed",
+						"media_item_text_color": "#ffffff",
+						"media_item_overlay": "#000000"
+					}
+				},
+				"megamenu_products_grid_AwKniE": {
+					"type": "megamenu-products-grid",
+					"settings": {}
+				}
+			},
+			"block_order": [
+				"megamenu_YbGbxE",
+				"megamenu_media_znBq64",
+				"megamenu_products_grid_AwKniE"
+			],
+			"settings": {
+				"header_type": "sticky",
+				"is_show_language_selector": true,
+				"is_show_country_selector": true,
+				"show_country_full_name": true,
+				"logo_width": 150,
+				"menu": "main-menu",
+				"menu_type_desktop": "both",
+				"open_menu_type": "hover",
+				"enable_first_level_link": false,
+				"enable_second_level_links": true,
+				"enable_burger_menu": true,
+				"burger_menu": "main-menu",
+				"header_background": "#000000",
+				"main_menu_background": "#FFFFFF1F",
+				"main_menu_text_color": "#ffffff",
+				"main_menu_text_color_active": "#000000",
+				"main_menu_text_background_color_active": "#ffffff",
+				"dropdown_background": "#212121",
+				"dropdown_text_color": "#ffffff",
+				"dropdown_text_background_color_hover": "#c94aa1",
+				"menu_background": "#161414",
+				"menu_text_color": "#ffffff",
+				"menu_text_background_color_hover": "#c94aa1",
+				"count_text_color": "#ffffff",
+				"count_text_background": "#c94aa1",
+				"icon_color": "#ffffff",
+				"icon_color_hover": "#ffffff",
+				"button_icon_color": "#ffffff",
+				"button_icon_background_color": "#FFFFFF1F",
+				"button_icon_border_color": "rgba(0,0,0,0)",
+				"button_icon_border_outer_color": "#ffffff",
+				"button_icon_color_hover": "#000000",
+				"button_icon_background_color_hover": "#FFFFFF",
+				"button_icon_border_color_hover": "rgba(0,0,0,0)",
+				"button_icon_border_outer_color_hover": "#ffffff",
+				"button_icon_color_circle": "#ffffff",
+				"button_background_color_circle": "#ffffff3d",
+				"button_border_color_circle": "#696868",
+				"button_border_outer_color_circle": "rgba(0,0,0,0)",
+				"button_icon_color_circle_hover": "#000000",
+				"button_background_color_circle_hover": "#ffffff",
+				"button_border_color_circle_hover": "#cccccc",
+				"button_border_outer_color_circle_hover": "rgba(0,0,0,0)",
+				"localization_form_background": "#212121e6",
+				"localization_form_text": "#ffffff",
+				"localization_form_border": "#696868",
+				"price_color": "#ffffff",
+				"sale_price_color": "#ff5053",
+				"regular_price_color": "#7b7b7b"
+			}
+		},
+		"cart-drawer": {
+			"type": "cart-drawer",
+			"blocks": {
+				"selling": {
+					"type": "shipping",
+					"settings": {
+						"amount": 100,
+						"message": "You are only {amount} away from free shipping",
+						"congratulatory_message": "You got free shipping",
+						"block_background": "rgba(255,255,255, 0.06)",
+						"text_color": "#ffffff",
+						"amount_color": "#ffffff",
+						"amount_bg": "linear-gradient(85.71deg, rgba(207, 29, 93, 1) 0.03%, rgba(255, 113, 12, 0.6) 100%)",
+						"bar_color": "#585b61",
+						"fill_color": "#f8399b"
+					}
+				},
+				"items": {
+					"type": "items",
+					"settings": {}
+				},
+				"upsell_E9ytXQ": {
+					"type": "upsell",
+					"settings": {
+						"heading": "You might also like"
+					}
+				}
+			},
+			"block_order": [
+				"selling",
+				"items",
+				"upsell_E9ytXQ"
+			],
+			"settings": {
+				"heading": "Your cart",
+				"show_cart_items_count": true,
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": ""
+			}
+		}
+	},
+	"order": [
+		"announcement-bar",
+		"header",
+		"cart-drawer"
+	]
+}

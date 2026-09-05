@@ -1,0 +1,295 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Text
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign heading_first_line              = section.settings.heading_first_line -%}
+{%- assign heading_second_line             = section.settings.heading_second_line -%}
+{%- assign subheading                      = section.settings.subheading -%}
+{%- assign text_content                    = section.settings.text_content -%}
+{%- assign text_alignment                  = section.settings.text_alignment -%}
+
+{%- assign enable_read_more                = section.settings.enable_read_more -%}
+{%- assign read_more_text                  = section.settings.read_more_text -%}
+{%- assign show_less_text                  = section.settings.show_less_text -%}
+
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme                    = section.settings.color_scheme -%}
+{%- assign enable_bottom_rounded_corners   = section.settings.enable_bottom_rounded_corners -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if heading_first_line != blank or heading_second_line or text_content != blank -%}
+	{%- render 'adastra' with '/src/styles/text-section.scss' -%}
+
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+			}
+		}
+	{%- endstyle -%}
+
+	{%- capture styles -%}
+		--text-align: {{ text_alignment | replace: "left", "start" | replace: "right", "end" }}; {{- -}}
+		--inner-offset-top-desktop: {{- section.settings.inner_offset_top_desktop -}}px; {{- -}}
+		--inner-offset-bottom-desktop: {{- section.settings.inner_offset_bottom_desktop -}}px; {{- -}}
+		--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{- -}}
+		--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{- -}}
+	{%- endcapture -%}
+
+	<section
+		class="text-section js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %} color-{{ color_scheme.id }}"
+		style="{{ styles }}">
+		<div class="text-section__container container">
+			<h2 class="text-section__title section-title need-animate h1">
+				{%- if heading_first_line != blank -%}
+					<span
+						class="section-title__text-container {% if heading_second_line == blank %}text-center{% endif %}">
+						<span class="section-title__text">
+							{{- heading_first_line -}}
+						</span>
+					</span>
+				{%- endif -%}
+
+				{%- if heading_second_line != blank -%}
+					<span class="section-title__text-container">
+						<span class="section-title__text text-center">
+							{{- heading_second_line -}}
+						</span>
+					</span>
+				{%- endif -%}
+			</h2>
+
+			{%- if subheading != blank -%}
+				<div class="text-section__subheading need-animate tr-dur-0-8 tr-del-0-4">{{- subheading -}}</div>
+			{%- endif -%}
+
+			{%- if text_content != blank -%}
+				<div id="text-section-content-{{ section.id }}"
+					 class="text-section__content need-animate tr-dur-0-8 tr-del-0-75 rte {% if enable_read_more %}text-section__content--cut-off{% endif %}"
+				>
+					{{- text_content -}}
+				</div>
+
+				{% if enable_read_more %}
+					<button
+						class="text-section__read-more-button-wrapper focus-visible-outline need-animate js-rich-text-read-more tr-dur-0-5"
+						data-read-more-text="{{ read_more_text }}"
+						data-show-less-text="{{ show_less_text }}"
+						aria-expanded="false"
+						aria-controls="text-section-content-{{ section.id }}"
+					>
+						<div class="button-circle">
+							<span class="button-circle__inner">
+								{%- render 'icons', icon: 'circle-decoration' -%}
+								{%- render 'icons', icon: 'plus', class: 'icon-inactive' -%}
+								{%- render 'icons', icon: 'minus', class: 'icon-active' -%}
+							</span>
+						</div>
+
+						<span class="text-section__read-more-button-text" data-text>{{- read_more_text -}}</span>
+					</button>
+				{% endif %}
+			{%- endif -%}
+		</div>
+	</section>
+
+	{%- render 'adastra' with '/src/scripts/section-richtext.js' -%}
+{%- endif -%}
+
+{%- schema -%}
+	{
+		"name": "Rich text",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+			{
+				"id": "heading_first_line",
+				"type": "inline_richtext",
+				"label": "Heading (First line)",
+				"default": "STORY ABOUT"
+			},
+			{
+				"id": "heading_second_line",
+				"type": "inline_richtext",
+				"label": "Heading (Second line)",
+				"default": "<em>STORE</em>"
+			},
+			{
+				"type": "textarea",
+				"id": "subheading",
+				"label": "Subheading",
+				"default": "Subheading"
+			},
+			{
+				"id": "text_content",
+				"type": "richtext",
+				"label": "Text",
+				"default": "<p>Add text to share customers about your store, products, brand.</p>"
+			},
+			{
+				"type": "select",
+				"id": "text_alignment",
+				"label": "Text alignment",
+				"options": [
+					{
+						"value": "left",
+						"label": "Left"
+					},
+					{
+						"value": "center",
+						"label": "Center"
+					},
+					{
+						"value": "right",
+						"label": "Right"
+					}
+				],
+				"default": "left"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_read_more",
+				"label": "Enable read more button",
+				"default": false,
+				"info": "Enable this feature to truncate text and show read more button."
+			},
+			{
+				"type": "text",
+				"id": "read_more_text",
+				"label": "Read more button label",
+				"default": "Show more"
+			},
+			{
+				"type": "text",
+				"id": "show_less_text",
+				"label": "Show less button label",
+				"default": "Show less"
+			},
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"default": true,
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"label": "Color scheme",
+				"default": "scheme-1"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_bottom_rounded_corners",
+				"label": "Enable bottom rounded corners",
+				"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+				"default": false
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset top",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset bottom",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset top",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset bottom",
+				"default": 40
+			}
+		],
+		"presets": [
+			{
+				"name": "Rich text"
+			}
+		]
+	}
+{%- endschema -%}

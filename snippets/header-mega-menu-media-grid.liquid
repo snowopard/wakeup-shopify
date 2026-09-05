@@ -1,0 +1,112 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header mega menu media grid
+	Render header mega menu media grid
+	- menu: menu object (required)
+	- forloop: forloop object (required)
+	- first_level_link: first level link object (required)
+	- megamenu_object: blocks object using for output media content (required).
+
+	Usage:
+	{%- render 'header-mega-menu-media-grid', menu: menu, forloop: forloop, first_level_link: first_level_link, megamenu_object: megamenu_object -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign filled_blocks		= 0 -%}
+
+{%- for i in (1..5) -%}
+	{%- assign image_key 		= 'media_item_image_' | append: i -%}
+	{%- assign heading_key 		= 'media_item_heading_' | append: i -%}
+	{%- assign text_key			= 'media_item_text_' | append: i -%}
+	{%- assign link_label_key 	= 'media_item_link_label_' | append: i -%}
+	{%- assign link_key 		= 'media_item_link_' | append: i -%}
+	{%- assign product_key 		= 'media_item_product_' | append: i -%}
+
+	{%- assign image 			= megamenu_object.settings[image_key] -%}
+	{%- assign heading 			= megamenu_object.settings[heading_key] -%}
+	{%- assign text		 		= megamenu_object.settings[text_key] -%}
+	{%- assign link_label 		= megamenu_object.settings[link_label_key] -%}
+	{%- assign link 			= megamenu_object.settings[link_key] -%}
+	{%- assign product 			= megamenu_object.settings[product_key] -%}
+
+	{%- if image != blank or product != blank -%}
+		{%- assign filled_blocks = filled_blocks | plus: 1 -%}
+	{%- endif -%}
+{%- endfor -%}
+
+{% assign items_count = 5 %}
+{% assign show_placeholder = true %}
+
+{%- if filled_blocks > 0 -%}
+	{% assign show_placeholder = false %}
+{%- endif -%}
+
+<div
+	id="headerMegaMenu:{{- menu.handle -}}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}"
+	class="header-mega-menu js-header-menu is-hidden"
+	data-menu-type="mega-menu"
+	style="height: 0"
+>
+	<span class="visually-hidden">
+		{{- "layout.navigation.mega_menu" | t -}}
+	</span>
+
+	<div class="header-mega-menu__container js-header-menu-scroll-container">
+		<div class="header-mega-menu__content-container js-header-menu-container">
+			<div class="header-mega-menu__grid">
+				<div class="header-mega-menu__grid-column">
+					<ul class="header-mega-menu__list header-mega-menu__list--media-grid">
+						{%- assign animation_delay 	= 0 -%}
+
+						{%- for i in (1..items_count) -%}
+							{%- assign image_key 		= 'media_item_image_' | append: i -%}
+							{%- assign heading_key 		= 'media_item_heading_' | append: i -%}
+							{%- assign text_key 		= 'media_item_text_' | append: i -%}
+							{%- assign link_label_key 	= 'media_item_link_label_' | append: i -%}
+							{%- assign link_key 		= 'media_item_link_' | append: i -%}
+							{%- assign product_key 		= 'media_item_product_' | append: i -%}
+
+							{%- assign image 			= megamenu_object.settings[image_key] -%}
+							{%- assign heading 			= megamenu_object.settings[heading_key] -%}
+							{%- assign text 			= megamenu_object.settings[text_key] -%}
+							{%- assign link_label 		= megamenu_object.settings[link_label_key] -%}
+							{%- assign link 			= megamenu_object.settings[link_key] -%}
+							{%- assign product 			= megamenu_object.settings[product_key] -%}
+							{%- assign text_color 		= megamenu_object.settings.media_item_text_color -%}
+							{%- assign overlay_color 	= megamenu_object.settings.media_item_overlay -%}
+
+							{% if show_placeholder or image != blank or product != blank %}
+								<li class="header-mega-menu__list-item header-mega-menu__animate need-animate" style="--animation-delay: {{ animation_delay }}s">
+									{%- if product != blank -%}
+										{%- render
+											'product-card',
+											product: product,
+											size: 318,
+											tablet_size: 388,
+											mobile_size: 388,
+											simplified_view: true
+										-%}
+									{%- else -%}
+										{%- render
+											'header-banner-small',
+											image: image,
+											heading: heading,
+											text: text,
+											link_label: link_label,
+											link: link,
+											enable_lazy_load: true,
+											text_color: text_color,
+											overlay_color: overlay_color
+										-%}
+									{%- endif -%}
+
+									{%- assign animation_delay = animation_delay | plus: 0.12 -%}
+								</li>
+							{% endif %}
+						{%- endfor -%}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

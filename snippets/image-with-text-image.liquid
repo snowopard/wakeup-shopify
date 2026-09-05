@@ -1,0 +1,86 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Image with text image
+	This snippet will output main image on image with text section
+
+	- image: desktop image object (required, object),
+	- object_fit: select (optional, string),
+	- image_width: mobile image width 1x
+	- image_width_2x: mobile image widht 2x,
+	- delay_step: delay animation (optional, number)
+
+	{% render 'image-with-text-image', image: image, object_fit: object_fit_main  %}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign image_width    = image_width | default: "371x" -%}
+{%- assign image_width_2x = image_width_2x | default: "742x" -%}
+
+{%- if image != blank -%}
+	{%- capture img_style -%}
+		--object-fit: {{ object_fit }};
+		--img-pos: {{ image.presentation.focal_point }};
+	{%- endcapture -%}
+
+	<picture class="lazy image-with-text__image-inner need-animate"
+			 {% if delay_step != blank %}
+			 	style="transition-delay: {{ delay_step }}s"
+			 {% endif %}
+	>
+		<source
+			data-srcset="{{ image | img_url: "326x" }} 1x, {{ image | img_url: "652x" }} 2x"
+			srcset="{{ mobile_image | img_url: "10x" }} 1x, {{ image | img_url: "10x" }} 2x"
+			media="(max-width: 375px)"
+			width="375"
+			height="348"
+		/>
+
+		<source
+			data-srcset="{{ image | img_url: image_width, crop: "center" }} 1x, {{ image | img_url: image_width_2x, crop: "center" }} 2x"
+			srcset="{{ mobile_image | img_url: "10x" }} 1x, {{ image | img_url: "10x" }} 2x"
+			media="(max-width: 420px)"
+			width="388"
+			height="286"
+		/>
+
+		<source
+			data-srcset="{{ image | img_url: "360x" }} 1x, {{ image | img_url: "720x" }} 2x"
+			srcset="{{ mobile_image | img_url: "10x" }} 1x, {{ image | img_url: "10x" }} 2x"
+			media="(max-width: 767px)"
+			width="768"
+			height="712"
+		/>
+
+		<source
+			data-srcset="{{ image | img_url: "471x" }} 1x, {{ image | img_url: "942x" }} 2x"
+			srcset="{{ mobile_image | img_url: "10x" }} 1x, {{ image | img_url: "10x" }} 2x"
+			media="(max-width: 991px)"
+			width="991"
+			height="920"
+		/>
+
+		<source
+			data-srcset="{{ image | img_url: "696x" }} 1x, {{ image | img_url: "1392x" }} 2x"
+			srcset="{{ desktop_image | img_url: "10x" }} 1x, {{ image | img_url: "10x" }} 2x"
+			media="(max-width: 1440px)"
+			width="720"
+			height="668"
+		/>
+
+		<img
+			data-srcset="{{ image | img_url: "936x" }} 1x, {{ image | img_url: "1872x" }} 2x"
+			srcset="{{ image | img_url: "10x" }} 1x, {{ image | img_url: "10x" }} 2x"
+			data-src="{{ image | img_url: "936x" }}"
+			src="{{ image | img_url: "10x" }}"
+			alt="{{ image.alt }}"
+			width="928"
+			height="780"
+			class="image-with-text__image"
+			style="{{ img_style }}"
+		/>
+	</picture>
+{%- else -%}
+	<div class="image-with-text__image-wrapper need-animate">
+		{{ 'product-apparel-3' | placeholder_svg_tag: 'image-with-text__image image-with-text__image--placeholder' }}
+	</div>
+{%- endif -%}

@@ -1,0 +1,625 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+Section: Gallery
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/gallery.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign heading_first_line 	= section.settings.heading_first_line -%}
+{%- assign heading_second_line 	= section.settings.heading_second_line -%}
+{%- assign button_label	 		= section.settings.button_label -%}
+{%- assign button_link	 		= section.settings.button_link -%}
+{%- assign decor_image_first	= section.settings.decor_image_first -%}
+{%- assign decor_image_second	= section.settings.decor_image_second -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme			= section.settings.color_scheme -%}
+{%- assign enable_bottom_rounded_corners	= section.settings.enable_bottom_rounded_corners -%}
+{%- assign blocks		 		= section.blocks -%}
+{%- assign has_heading	 		= false -%}
+{%- assign has_button 	 		= false -%}
+{%- assign is_lazy 				= true -%}
+
+{%- if section.index == 1 -%}
+	{%- assign is_lazy = false -%}
+{%- endif -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme	= settings.main_color_scheme -%}
+{%- endif -%}
+
+{% if heading_first_line != blank or heading_second_line != blank %}
+	{%- assign has_heading = true -%}
+{% endif %}
+
+{% if button_label != blank and button_link != blank %}
+	{%- assign has_button = true -%}
+{% endif %}
+
+{%- capture styles -%}
+	--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{  -}}
+{%- endcapture -%}
+
+<section class="gallery js-gallery color-{{ color_scheme.id }} {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %} js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}" style="{{- styles -}}">
+    <div class="gallery__wrapper js-image-mouse-move-wrapper">
+		{%- if decor_image_first != blank -%}
+			<picture class="gallery__image-decor-wrapper gallery__image-decor-wrapper--first {% if is_lazy %} lazy {% endif %}">
+				<source
+					{% if is_lazy %}
+						srcset="{{ decor_image_first | image_url: width: 10, height: 10 }} 1x,
+								{{ decor_image_first | image_url: width: 20, height: 20 }} 2x"
+						data-srcset="{{ decor_image_first | image_url: width: 100, height: 100 }} 1x,
+									 {{ decor_image_first | image_url: width: 200, height: 200 }} 2x"
+					{% else %}
+						srcset="{{ decor_image_first | image_url: width: 100, height: 100 }} 1x,
+								{{ decor_image_first | image_url: width: 200, height: 200 }} 2x"
+					{% endif %}
+					media="(max-width: 991px)"
+					width="100"
+					height="100"
+				>
+
+				<img class="gallery__image-decor is-reverse-translate js-image-mouse-move"
+					 {% if is_lazy %}
+						 src="{{ decor_image_first | image_url: width: 10, height: 10 }}"
+						 srcset="{{ decor_image_first | image_url: width: 10, height: 10 }} 1x,
+								 {{ decor_image_first | image_url: width: 20, height: 20 }} 2x"
+						 data-src="{{ decor_image_first | image_url: width: 130, height: 130 }}"
+						 data-srcset="{{ decor_image_first | image_url: width: 130, height: 130 }} 1x,
+								 	  {{ decor_image_first | image_url: width: 260, height: 260 }} 2x"
+					 {% else %}
+						 src="{{ decor_image_first | image_url: width: 130, height: 130 }}"
+						 srcset="{{ decor_image_first | image_url: width: 130, height: 130 }} 1x,
+								 {{ decor_image_first | image_url: width: 260, height: 260 }} 2x"
+					 {% endif %}
+					 data-move-distance="2.5"
+					 data-image-scale="1.1"
+					 alt="{{ decor_image_first.alt | escape }}"
+					 width="130"
+					 height="130"
+				>
+			</picture>
+		{%- endif -%}
+
+		{%- if decor_image_second != blank -%}
+			<picture class="gallery__image-decor-wrapper gallery__image-decor-wrapper--second {% if is_lazy %} lazy {% endif %}">
+				<source
+					{% if is_lazy %}
+						srcset="{{ decor_image_second | image_url: width: 10, height: 10 }} 1x,
+								{{ decor_image_second | image_url: width: 20, height: 20 }} 2x"
+						data-srcset="{{ decor_image_second | image_url: width: 100, height: 100 }} 1x,
+									 {{ decor_image_second | image_url: width: 200, height: 200 }} 2x"
+					{% else %}
+						srcset="{{ decor_image_second | image_url: width: 100, height: 100 }} 1x,
+								{{ decor_image_second | image_url: width: 200, height: 200 }} 2x"
+					{% endif %}
+					media="(max-width: 991px)"
+					width="100"
+					height="100"
+				>
+
+				<img class="gallery__image-decor js-image-mouse-move"
+					 {% if is_lazy %}
+						 src="{{ decor_image_second | image_url: width: 10, height: 10 }}"
+						 srcset="{{ decor_image_second | image_url: width: 10, height: 10 }} 1x,
+							 	 {{ decor_image_second | image_url: width: 20, height: 20 }} 2x"
+						 data-src="{{ decor_image_second | image_url: width: 138, height: 138 }}"
+						 data-srcset="{{ decor_image_second | image_url: width: 138, height: 138 }} 1x,
+							 	 	  {{ decor_image_second | image_url: width: 276, height: 276 }} 2x"
+					 {% else %}
+						 src="{{ decor_image_second | image_url: width: 138, height: 138 }}"
+						 srcset="{{ decor_image_second | image_url: width: 138, height: 138 }} 1x,
+							 	 {{ decor_image_second | image_url: width: 276, height: 276 }} 2x"
+					 {% endif %}
+					 data-move-distance="2.5"
+					 data-image-scale="0.9"
+					 alt="{{ decor_image_second.alt | escape }}"
+					 width="138"
+					 height="138"
+				>
+			</picture>
+		{%- endif -%}
+
+		{%- if has_heading or has_button -%}
+			<div class="gallery__box-text">
+				{%- if has_heading -%}
+					<h2 class="gallery__heading section-title section-title--center h1 need-animate">
+						{%- if heading_first_line != blank -%}
+							<span class="section-title__text-container">
+								<span class="section-title__text">
+									{{- heading_first_line -}}
+								</span>
+							</span>
+						{%- endif -%}
+
+						{%- if heading_second_line != blank -%}
+							<span class="section-title__text-container">
+								<span class="section-title__text text-right">
+									{{- heading_second_line -}}
+								</span>
+							</span>
+						{%- endif -%}
+					</h2>
+				{%- endif -%}
+
+				{% if has_button %}
+					<div class="gallery__button-wrapper need-animate">
+						<a
+							class="gallery__button button button--primary"
+							href="{{- button_link -}}"
+						>
+							<span class="button__outer"></span>
+
+							{{- button_label -}}
+						</a>
+					</div>
+				{% endif %}
+			</div>
+		{%- endif -%}
+
+        {%- if blocks.size > 0 -%}
+			<div class="gallery__columns">
+				{%- assign is_first_column  = false -%}
+				{%- assign is_second_column = false -%}
+				{%- assign size_image_991 		= 106 -%}
+				{%- assign size_image_991_2x 	= size_image_991 | items: 2 -%}
+				{%- assign size_image_1199 		= 180 -%}
+				{%- assign size_image_1199_2x 	= size_image_1199 | items: 2 -%}
+				{%- assign size_image 			= 237 -%}
+				{%- assign size_image_2x 		= size_image | items: 2 -%}
+
+				{%- for block in blocks -%}
+					{%- if forloop.index == 2 or forloop.index == 4 -%}
+						{%- assign is_first_column = true -%}
+					{%- endif -%}
+
+					{%- if forloop.index == 1 or forloop.index == 3 -%}
+						{%- assign is_second_column = true -%}
+					{%- endif -%}
+				{%- endfor -%}
+
+				{%- if is_first_column -%}
+					{%- assign delay_step = 0.25 -%}
+
+					<div class="gallery__column">
+						{%- for block in blocks -%}
+							{%- if forloop.index == 2 or forloop.index == 4 -%}
+								{%- assign image 			= block.settings.image -%}
+								{%- assign icon_hover 	   	= block.settings.icon_hover -%}
+								{%- assign url 			   	= block.settings.url -%}
+								{%- assign open_in_new_tab 	= block.settings.open_in_new_tab -%}
+
+								{%- capture img_focal -%}
+									--img-pos: {{ image.presentation.focal_point }};
+								{%- endcapture -%}
+
+								<div class="gallery__column-item gallery__column-item--{{ forloop.index }} need-animate{% if forloop.index == 4 %} is-reverse-translate{% endif %} js-gallery-image"
+									 style="transition-delay: {{ delay_step }}s;"
+								>
+									{%- if url != blank -%}
+										<a
+											class="gallery__column-overlay"
+										    href="{{- url -}}"
+											{% if open_in_new_tab %}
+												target="_blank"
+											{% endif %}
+										   aria-label="{{ image.alt | escape }}"
+										>
+											{% if icon_hover != blank %}
+												<img class="gallery__column-overlay-icon"
+													 src="{{ icon_hover | image_url: width: 25, height: 25 }}"
+													 srcset="{{ icon_hover | img_url: width: 25, height: 25 }} 1x,
+															 {{ icon_hover | img_url: width: 50, height: 50 }} 2x"
+													 alt=""
+													 loading="lazy"
+													 style="object-position: {{ icon_hover.presentation.focal_point }};"
+													 aria-hidden="true"
+												>
+											{% endif %}
+										</a>
+									{%- endif -%}
+
+									{%- if image != blank -%}
+										<picture class="gallery__column-image-wrapper{% if is_lazy %} lazy{% endif %}">
+											<source
+												{% if is_lazy %}
+													srcset="{{ image | image_url: width: 10, height: 10 }} 1x,
+															{{ image | image_url: width: 20, height: 20 }} 2x"
+													data-srcset="{{ image | image_url: width: size_image_991, height: size_image_991 }} 1x,
+																 {{ image | image_url: width: size_image_991_2x, height: size_image_991_2x }} 2x"
+												{% else %}
+													srcset="{{ image | image_url: width: size_image_991, height: size_image_991 }} 1x,
+															{{ image | image_url: width: size_image_991_2x, height: size_image_991_2x }} 2x"
+												{% endif-%}
+												media="(max-width: 991px)"
+												width="{{ size_image_991 }}"
+												height="{{ size_image_991 }}"
+											>
+
+											<source
+												{% if is_lazy %}
+													srcset="{{ image | image_url: width: 10, height: 10 }} 1x,
+															{{ image | image_url: width: 20, height: 20 }} 2x"
+													data-srcset="{{ image | image_url: width: size_image_1199, height: size_image_1199 }} 1x,
+																 {{ image | image_url: width: size_image_1199_2x, height: size_image_1199_2x }} 2x"
+												{% else %}
+													srcset="{{ image | image_url: width: size_image_1199, height: size_image_1199 }} 1x,
+															{{ image | image_url: width: size_image_1199_2x, height: size_image_1199_2x }} 2x"
+												{% endif %}
+												media="(max-width: 1199px)"
+												width="{{ size_image_1199 }}"
+												height="{{ size_image_1199 }}"
+											>
+
+											<img class="gallery__column-image"
+												 {% if is_lazy %}
+													 src="{{ image | image_url: width: 10, height: 10 }}"
+													 srcset="{{ image | image_url: width: 10, height: 10 }} 1x,
+													  		 {{ image | image_url: width: 20, height: 20 }} 2x"
+													 data-src="{{ image | image_url: width: size_image, height: size_image }}"
+													 data-srcset="{{ image | image_url: width: size_image, height: size_image }} 1x,
+													  		 	  {{ image | image_url: width: size_image_2x, height: size_image_2x }} 2x"
+												 {% else %}
+													 src="{{ image | image_url: width: size_image, height: size_image }}"
+													 srcset="{{ image | image_url: width: size_image, height: size_image }} 1x,
+													  		 {{ image | image_url: width: size_image_2x, height: size_image_2x }} 2x"
+												 {% endif %}
+												 alt="{{ image.alt | escape }}"
+												 style="{{ img_focal }}"
+												 width="{{ size_image }}"
+												 height="{{ size_image }}"
+											>
+										</picture>
+									{%- else -%}
+										<div class="gallery__column-image-wrapper">
+											{{- "detailed-apparel-1" | placeholder_svg_tag: 'gallery__column-image' -}}
+										</div>
+									{%- endif -%}
+								</div>
+
+								{%- assign delay_step = delay_step | plus: 0.5 -%}
+							{%- endif -%}
+						{%- endfor -%}
+					</div>
+				{%- endif -%}
+
+				{%- if is_second_column -%}
+					{%- assign delay_step = 0 -%}
+
+					<div class="gallery__column gallery__column--second">
+						{%- for block in blocks -%}
+							{%- if forloop.index == 1 or forloop.index == 3 -%}
+								{%- assign image 			= block.settings.image -%}
+								{%- assign icon_hover 	   	= block.settings.icon_hover -%}
+								{%- assign url 			   	= block.settings.url -%}
+								{%- assign open_in_new_tab 	= block.settings.open_in_new_tab -%}
+
+								{%- capture img_focal -%}
+									--img-pos: {{ image.presentation.focal_point }};
+								{%- endcapture -%}
+
+								<div class="gallery__column-item gallery__column-item--{{ forloop.index }} need-animate{% if forloop.index == 1 %} is-reverse-translate{% endif %} js-gallery-image"
+									 style="transition-delay: {{ delay_step }}s;"
+								>
+
+									{%- if url != blank -%}
+										<a
+											class="gallery__column-overlay"
+										    href="{{- url -}}"
+											{% if open_in_new_tab %}
+												target="_blank"
+											{% endif %}
+											 aria-label="{{ image.alt | escape }}"
+										>
+											{% if icon_hover != blank %}
+												<img class="gallery__column-overlay-icon"
+													 src="{{ icon_hover | image_url: width: 25, height: 25 }}"
+													 srcset="{{ icon_hover | img_url: width: 25, height: 25 }} 1x,
+															 {{ icon_hover | img_url: width: 50, height: 50 }} 2x"
+													 alt=""
+													 loading="lazy"
+													 style="object-position: {{ icon_hover.presentation.focal_point }};"
+													 aria-hidden="true"
+												>
+											{% endif %}
+										</a>
+									{%- endif -%}
+
+									{%- if image != blank -%}
+										<picture class="gallery__column-image-wrapper{% if is_lazy %} lazy{% endif %}">
+											<source
+												{% if is_lazy %}
+													srcset="{{ image | image_url: width: 10, height: 10 }} 1x,
+															{{ image | image_url: width: 20, height: 20 }} 2x"
+													data-srcset="{{ image | image_url: width: size_image_991, height: size_image_991 }} 1x,
+																 {{ image | image_url: width: size_image_991_2x, height: size_image_991_2x }} 2x"
+												{% else %}
+													srcset="{{ image | image_url: width: size_image_991, height: size_image_991 }} 1x,
+															{{ image | image_url: width: size_image_991_2x, height: size_image_991_2x }} 2x"
+												{% endif %}
+												media="(max-width: 991px)"
+												width="{{ size_image_991 }}"
+												height="{{ size_image_991 }}"
+											>
+
+											<source
+												{% if is_lazy %}
+													srcset="{{ image | image_url: width: 10, height: 10 }} 1x,
+															{{ image | image_url: width: 20, height: 20 }} 2x"
+													data-srcset="{{ image | image_url: width: size_image_1199, height: size_image_1199 }} 1x,
+																 {{ image | image_url: width: size_image_1199_2x, height: size_image_1199_2x }} 2x"
+												{% else %}
+													srcset="{{ image | image_url: width: size_image_1199, height: size_image_1199 }} 1x,
+															{{ image | image_url: width: size_image_1199_2x, height: size_image_1199_2x }} 2x"
+												{% endif %}
+												media="(max-width: 1199px)"
+												width="{{ size_image_1199 }}"
+												height="{{ size_image_1199 }}"
+											>
+
+											<img class="gallery__column-image"
+												{% if is_lazy %}
+													src="{{ image | image_url: width: 10, height: 10 }}"
+													srcset="{{ image | image_url: width: 10, height: 10 }} 1x,
+													  		{{ image | image_url: width: 20, height: 20 }} 2x"
+													data-src="{{ image | image_url: width: size_image, height: size_image }}"
+													data-srcset="{{ image | image_url: width: size_image, height: size_image }} 1x,
+													  		 	 {{ image | image_url: width: size_image_2x, height: size_image_2x }} 2x"
+												{% else %}
+													src="{{ image | image_url: width: size_image, height: size_image }}"
+													srcset="{{ image | image_url: width: size_image, height: size_image }} 1x,
+													  		{{ image | image_url: width: size_image_2x, height: size_image_2x }} 2x"
+												{% endif %}
+												 alt="{{ image.alt | escape }}"
+												 style="{{ img_focal }}"
+												 width="{{ size_image }}"
+												 height="{{ size_image }}"
+											>
+										</picture>
+									{%- else -%}
+										{%- assign random_number       = "now" | date: "%N" | modulo: diff | plus: min -%}
+										{%- assign placeholer_svg_name = 'lifestyle-' | append: random_number -%}
+
+										<div class="gallery__column-image-wrapper">
+											{{- "detailed-apparel-1" | placeholder_svg_tag: 'gallery__column-image' -}}
+										</div>
+									{%- endif -%}
+								</div>
+
+								{%- assign delay_step = delay_step | plus: 0.5 -%}
+							{%- endif -%}
+						{%- endfor -%}
+					</div>
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+    </div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/section-gallery.js' -%}
+
+{%- schema -%}
+{
+	"name": "Image gallery",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "inline_richtext",
+			"id": "heading_first_line",
+			"label": "Heading (first line)",
+			"default": "Heading"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading_second_line",
+			"label": "Heading (second line)",
+			"default": "Heading"
+		},
+		{
+			"id": "button_label",
+			"type": "text",
+			"label": "Button label",
+			"default": "Button label"
+		},
+		{
+			"type": "url",
+			"id": "button_link",
+			"label": "Button link"
+		},
+		{
+			"type": "image_picker",
+			"id": "decor_image_first",
+			"label": "Decor image first",
+			"info": "260 x 260px recommended"
+		},
+		{
+			"type": "image_picker",
+			"id": "decor_image_second",
+			"label": "Decor image second",
+			"info": "276 x 276px recommended"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"default": "scheme_1",
+			"label": "Color scheme"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"type": "image",
+			"name": "Image",
+			"limit": 4,
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image",
+					"info": "360 x 360px recommended"
+				},
+				{
+					"type": "image_picker",
+					"id": "icon_hover",
+					"label": "Icon hover",
+					"info": "25 x 25px .svg recommended"
+				},
+				{
+					"type": "url",
+					"id": "url",
+					"label": "Link"
+				},
+				{
+					"type": "checkbox",
+					"id": "open_in_new_tab",
+					"label": "Open link in new tab",
+					"default": false
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Image gallery",
+			"settings": {
+				"heading_first_line": "<em>Heading primary</em>",
+				"heading_second_line": "Heading secondary"
+			},
+			"blocks": [
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

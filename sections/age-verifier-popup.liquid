@@ -1,0 +1,256 @@
+{% assign age_verifier_cookie_time 	= section.settings.age_verifier_time %}
+{% assign title 					= section.settings.age_verifier_title %}
+{% assign text 						= section.settings.age_verifier_text %}
+{% assign button_label 				= section.settings.age_verifier_button_label | default: "Yes" %}
+{% assign button_close_label 		= section.settings.age_verifier_button_close_label %}
+{% assign redirect_url 				= section.settings.age_verifier_redirect_url | default: "https://google.com" %}
+{% assign image_desktop 			= section.settings.age_verifier_image_desktop %}
+{% assign image_mobile 				= section.settings.age_verifier_image_mobile | default: image_desktop %}
+{% assign hide_image_on_mobile 		= section.settings.age_verifier_hide_mobile_img %}
+{% assign color_scheme      	           	= section.settings.color_scheme %}
+{% assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance %}
+{% assign popup_icon_button_class 	= '' %}
+{% assign popup_content_modifier 	= '' %}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- render 'adastra' with '/src/styles/age-verifier-popup.scss' -%}
+
+{% unless hide_image_on_mobile or image_mobile == blank %}
+	{% assign popup_icon_button_class = 'popup-close-icon-button--round' %}
+{% endunless %}
+
+{% if hide_image_on_mobile or image_mobile == blank %}
+	{% assign popup_content_modifier = 'age-verifier-popup__content--top-offset'%}
+{% endif %}
+
+<div id="age-verifier-popup"
+	 class="popup age-verifier-popup color-{{ color_scheme }}"
+	 data-cookie-time="{{ age_verifier_cookie_time }}"
+	 data-redirect-url="{{ redirect_url }}"
+	 role="dialog"
+	{% if title != blank %}
+		aria-labelledby="age-verifier-popup-title"
+	{% endif %}
+>
+	<div class="popup__container age-verifier-popup__container {% if image_desktop == blank %}age-verifier-popup__container--no-image{% endif %}">
+		{% if image_desktop != blank %}
+			{%- capture img_focal -%}
+				--img-desktop-pos: {{ image_desktop.presentation.focal_point }}; --img-mob-pos: {{ image_mobile.presentation.focal_point }};
+			{%- endcapture -%}
+
+			<div class="age-verifier-popup__col {% if hide_image_on_mobile %}age-verifier-popup__col--hide-img-mob{% endif %}">
+				<picture class="age-verifier-popup__image-wrapper lazy">
+					<source
+						data-srcset="{{ image_mobile | img_url: '320x' }} 1x, {{ image_mobile | img_url: '640x' }} 2x"
+						srcset="{{ image_mobile | img_url: '10x' }} 1x, {{ image_mobile | img_url: '10x' }} 2x"
+						media="(max-width: 360px)"
+					/>
+
+					<source
+						data-srcset="{{ image_mobile | img_url: '343x' }} 1x, {{ image_mobile | img_url: '686x' }} 2x"
+						srcset="{{ image_mobile | img_url: '10x' }} 1x, {{ image_mobile | img_url: '10x' }} 2x"
+						media="(max-width: 380px)"
+					/>
+
+					<source
+						data-srcset="{{ image_mobile | img_url: '440x' }} 1x, {{ image_mobile | img_url: '480x' }} 2x"
+						srcset="{{ image_mobile | img_url: '10x' }} 1x, {{ image_mobile | img_url: '10x' }} 2x"
+						media="(max-width: 480px)"
+					/>
+
+					<source
+						data-srcset="{{ image_mobile | img_url: '472x' }} 1x, {{ image_mobile | img_url: '944x' }} 2x"
+						srcset="{{ image_mobile | img_url: '10x' }} 1x, {{ image_mobile | img_url: '10x' }} 2x"
+						media="(max-width: 767px)"
+					/>
+
+					<img
+						class="age-verifier-popup__image"
+						srcset="{{- image_desktop | img_url: "10x" -}}"
+						data-srcset="{{ image_desktop | img_url: "520x" }} 1x, {{ image_desktop | img_url: "1040x" }} 2x"
+						src="{{- image_desktop | img_url: "10x" -}}"
+						data-src="{{- image_desktop | img_url: main_image_size -}}"
+						alt="{{- image_desktop.alt -}}"
+						width="520"
+						height="520"
+						style="{{ img_focal }}"
+					/>
+				</picture>
+			</div>
+		{% endif %}
+
+		<div class="age-verifier-popup__col">
+			<div class="age-verifier-popup__content {{ popup_content_modifier }}">
+				{% if title != blank %}
+					<h2 id="age-verifier-popup-title" class="age-verifier-popup__title h3">{{ title }}</h2>
+				{% endif %}
+
+				{% if text != blank %}
+					<p class="age-verifier-popup__text">{{ text }}</p>
+				{% endif %}
+
+				{% if button_label != blank %}
+					<div class="age-verifier-popup__buttons">
+						<button class="button button--primary js-age-verifier-popup-confirm"
+								type="button"
+						>
+							<span class="button__outer"></span>
+							{{- button_label -}}
+						</button>
+
+						{% if button_close_label != blank %}
+							<button
+								type="button"
+								class="age-verifier-popup__close-button button-link"
+								data-target="age-verifier-popup"
+								data-js-toggle="ageVerifierPopupToggle"
+							>
+								<span data-text="{{- button_close_label -}}">
+									<span class="button-link__text">
+										{{- button_close_label -}}
+									</span>
+								</span>
+
+								<span class="button-link__icons">
+									{% render 'icons', icon: 'arrow-right', class: 'icon-base' %}
+										{% render 'icons', icon: 'arrow-right', class: 'icon-hover' %}
+								</span>
+							</button>
+						{% endif %}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+
+		<button type="button"
+				class="age-verifier-popup__close-icon-button age-verifier-popup__close-icon-button--desktop focus-visible-outline popup-close-icon-button"
+				aria-label="{{- 'general.accessibility.close_modal' | t | escape -}}"
+				data-target="age-verifier-popup"
+				data-js-toggle="ageVerifierPopupToggle"
+		>
+			{% render 'icons', icon: 'menu-close' %}
+		</button>
+
+		<button type="button"
+				class="age-verifier-popup__close-icon-button age-verifier-popup__close-icon-button--mobile focus-visible-outline popup-close-icon-button {{ popup_icon_button_class }}"
+				aria-label="{{- 'general.accessibility.close_modal' | t | escape -}}"
+				data-target="age-verifier-popup"
+				data-js-toggle="ageVerifierPopupToggle"
+		>
+			{% render 'icons', icon: 'menu-close' %}
+		</button>
+	</div>
+</div>
+
+{%- render 'adastra' with '/src/scripts/section-age-verifier-popup.js' -%}
+
+{%- schema -%}
+{
+	"name": "Age verifier Popup",
+	"limit": 1,
+	"enabled_on": {
+		"groups": ["custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "select",
+			"id": "age_verifier_time",
+			"label": "Cookie time",
+			"options": [
+				{
+					"value": "1",
+					"label": "1 day"
+				},
+				{
+					"value": "7",
+					"label": "1 week"
+				},
+				{
+					"value": "30",
+					"label": "1 month"
+				},
+				{
+					"value": "90",
+					"label": "3 months"
+				},
+				{
+					"value": "365",
+					"label": "1 year"
+				}
+			]
+		},
+		{
+			"type": "text",
+			"id": "age_verifier_title",
+			"label": "Heading",
+			"default": "Access to the store"
+		},
+		{
+			"type": "textarea",
+			"id": "age_verifier_text",
+			"label": "Text",
+			"default": "Are you 18 years old?"
+		},
+		{
+			"type": "text",
+			"id": "age_verifier_button_label",
+			"label": "Button label",
+			"default": "Sign Up"
+		},
+		{
+			"type": "text",
+			"id": "age_verifier_button_close_label",
+			"label": "Button close label",
+			"default": "No Thanks"
+		},
+		{
+			"type": "url",
+			"id": "age_verifier_redirect_url",
+			"label": "Redirect link"
+		},
+		{
+			"type": "image_picker",
+			"id": "age_verifier_image_desktop",
+			"label": "Image desktop",
+			"info": "1040 x 1040px recommended"
+		},
+		{
+			"type": "image_picker",
+			"id": "age_verifier_image_mobile",
+			"label": "Image mobile",
+			"info": "944 x 693px recommended"
+		},
+		{
+			"type": "checkbox",
+			"id": "age_verifier_hide_mobile_img",
+			"label": "Hide image on mobile",
+			"default": false
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		}
+	],
+	"presets": [
+		{
+			"name": "Age verifier Popup"
+		}
+	]
+}
+{%- endschema -%}

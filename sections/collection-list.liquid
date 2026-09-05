@@ -1,0 +1,331 @@
+{%- render 'adastra' with '/src/styles/collection-list.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+	padding-top: {{- section.settings.offset_top_mobile -}}px;
+	padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+	#shopify-section-{{- section.id -}} {
+	padding-top: {{- section.settings.offset_top_desktop -}}px;
+	padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+	}
+	}
+{%- endstyle -%}
+
+{%- assign min = 1 -%}
+{%- assign max = 6 -%}
+{%- assign diff = max | minus: min -%}
+
+{%- assign heading_first_line			   = section.settings.heading_first_line -%}
+{%- assign heading_second_line			   = section.settings.heading_second_line -%}
+{%- assign text                            = section.settings.text -%}
+{%- assign container 					   = section.settings.container_width -%}
+{%- assign delay_step 					   = 0 -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 				   = section.settings.color_scheme -%}
+{%- assign enable_bottom_rounded_corners   = section.settings.enable_bottom_rounded_corners -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{%- capture styles -%}
+	--container-width: {{- container_width -}}; {{- -}}
+	--inner-offset-top-desktop: {{- section.settings.inner_offset_top_desktop -}}px; {{- -}}
+	--inner-offset-bottom-desktop: {{- section.settings.inner_offset_bottom_desktop -}}px; {{- -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{- -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{- -}}
+{%- endcapture -%}
+
+<section
+	class="collection-list js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %} color-{{ color_scheme.id }}"
+	style="{{- styles -}}">
+	<div class="container">
+		{%- if heading_first_line != blank or heading_second_line != blank -%}
+			<h2 class="h1 section-title section-title--center need-animate">
+				{%- if heading_first_line != blank -%}
+					<span class="section-title__text-container">
+						<span class="section-title__text {% if heading_second_line == blank %}text-center{% endif %}">
+							{{- heading_first_line -}}
+						</span>
+					</span>
+				{%- endif -%}
+
+				{%- if heading_second_line != blank -%}
+					<span class="section-title__text-container">
+						<span
+							class="section-title__text {% if heading_first_line != blank %}text-right{% else %}text-center{% endif %}">
+							{{- heading_second_line -}}
+						</span>
+					</span>
+				{%- endif -%}
+			</h2>
+		{%- endif -%}
+
+		{% if text != blank %}
+			<div class="collection-list__text rte need-animate tr-dur-0-8">
+				{{ text }}
+			</div>
+		{% endif %}
+
+		<div class="collection-list__container">
+			{% if section.blocks.size > 0 %}
+				{% for block in section.blocks %}
+					{% assign collection 		 = block.settings.collection %}
+					{% assign image 			 = block.settings.image | default: collection.featured_image %}
+					{% assign delay_step         = delay_step | plus: 0.25 %}
+					{% assign ellipse_background = block.settings.background_color %}
+					{% assign image_object_fit   = block.settings.image_object_fit %}
+
+					{% if section.index > 1 %}
+						{% assign is_lazy = true %}
+					{% elsif section.index == 1 and forloop.index > 2 %}
+						{% assign is_lazy = true %}
+					{% endif %}
+
+					<div class="collection-list__col need-animate tr-dur-0-5"
+						 style="transition-delay: {{ delay_step }}s;"
+					>
+						{% render 'collection-card',
+							collection: collection,
+							image: image,
+							aspect_ratio: "collection-card__image-wrapper--portrait",
+							ellipse_background: ellipse_background,
+							image_object_fit: image_object_fit,
+							is_lazy: is_lazy
+						%}
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</section>
+
+{% schema %}
+	{
+		"name": "Collection list",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+			{
+				"type": "inline_richtext",
+				"id": "heading_first_line",
+				"label": "Heading (first line)",
+				"default": "<em>COLLECTION</em>"
+			},
+			{
+				"type": "inline_richtext",
+				"id": "heading_second_line",
+				"label": "Heading (second line)",
+				"default": "LIST"
+			},
+			{
+				"type": "richtext",
+				"id": "text",
+				"label": "Text"
+			},
+			{
+				"type": "header",
+				"content": "Color"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"default": true,
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"label": "Color scheme",
+				"default": "scheme-1"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "select",
+				"id": "container_width",
+				"label": "Container width",
+				"options": [
+					{
+						"value": "1560px",
+						"label": "Default - 1440px"
+					},
+					{
+						"value": "2040px",
+						"label": "Large - 1920px"
+					},
+					{
+						"value": "100%",
+						"label": "Full width"
+					},
+					{
+						"value": "inherit",
+						"label": "Inherit of general setting"
+					}
+				],
+				"default": "inherit",
+				"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_bottom_rounded_corners",
+				"label": "Enable bottom rounded corners",
+				"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+				"default": false
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 60
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 60
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset top",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset bottom",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset top",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset bottom",
+				"default": 40
+			}
+			],
+			"blocks": [
+				{
+					"type": "collection",
+					"name": "Collection",
+					"settings": [
+						{
+							"type": "collection",
+							"id": "collection",
+							"label": "Collection"
+						},
+						{
+							"type": "image_picker",
+							"id": "image",
+							"label": "Image",
+							"info": "Use instead of collection image. 520 x 670px recommended"
+						},
+						{
+							"type": "select",
+							"id": "image_object_fit",
+							"label": "Image object-fit",
+							"options": [
+								{
+									"value": "cover",
+									"label": "Cover"
+								},
+								{
+									"value": "contain",
+									"label": "Contain"
+								}
+							],
+							"default": "cover"
+						},
+						{
+							"type": "color",
+							"id": "background_color",
+							"label": "Background",
+							"default": "#FF0000"
+						}
+					]
+				}
+			],
+			"presets": [
+				{
+					"name": "Collection list",
+					"blocks": [
+					{
+						"type": "collection"
+					},
+					{
+						"type": "collection"
+					},
+					{
+						"type": "collection"
+					},
+					{
+						"type": "collection"
+					}
+				]
+			}
+		]
+	}
+{% endschema %}

@@ -1,0 +1,767 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Contact page template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/contact.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign map_api_key = section.settings.map_api_key -%}
+{%- assign map_query = section.settings.map_query -%}
+{%- assign map_url = section.settings.map_url -%}
+{%- assign image_desktop = section.settings.image_desktop -%}
+{%- assign image_mobile = section.settings.image_mobile | default: image_desktop -%}
+
+{%- assign heading_first_line = section.settings.heading_first_line -%}
+{%- assign heading_second_line = section.settings.heading_second_line -%}
+{%- assign decor_image_first = section.settings.decor_image_first -%}
+{%- assign decor_image_second = section.settings.decor_image_second -%}
+{%- assign form_heading = section.settings.form_heading | default: page.title -%}
+{%- assign name_label = section.settings.name_label -%}
+{%- assign email_label = section.settings.email_label -%}
+{%- assign phone_label = section.settings.phone_label -%}
+{%- assign message_label = section.settings.message_label -%}
+{%- assign submit_label = section.settings.submit_label -%}
+{%- assign is_name_required = section.settings.is_name_required -%}
+{%- assign is_phone_required = section.settings.is_phone_required -%}
+{%- assign is_message_required = section.settings.is_message_required -%}
+{%- assign socials_heading = section.settings.socials_heading -%}
+{%- assign show_social_links = section.settings.show_social_links -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme = section.settings.color_scheme -%}
+{%- assign container = section.settings.container_width -%}
+{%- assign enable_bottom_rounded_corners = section.settings.enable_bottom_rounded_corners -%}
+
+{%- capture socials_content -%}
+	{%- if show_social_links -%}
+		{%- render "social-links" -%}
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{%- if image_desktop != blank -%}
+	{%- assign section_has_images = true -%}
+{%- else -%}
+	{%- assign section_has_images = false -%}
+{%- endif -%}
+
+{%- capture map_image -%}
+	{%- capture img_focal -%}
+		--img-desktop-pos: {{ image_desktop.presentation.focal_point }}; --img-mob-pos: {{ image_mobile.presentation.focal_point }};
+	{%- endcapture -%}
+
+	<picture class="lazy">
+		<source
+			data-srcset="{{ image_mobile | img_url: '380x' }} 1x, {{ image_mobile | img_url: '760x' }} 2x"
+			srcset="{{ image_mobile | img_url: '10x' }} 1x, {{ image_mobile | img_url: '10x' }} 2x"
+			media="(max-width: 380px)"
+			width="380"
+			height="242"
+		/>
+
+		<source
+			data-srcset="{{ image_mobile | img_url: '480x' }} 1x, {{ image_mobile | img_url: '960x' }} 2x"
+			srcset="{{ image_mobile | img_url: '10x' }} 1x, {{ image_mobile | img_url: '10x' }} 2x"
+			media="(max-width: 480px)"
+			width="480"
+			height="305"
+		/>
+
+		<source
+			data-srcset="{{ image_desktop | img_url: '575x' }} 1x, {{ image_desktop | img_url: '1150x' }} 2x"
+			srcset="{{ image_desktop | img_url: '10x' }} 1x, {{ image_desktop | img_url: '10x' }} 2x"
+			media="(max-width: 575px)"
+			width="575"
+			height="345"
+		/>
+
+		<source
+			data-srcset="{{ image_desktop | img_url: '767x' }} 1x, {{ image_desktop | img_url: '1534x' }} 2x"
+			srcset="{{ image_desktop | img_url: '10x' }} 1x, {{ image_desktop | img_url: '10x' }} 2x"
+			media="(max-width: 767px)"
+			width="767"
+			height="460"
+		/>
+
+		<source
+			data-srcset="{{ image_desktop | img_url: '991x' }} 1x, {{ image_desktop | img_url: '1982x' }} 2x"
+			srcset="{{ image_desktop | img_url: '10x' }} 1x, {{ image_desktop | img_url: '10x' }} 2x"
+			media="(max-width: 991px)"
+			width="991"
+			height="446"
+		/>
+
+		<source
+			data-srcset="{{ image_desktop | img_url: '1199x' }} 1x, {{ image_desktop | img_url: '2398x' }} 2x"
+			srcset="{{ image_desktop | img_url: '10x' }} 1x, {{ image_desktop | img_url: '10x' }} 2x"
+			media="(max-width: 1199px)"
+			width="1199"
+			height="429"
+		/>
+
+		<source
+			data-srcset="{{ image_desktop | img_url: '1500x' }} 1x, {{ image_desktop | img_url: '3000x' }} 2x"
+			srcset="{{ image_desktop | img_url: '10x' }} 1x, {{ image_desktop | img_url: '10x' }} 2x"
+			media="(max-width: 1500px)"
+			width="1500"
+			height="536"
+		/>
+
+		<source
+			data-srcset="{{ image_desktop | img_url: '1680x' }} 1x, {{ image_desktop | img_url: '3360x' }} 2x"
+			srcset="{{ image_desktop | img_url: '10x' }} 1x, {{ image_desktop | img_url: '10x' }} 2x"
+			media="(max-width: 1680px)"
+			width="1680"
+			height="600"
+		/>
+
+		<img
+			class="contact__map-image js-animate"
+			srcset="{{ image_desktop | img_url: "10x" }}"
+			data-srcset="{{ image_desktop | img_url: "1920x" }} 1x, {{ image_desktop | img_url: "3840x" }} 2x"
+			src="{{- image_desktop | img_url: "10x" -}}"
+			data-src="{{- image_desktop | img_url: "1920x" -}}"
+			alt="{{- image_desktop.alt -}}"
+			width="1920"
+			height="686"
+			style="{{ img_focal }}"
+		/>
+	</picture>
+{%- endcapture -%}
+
+{%- capture contact_form -%}
+	{%- form "contact", class: "contact__form container", id: "ContactForm" -%}
+		{%- capture form_message -%}
+			{%- if form.posted_successfully? -%}
+				<p class="contact__form-submitted-title success" tabindex="-1" autofocus>
+					{{- "contact.form.success_heading" | t -}}
+				</p>
+			{%- elsif form.errors -%}
+				<p class="contact__form-submitted-title error" autofocus tabindex="-1" role="alert">
+					{{- "contact.form.error_heading" | t -}}
+				</p>
+			{%- endif -%}
+		{%- endcapture -%}
+
+		{% if heading_first_line != blank or heading_second_line != blank or section.blocks.size > 0 or socials_content != blank %}
+			<div class="contact__form-header tr-dur-0-5">
+				{% if heading_first_line != blank or heading_second_line != blank %}
+					<h2 class="contact__section-title section-title need-animate">
+						{% if heading_first_line != blank %}
+							<span class="section-title__text-container">
+								<span class="section-title__text">{{ heading_first_line }}</span>
+							</span>
+						{% endif %}
+
+						{% if heading_second_line != blank %}
+							<span class="section-title__text-container">
+								<span class="section-title__text">{{ heading_second_line }}</span>
+							</span>
+						{% endif %}
+					</h2>
+				{% endif %}
+
+				{% for block in section.blocks %}
+					{% assign block_heading = block.settings.heading %}
+					{% assign block_text = block.settings.text %}
+
+					{% if block_heading != blank or block_text != blank %}
+						<div class="contact__info-block {% if forloop.first %}contact__info-block--first{% endif %}">
+							<span class="contact__info-heading">{{ block_heading }}</span>
+							<div class="contact__info-text rte">{{ block_text }}</div>
+						</div>
+					{% endif %}
+				{% endfor %}
+
+				{%- if socials_content != blank -%}
+					<div class="contact__socials">
+						{%- if socials_heading != blank -%}
+							<span class="contact__info-heading">
+								{{ socials_heading }}
+							</span>
+						{%- endif -%}
+
+						<div class="contact__socials-content">
+							{{- socials_content -}}
+						</div>
+					</div>
+				{%- endif -%}
+			</div>
+		{% endif %}
+
+		{% if form_heading != blank or form.posted_successfully? or form.errors %}
+			<div class="contact__form-container tr-dur-0-5">
+				{%- if form_heading != blank -%}
+					<h2 class="contact__form-heading h4">
+						{{- form_heading -}}
+					</h2>
+				{%- endif -%}
+
+				<div class="contact__form-fields">
+					<div class="input-wrapper contact__field contact__fields-col">
+						<input
+							id="ContactForm-name--{{- section.id -}}"
+							class="input {% if form.errors contains "name" %} error{% endif %}"
+							type="text"
+							name="contact[name]"
+							placeholder="{{ name_label }}"
+							autocomplete="name"
+							autocapitalize="off"
+							{% if is_name_required %}
+								required
+								aria-required="true"
+							{% endif %}
+							{% if form.errors contains "name" %}
+								aria-invalid="true"
+								aria-describedby="ContactForm-name-error--{{- section.id -}}"
+							{% endif %}
+							{% if customer %}
+								value="{{- customer.name -}}"
+							{% endif %}
+						/>
+
+						{% if name_label != blank %}
+							<label class="input-label {% if is_name_required %}input-label--required{% endif %}"
+								   for="ContactForm-name--{{- section.id -}}"
+							>
+								{{ name_label }}
+							</label>
+						{% endif %}
+
+						{%- if form.errors contains "name" -%}
+							<small class="contact__input-error error" id="ContactForm-name-error--{{- section.id -}}">
+							<span class="visually-hidden">
+								{{- "contact.form.error" | t -}}
+							</span>
+
+								<span class="contact__input-error-message">
+								{{ form.errors.translated_fields['name'] | capitalize }} {{ form.errors.messages['name'] }}
+							</span>
+							</small>
+						{%- endif -%}
+					</div>
+
+					<div class="input-wrapper contact__field contact__fields-col">
+						<input
+							id="ContactForm-email--{{- section.id -}}"
+							class="input {% if form.errors contains "email" %} error{% endif %}"
+							type="email"
+							name="contact[email]"
+							placeholder="{{ email_label }}"
+							autocomplete="email"
+							autocapitalize="off"
+							{% if form.errors contains "email" %}
+								aria-invalid="true"
+								aria-describedby="ContactForm-email-error--{{- section.id -}}"
+							{% endif %}
+							{% if customer %}
+								value="{{- customer.email -}}"
+							{% endif %}
+							aria-required="true"
+							required
+						/>
+
+						{% if email_label != blank %}
+							<label class="input-label input-label--required"
+								   for="ContactForm-email--{{- section.id -}}">
+								{{ email_label }}
+							</label>
+						{% endif %}
+
+						{%- if form.errors contains "email" -%}
+							<small class="contact__input-error error" id="ContactForm-email-error--{{- section.id -}}">
+				  				<span class="visually-hidden">
+				    				{{- "contact.form.error" | t -}}
+				  				</span>
+
+								<span class="contact__input-error-message">
+									{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+				  				</span>
+							</small>
+						{%- endif -%}
+					</div>
+
+					<div class="input-wrapper contact__field">
+						<input
+							id="ContactForm-phone--{{- section.id -}}"
+							type="tel"
+							class="input"
+							name="contact[phone]"
+							placeholder="{{ phone_label }}"
+							pattern="[0-9\-]*"
+							autocomplete="tel"
+							inputmode="tel"
+							autocapitalize="off"
+							{% if is_phone_required %}
+								required
+								aria-required="true"
+							{% endif %}
+							value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+						/>
+
+						{% if phone_label != blank %}
+							<label class="input-label {% if is_phone_required %}input-label--required{% endif %}"
+								   for="ContactForm-phone--{{- section.id -}}"
+							>
+								{{ phone_label }}
+							</label>
+						{% endif %}
+					</div>
+
+					<div class="input-wrapper contact__field">
+						<textarea
+							id="ContactForm-message--{{- section.id -}}"
+							class="input {% if form.errors contains "body" %} error{% endif %}"
+							name="contact[body]"
+							placeholder="{{ message_label }}"
+							{% if customer %}
+								aria-label="{{ message_label }}"
+							{% endif %}
+							{% if form.errors contains "body" %}
+								aria-invalid="true"
+								aria-describedby="ContactForm-message-error--{{- section.id -}}"
+							{% endif %}
+							{% if is_message_required %}
+								aria-required="true"
+								required
+							{% endif %}
+						></textarea>
+
+						{% if message_label != blank %}
+							<label class="input-label {% if is_message_required %}input-label--required{% endif %}"
+								   for="ContactForm-message--{{- section.id -}}"
+							>
+								{{ message_label }}
+							</label>
+						{% endif %}
+
+						{%- if form.errors contains "body" -%}
+							<small class="contact__input-error error"
+								   id="ContactForm-message-error--{{- section.id -}}">
+								<span class="visually-hidden">
+									{{- "contact.form.error" | t -}}
+								</span>
+
+								<span class="contact__input-error-message">
+									{{ form.errors.translated_fields['body'] | capitalize }} {{ form.errors.messages['body'] }}
+								</span>
+							</small>
+						{%- endif -%}
+					</div>
+
+					{{ form_message }}
+
+					<button
+						type="submit"
+						class="button button--primary contact__button"
+					>
+						<span class="button__outer"></span>
+						{{- submit_label -}}
+					</button>
+				</div>
+			</div>
+		{% endif %}
+	{%- endform -%}
+{%- endcapture -%}
+
+{% capture section_styles %}
+	--container-width: {{ container_width }}; {{- -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px; {{- -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{- -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{- -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{- -}}
+{% endcapture %}
+
+<section
+	class="contact js-image-mouse-move-wrapper js-animate {% if request.visual_preview_mode %}animated{% endif %} need-animate {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %} color-{{- color_scheme.id -}}"
+	style="{{ section_styles }}">
+	<div class="contact__wrapper">
+		<div class="contact__content-wrapper">
+			{% if decor_image_first != blank %}
+				<div class="contact__decor-image-wrapper-first js-image-mouse-move"
+					 data-animation-speed="0.2"
+					 data-move-distance="2"
+				>
+					<picture>
+						<div class="contact__decor-aspect-ratio lazy">
+							<img class="contact__decor-image"
+								 src="{{ decor_image_first | image_url: width: 10, height: 10 }}"
+								 srcset="{{ decor_image_first | image_url: width: 10, height: 10 }} 1x, {{ decor_image_first | image_url: width: 20, height: 20 }} 2x"
+								 data-src="{{ decor_image_first | image_url: width: 140, height: 140 }}"
+								 data-srcset="{{ decor_image_first | image_url: width: 140, height: 140 }} 1x, {{ decor_image_first | image_url: width: 280, height: 280 }} 2x"
+								 alt="{{ decor_image_first.alt | escape }}">
+						</div>
+					</picture>
+				</div>
+			{% endif %}
+
+			{{ contact_form }}
+
+			{% if decor_image_second != blank %}
+				<div class="contact__decor-image-wrapper-second is-reverse-translate js-image-mouse-move"
+					 data-animation-speed="0.2"
+					 data-move-distance="2"
+				>
+					<div class="contact__decor-aspect-ratio">
+						<picture class="lazy">
+							<img class="contact__decor-image"
+								 src="{{ decor_image_second | image_url: width: 10, height: 10 }}"
+								 srcset="{{ decor_image_second | image_url: width: 10, height: 10 }} 1x, {{ decor_image_second | image_url: width: 20, height: 20 }} 2x"
+								 data-src="{{ decor_image_second | image_url: width: 181, height: 181 }}"
+								 data-srcset="{{ decor_image_second | image_url: width: 181, height: 181 }} 1x, {{ decor_image_second | image_url: width: 362, height: 362 }} 2x"
+								 alt="{{ decor_image_second.alt | escape }}">
+						</picture>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+
+		{%- if map_api_key != blank and map_query != blank -%}
+			<div class="contact__map-container">
+				<div class="contact__map-wrapper js-animate {% if request.visual_preview_mode %}animated{% endif %}">
+					<iframe
+						class="contact__map"
+						width="100%"
+						height="100%"
+						frameborder="0" style="border:0"
+						referrerpolicy="no-referrer-when-downgrade"
+						src="https://www.google.com/maps/embed/v1/place?key={{- map_api_key -}}&q={{- map_query -}}"
+						allowfullscreen>
+					</iframe>
+				</div>
+			</div>
+		{%- elsif map_url != blank and section_has_images == true -%}
+			<div class="contact__map-container">
+				<a
+					href="{{- map_url -}}"
+					class="contact__map-link-image-wrapper contact__map-link-image-wrapper-hover js-animate {% if enable_bottom_rounded_corners %}contact__map-link-image-wrapper--bottom-rounded{% endif %} {% if request.visual_preview_mode %}animated{% endif %}"
+					target="_blank"
+					rel="nofollow"
+					aria-label="{{- 'contact.form.map_link_aria_label' | t | escape -}}"
+				>
+					{{- map_image -}}
+				</a>
+			</div>
+		{% elsif section_has_images == true and map_url == nil %}
+			<div class="contact__map-container">
+				<div
+					class="contact__map-link-image-wrapper js-animate {% if enable_bottom_rounded_corners %}contact__map-link-image-wrapper--bottom-rounded{% endif %} {% if request.visual_preview_mode %}animated{% endif %}">
+					{{- map_image -}}
+				</div>
+			</div>
+		{% endif %}
+	</div>
+</section>
+
+{%- schema -%}
+{
+	"name": "Contact",
+	"settings": [
+		{
+			"type": "inline_richtext",
+			"id": "heading_first_line",
+			"label": "Heading (first line)"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading_second_line",
+			"label": "Heading (second line)"
+		},
+		{
+			"type": "image_picker",
+			"id": "decor_image_first",
+			"label": "Decor image first",
+			"info": "Decor images are displayed for desktop only. 280 x 280px recommended"
+		},
+		{
+			"type": "image_picker",
+			"id": "decor_image_second",
+			"label": "Decor image second",
+			"info": "Decor images are displayed for desktop only. 362 x 362px recommended"
+		},
+		{
+			"type": "header",
+			"content": "Contact form"
+		},
+		{
+			"type": "text",
+			"id": "form_heading",
+			"label": "Heading",
+			"info": "Heading will replace the page title"
+		},
+		{
+			"type": "text",
+			"id": "name_label",
+			"label": "Name label",
+			"default": "Name"
+		},
+		{
+			"type": "checkbox",
+			"id": "is_name_required",
+			"label": "Name required",
+			"default": false
+		},
+		{
+			"type": "text",
+			"id": "email_label",
+			"label": "Email label",
+			"default": "Email"
+		},
+		{
+			"type": "text",
+			"id": "phone_label",
+			"label": "Phone label",
+			"default": "Phone"
+		},
+		{
+			"type": "checkbox",
+			"id": "is_phone_required",
+			"label": "Phone required",
+			"default": false
+		},
+		{
+			"type": "text",
+			"id": "message_label",
+			"label": "Message label",
+			"default": "Message"
+		},
+		{
+			"type": "checkbox",
+			"id": "is_message_required",
+			"label": "Message required",
+			"default": false
+		},
+		{
+			"type": "text",
+			"id": "submit_label",
+			"label": "Button label",
+			"default": "Send"
+		},
+		{
+			"type": "header",
+			"content": "Socials"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_social_links",
+			"label": "Show social links",
+			"default": true
+		},
+		{
+			"type": "text",
+			"id": "socials_heading",
+			"label": "Socials heading",
+			"default": "Socials"
+		},
+		{
+			"type": "header",
+			"content": "Map"
+		},
+		{
+			"type": "text",
+			"id": "map_api_key",
+			"label": "Google maps API key",
+			"info": "You’ll need to [register a Google Maps API Key](https://utdweb.team/shopify-themes/victory/manual#section-contact-template) to display the map."
+		},
+		{
+			"type": "text",
+			"id": "map_query",
+			"label": "Map query",
+			"info": "Specify the query parameter [learn more](https://utdweb.team/shopify-themes/victory/manual#section-contact-template)",
+			"default": "Eiffel+Tower,Paris+France"
+		},
+		{
+			"type": "url",
+			"id": "map_url",
+			"label": "Map link",
+			"info": "The link will be opened in the new window."
+		},
+		{
+			"type": "image_picker",
+			"id": "image_desktop",
+			"label": "Map image desktop"
+		},
+		{
+			"type": "image_picker",
+			"id": "image_mobile",
+			"label": "Map image mobile"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"name": "Contact information",
+			"type": "contact_information",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading",
+					"default": "Heading:"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text",
+					"default": "<p>Contact information</p>"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

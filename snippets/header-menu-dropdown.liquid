@@ -1,0 +1,110 @@
+{%- capture block_styles -%}
+	--header-navigation-item-text-color: var(--header-menu-dropdown-text-color);
+	--header-navigation-item-border-color: var(--header-menu-dropdown-border-color);
+	--header-navigation-item-text-background-color-hover: var(--header-menu-dropdown-text-background-color-hover);
+{%- endcapture -%}
+
+<div id="headerDesktopMenu:{{- menu.handle -}}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}"
+	 class="header-dropdown js-header-menu is-hidden"
+	 data-menu-type="dropdown-menu"
+	 style="{{- block_styles | strip_newlines }} height: 0;"
+>
+	<div class="header-dropdown__menu js-header-menu-scroll-container">
+		<ul class="header-dropdown__menu-list js-header-menu-container">
+			{%- assign animation_delay = 0 -%}
+
+			{%- for second_level_link in first_level_link.links -%}
+				{%- assign has_second_level_links = false -%}
+				{%- assign has_sub_links = false -%}
+
+				{%- if second_level_link.links.size > 0 -%}
+					{%- assign has_sub_links = true -%}
+				{%- endif -%}
+
+				{%- if second_level_link.url != '#' and enable_second_level_links and open_menu_type == 'hover' -%}
+					{%- assign has_second_level_links = true -%}
+				{%- endif -%}
+
+				<li class="header-dropdown__menu-list-item">
+					<div class="header-dropdown__animate header-dropdown__animate--main need-animate"
+						 style="--animation-delay: {{ animation_delay }}s">
+
+						{%- if second_level_link.links.size < 1 or has_second_level_links -%}
+							<a
+								class="{% if has_sub_links %}js-header-menu-toggler {% endif %}header-navigation-item-highlight header-navigation-item-highlight--simple {% if forloop.last %} header-navigation-item-highlight--hide-border {%- endif -%}"
+								href="{{- second_level_link.url -}}"
+								{% if second_level_link.current %}aria-current="page"{% endif %}
+								{% if has_sub_links %}
+									data-target="headerDesktopMenuNested:{{ menu.handle }}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}-{{- second_level_link.title | handleize -}}"
+									aria-controls="headerDesktopMenuNested:{{ menu.handle }}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}-{{- second_level_link.title | handleize -}}"
+									aria-expanded="false"
+								{% endif %}
+							>
+								<span class="header-navigation-item-highlight__text">
+									{{- second_level_link.title -}}
+								</span>
+
+								{%- if has_sub_links -%}
+									<span class="header-navigation-item-highlight__toggle-icon">
+										{%- render 'icons', icon: 'arrow-right-bold' -%}
+									</span>
+								{%- endif -%}
+							</a>
+						{%- else -%}
+							<button
+								class="js-header-menu-toggler header-navigation-item-highlight header-navigation-item-highlight--simple header-navigation-item-highlight--with-active {% if forloop.last %} header-navigation-item-highlight--hide-border {%- endif -%}"
+								type="button"
+								data-target="headerDesktopMenuNested:{{ menu.handle }}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}-{{- second_level_link.title | handleize -}}"
+								aria-controls="headerDesktopMenuNested:{{ menu.handle }}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}-{{- second_level_link.title | handleize -}}"
+								aria-expanded="false"
+							>
+								<span class="header-navigation-item-highlight__text">
+									{{ second_level_link.title | escape }}
+								</span>
+
+								<span class="header-navigation-item-highlight__toggle-icon">
+									{%- render 'icons', icon: 'arrow-right-bold' -%}
+								</span>
+							</button>
+						{%- endif -%}
+					</div>
+				</li>
+
+				{%- assign animation_delay = animation_delay | plus: 0.08 -%}
+			{%- endfor -%}
+		</ul>
+	</div>
+</div>
+{%- for second_level_link in first_level_link.links -%}
+	{%- if second_level_link.links.size > 0 -%}
+		<div
+			id="headerDesktopMenuNested:{{ menu.handle }}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}-{{- second_level_link.title | handleize -}}"
+			class="header-dropdown header-dropdown--nested js-header-menu is-hidden"
+			data-menu-type="dropdown-menu-nested"
+			style="{{- block_styles | strip_newlines }} width: 0;"
+		>
+			<div class="header-dropdown__menu js-header-menu-scroll-container">
+				<ul class="header-dropdown__menu-list js-header-menu-container">
+					{%- assign animation_delay = 0 -%}
+
+					{%- for third_level_link in second_level_link.links -%}
+						<li class="header-dropdown__menu-list-item header-dropdown__animate header-dropdown__animate--main need-animate"
+							style="--animation-delay: {{ animation_delay }}s">
+							<a
+								class="header-navigation-item-highlight header-navigation-item-highlight--simple {% if forloop.last %} header-navigation-item-highlight--hide-border {%- endif -%}"
+								href="{{- third_level_link.url -}}"
+								{% if third_level_link.current %}aria-current="page"{% endif %}
+							>
+								<span class="header-navigation-item-highlight__text">
+									{{- third_level_link.title -}}
+								</span>
+							</a>
+						</li>
+
+						{%- assign animation_delay = animation_delay | plus: 0.08 -%}
+					{%- endfor -%}
+				</ul>
+			</div>
+		</div>
+	{%- endif -%}
+{%- endfor -%}

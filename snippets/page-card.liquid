@@ -1,0 +1,29 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Snippet: Page card
+	- page: Page object (required)
+
+	Usage:
+
+	{%- render 'page-card', page: page -%}
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- render 'adastra' with '/src/styles/page-card.scss' -%}
+
+<div class="page-card">
+	<h3 class="page-card__title">
+		{{- page.title -}}
+	</h3>
+
+	<a
+		class="page-card__btn button-circle button-circle--small"
+		href="{{- page.url -}}"
+		aria-label="{{- page.title -}}"
+	>
+		<span class="button-circle__inner">
+			{%- render 'icons', icon: 'circle-decoration' -%}
+			{%- render 'icons', icon: 'arrow-right-secondary' -%}
+		</span>
+	</a>
+</div>

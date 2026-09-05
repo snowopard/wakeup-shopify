@@ -1,0 +1,442 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Lookbook
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/carousel.scss' -%}
+{%- render 'adastra' with '/src/styles/lookbook.scss' -%}
+
+{%- assign offset_top_desktop 		= section.settings.offset_top_desktop -%}
+{%- assign offset_bottom_desktop 	= section.settings.offset_bottom_desktop -%}
+{%- assign offset_top_mobile 		= section.settings.offset_top_mobile -%}
+{%- assign offset_bottom_mobile 	= section.settings.offset_bottom_mobile -%}
+{%- assign heading 					= section.settings.heading -%}
+{%- assign text 					= section.settings.text -%}
+{%- assign text_alignment 			= section.settings.text_alignment -%}
+{%- assign container 				= section.settings.container_width -%}
+
+{%- assign blocks 					= section.blocks -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{%- capture section_styles -%}
+	--text-alignment: {{ text_alignment }}; {{  -}}
+	--container-width: {{ container_width }}; {{- -}}
+{%- endcapture -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- offset_top_mobile -}}px;
+		padding-bottom: {{- offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 992px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- offset_top_desktop -}}px;
+			padding-bottom: {{- offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+<section
+	class="lookbook js-animate js-lookbook {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} need-animate"
+	style="{{- section_styles -}}"
+	id="{{- section.id -}}"
+>
+	<div class="container">
+		{%- if heading != blank or text != blank -%}
+			<div class="lookbook__header need-animate">
+				{%- if heading != blank -%}
+					<h2 class="lookbook__title h2">{{ heading }}</h2>
+				{%- endif -%}
+
+				{%- if text != blank -%}
+					<p class="lookbook__description">{{ text }}</p>
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+
+		<div class="js-lookbook-slider swiper lookbook__slider">
+			<div class="lookbook__wrapper swiper-wrapper lookbook__wrapper--items-{{ section.blocks.size }}">
+				{%- for block in section.blocks -%}
+					{%- assign product 	= block.settings.product -%}
+					{%- assign image 	= block.settings.image -%}
+
+					<div class="lookbook__item js-lookbook-item swiper-slide">
+						{%- if product != blank -%}
+							<a href="{{- product.url -}}" class="lookbook__overlay-link focus-visible-outline" aria-label="{{- product.title | escape -}}"></a>
+						{%- endif -%}
+
+						{%- if image != blank -%}
+							{% liquid
+								assign count = section.blocks.size
+								assign idx = forloop.index
+
+								assign image_420_height = 485
+								assign image_768_height = 920
+								assign image_991_height = 1199
+
+								assign image_1199_width = 387
+								assign image_1199_height = 483
+
+								assign image_1600_width = 491
+								assign image_1600_height = 614
+
+								assign image_default_width = 598
+								assign image_default_height = 747
+
+								case count
+									when 1
+										assign image_1199_width = 1167
+										assign image_1199_height = 657
+
+										assign image_1600_width = 1480
+										assign image_1600_height = 833
+
+										assign image_default_width = 1800
+										assign image_default_height = 1013
+
+									when 2
+										assign image_1199_width = 582
+										assign image_1199_height = 727
+
+										assign image_1600_width = 738
+										assign image_1600_height = 923
+
+										assign image_default_width = 898
+										assign image_default_height = 1123
+
+									when 4
+										if idx == 4
+											assign image_1199_width = 1167
+											assign image_1199_height = 389
+
+											assign image_1600_width = 1480
+											assign image_1600_height = 493
+
+											assign image_default_width = 1780
+											assign image_default_height = 600
+										endif
+
+									when 5
+										if idx == 4 or idx == 5
+											assign image_1199_width = 582
+											assign image_1199_height = 388
+
+											assign image_1600_width = 738
+											assign image_1600_height = 492
+
+											assign image_default_width = 898
+											assign image_default_height = 599
+										endif
+								endcase
+
+								assign image_1199_width_2x = image_1199_width | times: 2
+								assign image_1600_width_2x = image_1600_width | times: 2
+								assign image_default_width_2x = image_default_width | times: 2
+
+								assign is_lazy = true
+
+								if section.index == 1 and forloop.first
+									assign is_lazy = false
+								endif
+							%}
+
+							{%- capture img_focal -%}
+								--img-pos: {{ image.presentation.focal_point }};
+							{%- endcapture -%}
+
+							<picture {% if is_lazy %}class="lazy"{% endif %}>
+								<source
+									{% if is_lazy %}
+										data-srcset="{{ image | image_url: width: 388 }} 1x, {{ image | image_url: width: 776 }} 2x"
+										srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+									{% else %}
+										srcset="{{ image | image_url: width: 388 }} 1x, {{ image | image_url: width: 776 }} 2x"
+									{% endif %}
+									media="(max-width: 420px)"
+									width="388"
+									height="{{ image_420_height }}"
+								>
+
+								<source
+									{% if is_lazy %}
+										data-srcset="{{ image | image_url: width: 736 }} 1x, {{ image | image_url: width: 1472 }} 2x"
+										srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+									{% else %}
+										srcset="{{ image | image_url: width: 736 }} 1x, {{ image | image_url: width: 1472 }} 2x"
+									{% endif %}
+									media="(max-width: 768px)"
+									width="736"
+									height="{{ image_768_height }}"
+								>
+
+								<source
+									{% if is_lazy %}
+										data-srcset="{{ image | image_url: width: 959 }} 1x, {{ image | image_url: width: 1918 }} 2x"
+										srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+									{% else %}
+										srcset="{{ image | image_url: width: 959 }} 1x, {{ image | image_url: width: 1918 }} 2x"
+									{% endif %}
+									media="(max-width: 991px)"
+									width="959"
+									height="{{ image_991_height }}"
+								>
+
+								<source
+									{% if is_lazy %}
+										data-srcset="{{ image | image_url: width: image_1199_width }} 1x, {{ image | image_url: width: image_1199_width_2x }} 2x"
+										srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+									{% else %}
+										srcset="{{ image | image_url: width: image_1199_width }} 1x, {{ image | image_url: width: image_1199_width_2x }} 2x"
+									{% endif %}
+									media="(max-width: 1199px)"
+									width="{{ image_1199_width }}"
+									height="{{ image_1199_height }}"
+								>
+
+								<source
+									{% if is_lazy %}
+										data-srcset="{{ image | image_url: width: image_1600_width }} 1x, {{ image | image_url: width: image_1600_width_2x }} 2x"
+										srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+									{% else %}
+										srcset="{{ image | image_url: width: image_1600_width }} 1x, {{ image | image_url: width: image_1600_width_2x }} 2x"
+									{% endif %}
+									media="(max-width: 1600px)"
+									width="{{ image_1600_width }}"
+									height="{{ image_1600_height }}"
+								>
+
+								<img
+									class="lookbook__image"
+									{% if is_lazy %}
+										data-srcset="{{ image | image_url: width: image_default_width }} 1x, {{ image | image_url: width: image_default_width_2x }} 2x"
+										srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+										data-src="{{ image | image_url: width: image_default_width }}"
+										src="{{ image | image_url: width: 10 }}"
+									{% else %}
+										srcset="{{ image | image_url: width: image_default_width }} 1x, {{ image | image_url: width: image_default_width_2x }} 2x"
+										src="{{- image | image_url: width: image_default_width -}}"
+									{% endif %}
+									alt="{{- image.alt | escape -}}"
+									width="{{ image_default_width }}"
+									height="{{ image_default_height }}"
+									style="{{ img_focal }}"
+								>
+							</picture>
+						{%- else -%}
+							{%- assign placeholder_index = forloop.index0 | modulo: 3 | plus: 1 -%}
+							{%- assign placeholer_svg_name = 'hero-apparel-' | append: placeholder_index -%}
+
+							{{- placeholer_svg_name | placeholder_svg_tag: 'lookbook__image' -}}
+						{%- endif -%}
+
+						{%- if product != blank -%}
+							{%- assign product_image = product.selected_or_first_available_variant.image | default: product.featured_image -%}
+
+							<div class="lookbook__product-card js-lookbook-product-card">
+								<a class="focus-visible-outline lookbook__product-image-wrapper" href="{{- product.url -}}">
+									{%- if product_image != blank -%}
+										<img
+											class="lookbook__product-image"
+											src="{{ product_image | image_url: width: 55, height: 85 }}"
+											srcset="{{ product_image | image_url: width: 55, height: 85 }} 1x, {{ product_image | image_url: width: 110, height: 170 }} 2x"
+											alt="{{ product_image.alt | escape }}"
+											loading="lazy"
+											width="55"
+											height="85"
+										>
+									{%- else -%}
+										{%- assign placeholder_index = forloop.index0 | modulo: 4 | plus: 1 -%}
+										{%- assign placeholer_svg_name = 'product-apparel-' | append: placeholder_index -%}
+
+										{{- placeholer_svg_name | placeholder_svg_tag: 'lookbook__product-image' -}}
+									{%- endif -%}
+								</a>
+
+								<div class="lookbook__product-body">
+									<div class="lookbook__product-content">
+										<a class="focus-visible-outline lookbook__product-content-title" href="{{- product.url -}}">
+											{{- product.title -}}
+										</a>
+
+										<div class="lookbook__product-content-price">
+											{% render 'price', product: product %}
+										</div>
+									</div>
+								</div>
+							</div>
+						{%- endif -%}
+					</div>
+				{%- endfor -%}
+			</div>
+
+			{%- if blocks.size > 0 -%}
+				{% assign arrow_prev_class = 'js-swiper-button-prev-' | append: section.id %}
+				{% assign arrow_next_class = 'js-swiper-button-next-' | append: section.id %}
+
+				<div class="slider-pagination lookbook__slider-pagination">
+					{% render 'swiper-button', direction: 'prev', class: arrow_prev_class %}
+
+					<div class="custom-swiper-pagination js-lookbook-pagination"></div>
+
+					{% render 'swiper-button', direction: 'next', class: arrow_next_class %}
+				</div>
+			{%- endif -%}
+		</div>
+	</div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/lookbook.js' -%}
+
+{%- schema -%}
+{
+	"name": "Lookbook",
+	"max_blocks": 6,
+	"disabled_on": {
+		"groups": [
+			"header",
+			"footer",
+			"custom.popup"
+		]
+	},
+	"settings": [
+		{
+			"type": "text",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Heading"
+		},
+		{
+			"type": "textarea",
+			"id": "text",
+			"label": "Text",
+			"default": "Some short text about some feature on your site"
+		},
+		{
+			"id": "text_alignment",
+			"type": "select",
+			"label": "Text alignment",
+			"options": [
+				{
+					"value": "start",
+					"label": "Left"
+				},
+				{
+					"value": "center",
+					"label": "Center"
+				},
+				{
+					"value": "end",
+					"label": "Right"
+				}
+			],
+			"default": "start"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "If you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 50
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 50
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		}
+	],
+	"blocks": [
+		{
+			"type": "image",
+			"name": "Image",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image"
+				},
+				{
+					"type": "product",
+					"id": "product",
+					"label": "Product"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Lookbook",
+			"blocks": [
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

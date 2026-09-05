@@ -1,0 +1,2125 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Announcement bar
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign layout 							= section.settings.layout -%}
+{%- assign additional_menu 					= section.settings.additional_menu -%}
+{%- assign ticker_text_desktop 				= section.settings.ticker_text_desktop -%}
+{%- assign ticker_text_mobile               = section.settings.ticker_text_mobile | default: ticker_text_desktop -%}
+{%- assign autoplay_speed 		  			= section.settings.autoplay_speed | times: 1000 -%}
+{%- assign enable_autoplay 		  			= section.settings.enable_autoplay -%}
+{%- assign text_content_desktop 			= section.settings.text_content_desktop -%}
+{%- assign text_content_mobile 				= section.settings.text_content_mobile | default: text_content_desktop -%}
+{%- assign show_socials 				    = section.settings.show_socials -%}
+{%- assign hide_menu_on_mobile 				= section.settings.hide_menu_on_mobile -%}
+
+{%- assign text_desktop 					= section.settings.text_desktop -%}
+{%- assign text_mobile 						= section.settings.text_mobile | default: text_desktop -%}
+{%- assign timer_type 						= section.settings.timer_type -%}
+{%- assign timer_duration 					= section.settings.timer_duration -%}
+{%- assign enable_timer_loop 				= section.settings.enable_timer_loop -%}
+{%- assign timer_year 						= section.settings.timer_year -%}
+{%- assign timer_month 						= section.settings.timer_month -%}
+{%- assign timer_day 						= section.settings.timer_day -%}
+{%- assign timer_hour 						= section.settings.timer_hour -%}
+{%- assign timer_timezone 					= section.settings.timer_timezone -%}
+{%- assign timer_icon 					    = section.settings.timer_icon -%}
+{%- assign button_text 						= section.settings.button_text -%}
+{%- assign button_link 						= section.settings.button_link -%}
+
+{%- assign ticker_text 						= section.settings.ticker_text -%}
+{%- assign ticker_desktop_movement_speed 	= section.settings.desktop_movement_speed -%}
+{%- assign ticker_mobile_movement_speed 	= section.settings.mobile_movement_speed -%}
+{%- assign ticker_bullet_icon 	            = section.settings.bullet_icon -%}
+
+{%- assign background_color 				= section.settings.background_color -%}
+{%- assign text_color 						= section.settings.text_color -%}
+{%- assign text_timer 						= section.settings.text_timer -%}
+{%- assign number_timer 					= section.settings.number_timer -%}
+{%- assign link_color 						= section.settings.link_color -%}
+{%- assign button_color 					= section.settings.button_color -%}
+{%- assign button_background 				= section.settings.button_background -%}
+{%- assign button_color_hover 				= section.settings.button_color_hover -%}
+{%- assign button_background_hover 			= section.settings.button_background_hover -%}
+
+{% assign use_slider 						= false %}
+
+{% if section.blocks.size > 0 %}
+	{% assign use_slider = true %}
+{% endif %}
+
+{%- capture section_styles -%}
+	--background-color: {{- background_color -}}; {{-  -}}
+	--text-color: {{- text_color -}}; {{-  -}}
+	--text-timer-color: {{- text_timer -}}; {{-  -}}
+	--number-timer-color: {{- number_timer -}}; {{-  -}}
+	--bar-link-color: {{- link_color -}}; {{-  -}}
+	--button-color: {{- button_color -}}; {{-  -}}
+	--button-background: {{- button_background -}}; {{-  -}}
+	--button-color-hover: {{- button_color_hover -}}; {{-  -}}
+	--button-background-hover: {{- button_background_hover -}}; {{-  -}}
+	--desktop-movement-speed: {{- ticker_desktop_movement_speed -}}s; {{-  -}}
+	--mobile-movement-speed: {{- ticker_mobile_movement_speed -}}s; {{-  -}}
+{%- endcapture -%}
+
+{%- capture announcement_bar_simple_text -%}
+	{%- if text_content_desktop != blank -%}
+		<div class="announcement-bar__text announcement-bar__text--desktop rte">
+			{{- text_content_desktop -}}
+		</div>
+
+		<div class="announcement-bar__text announcement-bar__text--mobile rte">
+			{{- text_content_mobile -}}
+		</div>
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- capture timer -%}
+	{%- if timer_year != blank and timer_month != blank and timer_day != blank and timer_hour != blank -%}
+		<p
+			class="announcement-bar__timer js-timer {% if timer_type == 'duration' %}is-hidden{% endif %} {% if timer_icon != blank %}announcement-bar__timer--with-icon{% endif %}"
+			role="timer"
+			aria-live="off"
+			{% if timer_icon != blank %}
+				style="--timer-icon: url({{ timer_icon | image_url: width: 32, height: 32 }});"
+			{% endif %}
+		>
+			<script class="js-timer-settings" type="application/json">
+				{
+					"year": {{- timer_year | json -}},
+					"month": {{- timer_month | json -}},
+					"day": {{- timer_day | json -}},
+					"hour": {{- timer_hour | json -}},
+					"timezone": {{- timer_timezone | json -}},
+					"type": {{- timer_type | json -}},
+					"duration": {{- timer_duration | json -}},
+					"loop": {{- enable_timer_loop | json -}}
+				}
+			</script>
+
+			<span class="announcement-bar__timer-value is-hidden js-timer-days-hundreds">0</span>
+
+			<span class="announcement-bar__timer-value js-timer-days-dozens">0</span>
+
+			<span class="announcement-bar__timer-value js-timer-days-units">0</span>
+
+			<span>&nbsp:&nbsp</span>
+
+			<span class="announcement-bar__timer-value js-timer-hours-dozens">0</span>
+
+			<span class="announcement-bar__timer-value js-timer-hours-units">0</span>
+
+			<span>&nbsp:&nbsp</span>
+
+			<span class="announcement-bar__timer-value js-timer-minutes-dozens">0</span>
+
+			<span class="announcement-bar__timer-value js-timer-minutes-units">0</span>
+
+			<span>&nbsp:&nbsp</span>
+
+			<span class="announcement-bar__timer-value js-timer-seconds-dozens">0</span>
+
+			<span class="announcement-bar__timer-value js-timer-seconds-units">0</span>
+		</p>
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- capture announcement_bar_countdown_timer -%}
+	{%- if text_desktop != blank or timer != blank -%}
+		<div class="announcement-bar__text-content-wrapper js-announcement-bar-text-wrapper">
+			{%- if text_desktop != blank -%}
+				<p class="announcement-bar__text announcement-bar__text--timer js-announcement-bar-text-desktop announcement-bar__text--desktop {% if timer_type == 'duration' %}is-hidden{% endif %}">
+					{{- text_desktop -}}
+				</p>
+
+				<p class="announcement-bar__text announcement-bar__text--timer js-announcement-bar-text-mobile announcement-bar__text--mobile {% if timer_type == 'duration' %}is-hidden{% endif %}">
+					{{- text_mobile -}}
+				</p>
+			{%- endif -%}
+
+			{%- if timer != blank -%}
+				{{- timer -}}
+			{%- endif -%}
+
+			{%- if button_link != blank and button_text != blank -%}
+				<a class="button-simple announcement-bar__link" href="{{- button_link -}}">
+					{{- button_text -}}
+				</a>
+			{%- endif -%}
+		</div>
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- capture ticker_content -%}
+	{% if ticker_text != blank %}
+		<div
+			class="
+				announcement-bar__ticker js-announcement-bar-ticker-container is-loading announcement-bar__ticker--small-offset
+				{% if ticker_bullet_icon == blank %}announcement-bar__ticker-item--hide-bullets{% endif %}
+			"
+			{% if ticker_bullet_icon != blank %}
+				style="--bullet-icon: url({{ ticker_bullet_icon | image_url: width: 16, height: 16 }});"
+			{% endif %}
+		>
+			<div class="announcement-bar__text announcement-bar__ticker-item rte js-ticker-content-container">
+				{{- ticker_text -}}
+			</div>
+		</div>
+	{% endif %}
+{%- endcapture -%}
+
+{%- capture menu_content -%}
+	{% if linklists[additional_menu].links.size > 0 or show_socials %}
+		<div class="announcement-bar__first-column">
+			{% if ticker_text_desktop != blank %}
+				<div class="announcement-bar__menu-text announcement-bar__menu-text--desktop rte">
+					{{ ticker_text_desktop }}
+				</div>
+				<div class="announcement-bar__menu-text announcement-bar__menu-text--mobile rte">
+					{{ ticker_text_mobile }}
+				</div>
+			{% endif %}
+		</div>
+
+		<div class="announcement-bar__second-column">
+			{% if linklists[additional_menu].links.size > 0 %}
+				<ul class="announcement-bar__menu {% if hide_menu_on_mobile %}announcement-bar__menu--hide-on-mobile{% endif %}">
+					{% for link in linklists[additional_menu].links limit: 3 %}
+						<li><a href="{{ link.url }}" class="announcement-bar__menu-link">{{ link.title }}</a></li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+
+			{%- if show_socials -%}
+				<div class="announcement-bar__social-links">
+					{% render "social-links" %}
+				</div>
+			{%- endif -%}
+		</div>
+	{% endif %}
+{%- endcapture -%}
+
+{%- if use_slider -%}
+	{%- capture slider_content -%}
+		<div class="announcement-bar__slider-wrapper">
+			{% render 'swiper-button', direction: 'prev', class: 'js-announcement-swiper-button-prev' %}
+
+			<div class="announcement-bar__slider announcement-bar__slider--gradient swiper js-announcement-bar-slider"
+				 data-autoplay="{{ enable_autoplay }}"
+				 data-autoplay-speed="{{ autoplay_speed }}"
+			>
+				<div class="swiper-wrapper">
+					{% for block in section.blocks %}
+						{% assign slide_layout 			= block.settings.slider_layout %}
+						{% assign text_slider_desktop 	= block.settings.text_slider_desktop %}
+						{% assign text_slider_mobile 	= block.settings.text_slider_mobile | default: text_slider_desktop %}
+
+						<div class="swiper-slide announcement-bar__slide">
+							<div class="announcement-bar__slide-container js-announcement-bar-slide-content">
+								{% if slide_layout == 'simple_text' %}
+									<div class="announcement-bar__text announcement-bar__text--desktop rte">{{ text_slider_desktop }}</div>
+									<div class="announcement-bar__text announcement-bar__text--mobile rte">{{ text_slider_mobile }}</div>
+								{% else %}
+									{% assign text_slider_timer_desktop = block.settings.text_slider_timer_desktop %}
+									{% assign text_slider_timer_mobile 	= block.settings.text_slider_timer_mobile | default: text_slider_timer_desktop %}
+									{% assign slider_timer_type 		= block.settings.slider_timer_type %}
+									{% assign slider_timer_duration 	= block.settings.slider_timer_duration %}
+									{% assign slider_enable_timer_loop 	= block.settings.slider_enable_timer_loop %}
+									{% assign slider_timer_year 		= block.settings.slider_timer_year %}
+									{% assign slider_timer_month 		= block.settings.slider_timer_month %}
+									{% assign slider_timer_day 			= block.settings.slider_timer_day %}
+									{% assign slider_timer_hour 		= block.settings.slider_timer_hour %}
+									{% assign slider_timer_timezone 	= block.settings.slider_timer_timezone %}
+									{% assign slider_timer_icon 	    = block.settings.timer_icon %}
+									{% assign slider_button_text 		= block.settings.slider_button_text %}
+									{% assign slider_button_link 		= block.settings.slider_button_link %}
+
+									{% if slider_timer_year != blank and slider_timer_month != blank and slider_timer_day != blank and slider_timer_hour != blank %}
+										<div class="announcement-bar__text-content-wrapper">
+											{%- if text_slider_timer_desktop != blank -%}
+												<p class="announcement-bar__text announcement-bar__text--timer announcement-bar__text--desktop">
+													{{- text_slider_timer_desktop -}}
+												</p>
+
+												<p class="announcement-bar__text announcement-bar__text--timer announcement-bar__text--mobile">
+													{{- text_slider_timer_mobile -}}
+												</p>
+											{%- endif -%}
+
+											<p
+												class="announcement-bar__timer {% if timer_type == 'duration' %}is-hidden{% endif %} {% if slider_timer_icon != blank %}announcement-bar__timer--with-icon{% endif %} js-timer"
+												role="timer"
+												aria-live="off"
+												{% if slider_timer_icon != blank %}
+													style="--timer-icon: url({{ slider_timer_icon | image_url: width: 32, height: 32 }});"
+												{% endif %}
+											>
+												<script class="js-timer-settings" type="application/json">
+													{
+														"year": {{- slider_timer_year | json -}},
+														"month": {{- slider_timer_month | json -}},
+														"day": {{- slider_timer_day | json -}},
+														"hour": {{- slider_timer_hour | json -}},
+														"timezone": {{- slider_timer_timezone | json -}},
+														"type": {{- slider_timer_type | json -}},
+														"duration": {{- slider_timer_duration | json -}},
+														"loop": {{- slider_enable_timer_loop | json -}}
+													}
+												</script>
+
+												<span class="announcement-bar__timer-value is-hidden js-timer-days-hundreds">0</span>
+
+												<span class="announcement-bar__timer-value js-timer-days-dozens">0</span>
+
+												<span class="announcement-bar__timer-value js-timer-days-units">0</span>
+
+												<span>:</span>
+
+												<span class="announcement-bar__timer-value js-timer-hours-dozens">0</span>
+
+												<span class="announcement-bar__timer-value js-timer-hours-units">0</span>
+
+												<span>:</span>
+
+												<span class="announcement-bar__timer-value js-timer-minutes-dozens">0</span>
+
+												<span class="announcement-bar__timer-value js-timer-minutes-units">0</span>
+
+												<span>:</span>
+
+												<span class="announcement-bar__timer-value js-timer-seconds-dozens">0</span>
+
+												<span class="announcement-bar__timer-value js-timer-seconds-units">0</span>
+											</p>
+
+											{%- if slider_button_link != blank and slider_button_text != blank -%}
+												<a class="button-simple announcement-bar__link" href="{{- slider_button_link -}}">
+													{{- slider_button_text -}}
+												</a>
+											{%- endif -%}
+										</div>
+									{% endif %}
+								{% endif %}
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+
+			{% render 'swiper-button', direction: 'next', class: 'js-announcement-swiper-button-next' %}
+		</div>
+	{%- endcapture -%}
+{%- endif -%}
+
+{%- capture announcement_bar -%}
+	{%- case layout -%}
+		{%- when 'simple_text' -%}
+			{%- if announcement_bar_simple_text != blank -%}
+				{{- announcement_bar_simple_text -}}
+			{%- endif -%}
+		{%- when 'countdown_timer' -%}
+			{%- if announcement_bar_countdown_timer != blank -%}
+				{{- announcement_bar_countdown_timer -}}
+			{%- endif -%}
+		{%- when 'ticker' -%}
+			{%- if ticker_content != blank -%}
+				{{ ticker_content }}
+			{%- endif -%}
+		{%- when 'menu' -%}
+			{%- if menu_content != blank -%}
+				{{- menu_content -}}
+			{%- endif -%}
+	{%- endcase -%}
+{%- endcapture -%}
+
+{%- if announcement_bar != blank or slider_content != blank -%}
+	{% comment %}
+		Critical css
+	{% endcomment %}
+	<style>
+		.announcement-bar {
+			--animate-end: -50%;
+			display: flex;
+			position: relative;
+			z-index: 13;
+			width: 100%;
+		}
+
+		.announcement-bar.is-hidden {
+			display: none;
+		}
+		.announcement-bar__container {
+			position: relative;
+			min-height: 48px;
+			display: flex;
+			width: 100%;
+			padding: 12px 0;
+			background: var(--background-color);
+		}
+		.announcement-bar__container.announcement-bar__container--bg-repeat {
+			background-repeat: repeat;
+		}
+		.announcement-bar__container.announcement-bar__container--bg-cover {
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+
+		.announcement-bar .announcement-bar__content {
+			position: relative;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			column-gap: 16px;
+			row-gap: 12px;
+			width: 100%;
+			padding-left: 16px;
+			padding-right: 16px;
+		}
+		.announcement-bar .announcement-bar__content.announcement-bar__content--no-close-btn {
+			padding-left: 16px;
+			padding-right: 16px;
+		}
+
+		.announcement-bar .announcement-bar__ticker {
+			width: calc(100% + 16px * 2);
+			position: relative;
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			overflow: hidden;
+			margin-left: -16px;
+			margin-right: -16px;
+		}
+
+		.announcement-bar .announcement-bar__ticker:not(.is-loading) .announcement-bar__ticker-item {
+			opacity: 1;
+			animation-name: animate;
+			animation-duration: var(--mobile-movement-speed);
+			animation-timing-function: linear;
+			animation-delay: var(--timing-base);
+			animation-iteration-count: infinite;
+		}
+
+		.announcement-bar .announcement-bar__ticker.announcement-bar__ticker--small-offset {
+			width: calc(100% + 16px * 2);
+			margin-left: -16px;
+			margin-right: -16px;
+		}
+
+		.announcement-bar .announcement-bar__content.announcement-bar__content--grid {
+			flex-direction: column;
+		}
+
+		.announcement-bar .announcement-bar__text-content-wrapper {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			column-gap: 16px;
+			row-gap: 8px;
+			text-align: center;
+		}
+		.announcement-bar .announcement-bar__slider-wrapper {
+			position: relative;
+			width: 100%;
+			max-width: 600px;
+			min-width: 0;
+			padding: 0 25px;
+		}
+
+		.announcement-bar .announcement-bar__slider {
+			text-align: center;
+			margin: -6px 0;
+		}
+
+		.announcement-bar .announcement-bar__slider:not(.swiper-initialized) {
+			position: relative;
+			padding: 0;
+			overflow: hidden;
+			list-style: none;
+			z-index: 1;
+		}
+
+		.announcement-bar .announcement-bar__slider:not(.swiper-initialized) .swiper-wrapper {
+			position: relative;
+			display: flex;
+			align-items: center;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			transition-property: transform;
+			box-sizing: content-box;
+			z-index: 1;
+		}
+
+		.announcement-bar .announcement-bar__slider:not(.swiper-initialized) .announcement-bar__slide {
+			flex-shrink: 0;
+			width: 100%;
+			height: 100%;
+			position: relative;
+			transition-property: transform;
+		}
+
+		.announcement-bar .swiper-button {
+			position: absolute;
+			top: 50%;
+			z-index: 10;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transform: translateY(-50%);
+			color: var(--text-color, #000000);
+		}
+
+		.announcement-bar .swiper-button.swiper-button--prev {
+			inset-inline-start: 0;
+		}
+
+		.announcement-bar .swiper-button.swiper-button--next {
+			inset-inline-start: auto;
+			inset-inline-end: 0;
+		}
+
+		@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+			.announcement-bar .swiper-button:hover:not(.swiper-button-disabled) {
+				color: var(--text-color, #000000);
+			}
+		}
+
+		.announcement-bar .announcement-bar__slider.announcement-bar__slider--gradient::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 6px;
+			z-index: 2;
+			background: linear-gradient(360deg, rgba(255,255,255,0) 0%, var(--background-color) 100%);
+			transition-property: top, opacity;
+			transition-duration: 0.2s;
+		}
+
+		.announcement-bar .announcement-bar__slider.announcement-bar__slider--gradient::after {
+			content: "";
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 6px;
+			z-index: 2;
+			background: linear-gradient(180deg, rgba(255,255,255,0) 0%, var(--background-color) 100%);R
+			transition-property: bottom, opacity;
+			transition-duration: 0.2s;
+
+		}
+
+		.announcement-bar .announcement-bar__slide-container {
+			padding: 6px 10px;
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+			justify-content: center;
+		}
+
+		.announcement-bar .swiper-button-prev,
+		.announcement-bar .swiper-button-next {
+			width: 24px;
+			height: 24px;
+			margin: 0;
+			padding: 0;
+			transform: translateY(-50%);
+			color: var(--text-color);
+		}
+
+		.announcement-bar .swiper-button-prev:focus-visible,
+		.announcement-bar .swiper-button-next:focus-visible {
+			outline: 2px solid currentColor;
+		}
+
+		.announcement-bar .swiper-button-prev::after,
+		.announcement-bar .swiper-button-next::after {
+			display: none;
+		}
+		.announcement-bar .swiper-button-prev {
+			left: 0;
+		}
+		.announcement-bar .swiper-button-next {
+			right: 0;
+		}
+		.announcement-bar .announcement-bar__text {
+			font-size: calc(var(--body-font-size) * 0.875);
+			font-weight: 500;
+			line-height: 1.28;
+			text-align: center;
+			color: var(--text-color, #000000);
+		}
+
+		.announcement-bar .announcement-bar__text.announcement-bar__text--timer {
+			font-weight: 400;
+			color: var(--text-timer-color, #535353);
+		}
+
+		.announcement-bar .announcement-bar__text p {
+			word-break: break-word;
+		}
+		.announcement-bar .announcement-bar__text p + * {
+			margin-top: 5px;
+		}
+		.announcement-bar .announcement-bar__text a {
+			color: var(--bar-link-color, #000000);
+		}
+		.announcement-bar .announcement-bar__text a:focus-visible {
+			outline: 2px solid var(--bar-link-color, #000000);
+		}
+		.announcement-bar .announcement-bar__text.announcement-bar__text--desktop {
+			display: none;
+		}
+		.announcement-bar .announcement-bar__timer {
+			position: relative;
+			display: flex;
+			align-items: center;
+			flex-shrink: 0;
+			min-height: 32px;
+			font-size: calc(var(--body-font-size) * 0.875);
+			font-weight: 500;
+			line-height: 1.28;
+			color: var(--text-color, #000000);
+		}
+		.announcement-bar .announcement-bar__timer {
+			color: var(--number-timer-color);
+		}
+		.announcement-bar .announcement-bar__timer.announcement-bar__timer--with-icon {
+			padding-inline-start: 24px;
+			margin-inline-start: 16px;
+		}
+		.announcement-bar .announcement-bar__timer.announcement-bar__timer--with-icon::before {
+			content: "";
+			position: absolute;
+			top: 50%;
+			inset-inline-end: 100%;
+			display: block;
+			width: 32px;
+			height: 32px;
+			background-image: var(--timer-icon);
+			transform: translate(50%, -50%);
+		}
+		.announcement-bar .announcement-bar__timer-value {
+			display: inline-block;
+			min-width: 0.7em;
+		}
+		.announcement-bar .announcement-bar__timer-value.is-hidden {
+			display: none;
+		}
+		.announcement-bar .announcement-bar__link {
+			padding: 3px 15px;
+			background-color: var(--button-background, #000000);
+			color: var(--button-color, #ffffff);
+			border: 0;
+		}
+
+		.announcement-bar .announcement-bar__link::after {
+			background-color: var(--button-background-hover, #757575);
+		}
+		@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+			.announcement-bar .announcement-bar__link:hover {
+				background-color: var(--button-background-hover, #757575);
+				color: var(--button-color-hover, #000000);
+			}
+		}
+		.announcement-bar .announcement-bar__menu {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			column-gap: 16px;
+			row-gap: 6px;
+		}
+		.announcement-bar .announcement-bar__menu.announcement-bar__menu--hide-on-mobile {
+			display: none;
+		}
+
+		.announcement-bar .announcement-bar__menu-link {
+			font-size: calc(var(--body-font-size) * 0.875);
+			font-weight: 500;
+			line-height: 1.28;
+			-webkit-text-decoration-color: transparent;
+			text-decoration-color: transparent;
+			color: var(--bar-link-color, #000000);
+			transition-property: -webkit-text-decoration-color;
+			transition-property: text-decoration-color;
+			transition-duration: var(--timing-base);
+		}
+		.announcement-bar .announcement-bar__menu-link:focus-visible {
+			outline: 2px solid var(--bar-link-color, #000000);
+		}
+		.announcement-bar .announcement-bar__social-links {
+			gap: 16px;
+		}
+		.announcement-bar .button-social {
+			width: 24px;
+			height: 24px;
+		}
+		.announcement-bar .button-social .icon {
+			width: 16px;
+			height: 16px;
+			color: var(--bar-link-color, #000000);
+		}
+
+		@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+			.announcement-bar .button-social:hover {
+				color: var(--bar-link-color, #000000);
+			}
+		}
+
+		@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+			.announcement-bar .announcement-bar__menu-link:hover {
+				-webkit-text-decoration-color: var(--bar-link-color, #000000);
+				text-decoration-color: var(--bar-link-color, #000000);
+			}
+		}
+
+		.announcement-bar .announcement-bar__ticker-item {
+			display: inline-flex;
+			align-items: center;
+			white-space: nowrap;
+			will-change: transform;
+			opacity: 0;
+			transition-property: opacity;
+			transition-duration: var(--timing-base);
+		}
+
+		.announcement-bar .announcement-bar__ticker-item p,
+		.announcement-bar .announcement-bar__ticker-item ol,
+		.announcement-bar .announcement-bar__ticker-item ul,
+		.announcement-bar .announcement-bar__ticker-item h1,
+		.announcement-bar .announcement-bar__ticker-item h2,
+		.announcement-bar .announcement-bar__ticker-item h3,
+		.announcement-bar .announcement-bar__ticker-item h4,
+		.announcement-bar .announcement-bar__ticker-item h5,
+		.announcement-bar .announcement-bar__ticker-item h6 {
+			position: relative;
+			display: inline-flex;
+			gap: 0.3em;
+			margin: 0;
+			padding: 0 24px;
+		}
+
+		.announcement-bar .announcement-bar__ticker-item p::after,
+		.announcement-bar .announcement-bar__ticker-item ol::after,
+		.announcement-bar .announcement-bar__ticker-item ul::after,
+		.announcement-bar .announcement-bar__ticker-item h1::after,
+		.announcement-bar .announcement-bar__ticker-item h2::after,
+		.announcement-bar .announcement-bar__ticker-item h3::after,
+		.announcement-bar .announcement-bar__ticker-item h4::after,
+		.announcement-bar .announcement-bar__ticker-item h5::after,
+		.announcement-bar .announcement-bar__ticker-item h6::after {
+			content: "";
+			position: absolute;
+			top: 50%;
+			right: 0;
+			display: block;
+			width: 16px;
+			height: 16px;
+			border-radius: 50%;
+			background-image: var(--bullet-icon);
+			transform: translate(50%, -50%);
+		}
+
+		.announcement-bar .announcement-bar__ticker-item.announcement-bar__ticker-item--hide-bullets p::after,
+		.announcement-bar .announcement-bar__ticker-item.announcement-bar__ticker-item--hide-bullets ol::after,
+		.announcement-bar .announcement-bar__ticker-item.announcement-bar__ticker-item--hide-bullets ul::after,
+		.announcement-bar .announcement-bar__ticker-item.announcement-bar__ticker-item--hide-bullets h1::after,
+		.announcement-bar .announcement-bar__ticker-item.announcement-bar__ticker-item--hide-bullets h2::after,
+		.announcement-bar .announcement-bar__ticker-item.announcement-bar__ticker-item--hide-bullets h3::after,
+		.announcement-bar .announcement-bar__ticker-item.announcement-bar__ticker-item--hide-bullets h4::after,
+		.announcement-bar .announcement-bar__ticker-item.announcement-bar__ticker-item--hide-bullets h5::after,
+		.announcement-bar .announcement-bar__ticker-item.announcement-bar__ticker-item--hide-bullets h6::after {
+			display: none;
+		}
+
+		.announcement-bar .announcement-bar__ticker-item.after-hidden p:last-child::after,
+		.announcement-bar .announcement-bar__ticker-item.after-hidden ul:last-child::after {
+			 display: none;
+		}
+
+		.announcement-bar__ticker-item:focus-within {
+			animation-play-state: paused;
+		}
+
+		.announcement-bar .announcement-bar__column.announcement-bar__column-content {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+			column-gap: 32px;
+			row-gap: 8px;
+			width: 100%;
+			min-width: 0;
+		}
+
+		.announcement-bar .announcement-bar__column.announcement-bar__column-content:has(.announcement-bar__menu),
+		.announcement-bar .announcement-bar__column.announcement-bar__column-content:has(.announcement-bar__social-links) {
+			justify-content: space-between;
+		}
+
+		.announcement-bar__first-column {
+			display: flex;
+			align-items: center;
+			max-width: unset;
+		}
+
+		.announcement-bar__menu-text.rte {
+			font-size: calc(var(--body-font-size) * 0.875);
+			color: var(--text-color, #000000);
+		}
+
+		.announcement-bar .announcement-bar__menu-text a {
+			color: var(--bar-link-color, #000000);
+		}
+
+		.announcement-bar__menu-text--desktop {
+			display: none;
+			text-align: start;
+		}
+
+		.announcement-bar__menu-text--mobile {
+			text-align: center;
+		}
+
+		.announcement-bar__second-column {
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+			row-gap: 8px;
+		}
+
+		@media (min-width: 768px) {
+			.announcement-bar .announcement-bar__content {
+				justify-content: center;
+			}
+			.announcement-bar .announcement-bar__text-content-wrapper {
+				flex-direction: row;
+				align-items: center;
+			}
+
+			.announcement-bar .announcement-bar__menu {
+				justify-content: flex-start;
+				column-gap: 32px;
+				row-gap: 8px;
+			}
+
+			.announcement-bar .announcement-bar__ticker-item p,
+			.announcement-bar .announcement-bar__ticker-item ol,
+			.announcement-bar .announcement-bar__ticker-item ul,
+			.announcement-bar .announcement-bar__ticker-item h1,
+			.announcement-bar .announcement-bar__ticker-item h2,
+			.announcement-bar .announcement-bar__ticker-item h3,
+			.announcement-bar .announcement-bar__ticker-item h4,
+			.announcement-bar .announcement-bar__ticker-item h5,
+			.announcement-bar .announcement-bar__ticker-item h6 {
+				padding: 0 40px;
+			}
+
+			.announcement-bar__menu-text--desktop {
+				display: block;
+			}
+
+			.announcement-bar__menu-text--mobile {
+				display: none;
+			}
+
+			.announcement-bar .announcement-bar__column.announcement-bar__column-content,
+			.announcement-bar__second-column {
+				flex-direction: row;
+			}
+
+			.announcement-bar .announcement-bar__social-links {
+				margin-inline-start: 32px;
+			}
+
+			.announcement-bar .announcement-bar__menu.announcement-bar__menu--hide-on-mobile {
+				display: flex;
+			}
+
+			.announcement-bar__first-column {
+				max-width: 50%;
+			}
+		}
+
+		@media (min-width: 1200px) {
+			.announcement-bar__container {
+				width: 100%;
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			.announcement-bar .announcement-bar__content.announcement-bar__content--grid {
+				flex-direction: row;
+			}
+
+			.announcement-bar .announcement-bar__text.announcement-bar__text--desktop {
+				display: block;
+			}
+			.announcement-bar .announcement-bar__text.announcement-bar__text--mobile {
+				display: none;
+			}
+
+			.announcement-bar .announcement-bar__ticker:not(.is-loading) .announcement-bar__ticker-item {
+				animation-duration: var(--desktop-movement-speed);
+			}
+
+			.announcement-bar .announcement-bar__ticker.announcement-bar__ticker--incomplete-width {
+				width: 100%;
+				margin-left: 0;
+				margin-right: 0;
+			}
+		}
+
+		body.rtl .announcement-bar {
+			--animate-end: 50%;
+		}
+
+		body.rtl .announcement-bar .announcement-bar__timer.announcement-bar__timer--with-icon::before {
+			transform: translate(-50%, -50%);
+		}
+
+		@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+			.announcement-bar__ticker:hover .announcement-bar__ticker-item {
+				animation-play-state: paused;
+			}
+		}
+
+		@keyframes animate {
+			0% {
+				transform: translateX(0%);
+			}
+
+			100% {
+				transform: translateX(var(--animate-end, -50%));
+			}
+		}
+	</style>
+
+	<section class="announcement-bar js-announcement-bar" style="{{- section_styles | strip_newlines -}}">
+		<div class="announcement-bar__container">
+			<div class="announcement-bar__content">
+				{% if use_slider %}
+					<div class="announcement-bar__column announcement-bar__column-content">
+						{{- slider_content -}}
+					</div>
+				{% else %}
+					<div class="announcement-bar__column announcement-bar__column-content">
+						{{- announcement_bar -}}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</section>
+
+	{% if section.blocks.size > 1 %}
+		{%- render 'adastra' with '/src/scripts/component-swiper-modules.js' -%}
+	{% endif %}
+
+	{%- render 'adastra' with '/src/scripts/section-announcement-bar.js' -%}
+{%- endif -%}
+
+{%- schema -%}
+{
+	"name": "Announcement bar",
+	"settings": [
+		{
+			"type": "header",
+			"content": "General",
+			"info": "If you want to show the carousel in the announcement bar - add blocks to the section."
+		},
+		{
+			"type": "select",
+			"id": "layout",
+			"label": "Layout",
+			"options": [
+				{
+					"value": "simple_text",
+					"label": "Simple text"
+				},
+				{
+					"value": "countdown_timer",
+					"label": "Countdown timer"
+				},
+				{
+					"value": "menu",
+					"label": "Menu"
+				},
+				{
+					"value": "ticker",
+					"label": "Ticker"
+				}
+			],
+			"default": "simple_text"
+		},
+		{
+			"type": "header",
+			"content": "Slideshow",
+			"info": "If you want to show the carousel in the announcement bar - add blocks to the section."
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_autoplay",
+			"label": "Enable autoplay",
+			"default": true
+		},
+		{
+			"type": "range",
+			"id": "autoplay_speed",
+			"label": "Autoplay speed",
+			"unit": "s",
+			"min": 3,
+			"max": 10,
+			"step": 1,
+			"info": "Works only with enabled autoplay",
+			"default": 5
+		},
+		{
+			"type": "header",
+			"content": "Simple text"
+		},
+		{
+			"type": "richtext",
+			"id": "text_content_desktop",
+			"label": "Text desktop",
+			"default": "<p>Announcement bar text</p>"
+		},
+		{
+			"type": "richtext",
+			"id": "text_content_mobile",
+			"label": "Text mobile",
+			"info": "If the field is empty, then the desktop text will be used"
+		},
+		{
+			"type": "header",
+			"content": "Countdown timer"
+		},
+		{
+			"type": "textarea",
+			"id": "text_desktop",
+			"label": "Text desktop",
+			"default": "Set the date for the timer"
+		},
+		{
+			"type": "textarea",
+			"id": "text_mobile",
+			"label": "Text mobile",
+			"info": "If the field is empty, then the desktop text will be used"
+		},
+		{
+			"type": "select",
+			"id": "timer_type",
+			"label": "Choose date:",
+			"options": [
+				{
+					"value": "duration",
+					"label": "Duration"
+				},
+				{
+					"value": "end_date",
+					"label": "End Date"
+				}
+			],
+			"default": "end_date",
+			"info": "Duration — set a start time and timer length. End Date — set a specific end date."
+		},
+		{
+			"type": "number",
+			"id": "timer_year",
+			"label": "Year",
+			"info": "Write year in the next format, example: 2026"
+		},
+		{
+			"type": "select",
+			"id": "timer_month",
+			"label": "Month",
+			"options": [
+				{
+					"value": "0",
+					"label": "Jan"
+				},
+				{
+					"value": "1",
+					"label": "Feb"
+				},
+				{
+					"value": "2",
+					"label": "Mar"
+				},
+				{
+					"value": "3",
+					"label": "Apr"
+				},
+				{
+					"value": "4",
+					"label": "May"
+				},
+				{
+					"value": "5",
+					"label": "Jun"
+				},
+				{
+					"value": "6",
+					"label": "Jul"
+				},
+				{
+					"value": "7",
+					"label": "Aug"
+				},
+				{
+					"value": "8",
+					"label": "Sep"
+				},
+				{
+					"value": "9",
+					"label": "Oct"
+				},
+				{
+					"value": "10",
+					"label": "Nov"
+				},
+				{
+					"value": "11",
+					"label": "Dec"
+				}
+			],
+			"default": "0"
+		},
+		{
+			"type": "select",
+			"id": "timer_day",
+			"label": "Day",
+			"options": [
+				{
+					"value": "1",
+					"label": "1"
+				},
+				{
+					"value": "2",
+					"label": "2"
+				},
+				{
+					"value": "3",
+					"label": "3"
+				},
+				{
+					"value": "4",
+					"label": "4"
+				},
+				{
+					"value": "5",
+					"label": "5"
+				},
+				{
+					"value": "6",
+					"label": "6"
+				},
+				{
+					"value": "7",
+					"label": "7"
+				},
+				{
+					"value": "8",
+					"label": "8"
+				},
+				{
+					"value": "9",
+					"label": "9"
+				},
+				{
+					"value": "10",
+					"label": "10"
+				},
+				{
+					"value": "11",
+					"label": "11"
+				},
+				{
+					"value": "12",
+					"label": "12"
+				},
+				{
+					"value": "13",
+					"label": "13"
+				},
+				{
+					"value": "14",
+					"label": "14"
+				},
+				{
+					"value": "15",
+					"label": "15"
+				},
+				{
+					"value": "16",
+					"label": "16"
+				},
+				{
+					"value": "17",
+					"label": "17"
+				},
+				{
+					"value": "18",
+					"label": "18"
+				},
+				{
+					"value": "19",
+					"label": "19"
+				},
+				{
+					"value": "20",
+					"label": "20"
+				},
+				{
+					"value": "21",
+					"label": "21"
+				},
+				{
+					"value": "22",
+					"label": "22"
+				},
+				{
+					"value": "23",
+					"label": "23"
+				},
+				{
+					"value": "24",
+					"label": "24"
+				},
+				{
+					"value": "25",
+					"label": "25"
+				},
+				{
+					"value": "26",
+					"label": "26"
+				},
+				{
+					"value": "27",
+					"label": "27"
+				},
+				{
+					"value": "28",
+					"label": "28"
+				},
+				{
+					"value": "29",
+					"label": "29"
+				},
+				{
+					"value": "30",
+					"label": "30"
+				},
+				{
+					"value": "31",
+					"label": "31"
+				}
+			],
+			"default": "1"
+		},
+		{
+			"type": "select",
+			"id": "timer_hour",
+			"label": "Hour",
+			"options": [
+				{
+					"value": "0",
+					"label": "0"
+				},
+				{
+					"value": "1",
+					"label": "1"
+				},
+				{
+					"value": "2",
+					"label": "2"
+				},
+				{
+					"value": "3",
+					"label": "3"
+				},
+				{
+					"value": "4",
+					"label": "4"
+				},
+				{
+					"value": "5",
+					"label": "5"
+				},
+				{
+					"value": "6",
+					"label": "6"
+				},
+				{
+					"value": "7",
+					"label": "7"
+				},
+				{
+					"value": "8",
+					"label": "8"
+				},
+				{
+					"value": "9",
+					"label": "9"
+				},
+				{
+					"value": "10",
+					"label": "10"
+				},
+				{
+					"value": "11",
+					"label": "11"
+				},
+				{
+					"value": "12",
+					"label": "12"
+				},
+				{
+					"value": "13",
+					"label": "13"
+				},
+				{
+					"value": "14",
+					"label": "14"
+				},
+				{
+					"value": "15",
+					"label": "15"
+				},
+				{
+					"value": "16",
+					"label": "16"
+				},
+				{
+					"value": "17",
+					"label": "17"
+				},
+				{
+					"value": "18",
+					"label": "18"
+				},
+				{
+					"value": "19",
+					"label": "19"
+				},
+				{
+					"value": "20",
+					"label": "20"
+				},
+				{
+					"value": "21",
+					"label": "21"
+				},
+				{
+					"value": "22",
+					"label": "22"
+				},
+				{
+					"value": "23",
+					"label": "23"
+				}
+			],
+			"default": "0"
+		},
+		{
+			"type": "select",
+			"id": "timer_timezone",
+			"label": "Timezone",
+			"options": [
+				{
+					"value": "+0",
+					"label": "GMT"
+				},
+				{
+					"value": "+1",
+					"label": "GMT+1:00"
+				},
+				{
+					"value": "+2",
+					"label": "GMT+2:00"
+				},
+				{
+					"value": "+3",
+					"label": "GMT+3:00"
+				},
+				{
+					"value": "+3.5",
+					"label": "GMT+3:30"
+				},
+				{
+					"value": "+4",
+					"label": "GMT+4:00"
+				},
+				{
+					"value": "+5",
+					"label": "GMT+5:00"
+				},
+				{
+					"value": "+5.5",
+					"label": "GMT+5:30"
+				},
+				{
+					"value": "+6",
+					"label": "GMT+6:00"
+				},
+				{
+					"value": "+7",
+					"label": "GMT+7:00"
+				},
+				{
+					"value": "+8",
+					"label": "GMT+8:00"
+				},
+				{
+					"value": "+9",
+					"label": "GMT+9:00"
+				},
+				{
+					"value": "+9.5",
+					"label": "GMT+9:30"
+				},
+				{
+					"value": "+10",
+					"label": "GMT+10:00"
+				},
+				{
+					"value": "+11",
+					"label": "GMT+11:00"
+				},
+				{
+					"value": "+12",
+					"label": "GMT+12:00"
+				},
+				{
+					"value": "-11",
+					"label": "GMT-11:00"
+				},
+				{
+					"value": "-10",
+					"label": "GMT-10:00"
+				},
+				{
+					"value": "-9",
+					"label": "GMT-9:00"
+				},
+				{
+					"value": "-8",
+					"label": "GMT-8:00"
+				},
+				{
+					"value": "-7",
+					"label": "GMT-7:00"
+				},
+				{
+					"value": "-6",
+					"label": "GMT-6:00"
+				},
+				{
+					"value": "-5",
+					"label": "GMT-5:00"
+				},
+				{
+					"value": "-4",
+					"label": "GMT-4:00"
+				},
+				{
+					"value": "-3.5",
+					"label": "GMT-3:30"
+				},
+				{
+					"value": "-3",
+					"label": "GMT-3:00"
+				},
+				{
+					"value": "-1",
+					"label": "GMT-1:00"
+				}
+			],
+			"default": "+0"
+		},
+		{
+			"type": "number",
+			"id": "timer_duration",
+			"label": "Duration",
+			"info": "Enter time in hours — it will be converted into days and hours.",
+			"visible_if": "{{ section.settings.timer_type == 'duration' }}"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_timer_loop",
+			"label": "Loop timer",
+			"default": false,
+			"info": "If enabled, the timer will automatically restart from the same end date once it expires. Only works with timer type Duration.",
+			"visible_if": "{{ section.settings.timer_type == 'duration' }}"
+		},
+		{
+			"type": "text",
+			"id": "button_text",
+			"label": "Button label"
+		},
+		{
+			"type": "url",
+			"id": "button_link",
+			"label": "Button link"
+		},
+		{
+			"type": "image_picker",
+			"id": "timer_icon",
+			"label": "Timer icon",
+			"info": "32 x 32px .svg recommended"
+		},
+		{
+			"type": "header",
+			"content": "Ticker"
+		},
+		{
+			"type": "image_picker",
+			"id": "bullet_icon",
+			"label": "Bullet icon",
+			"info": "16 x 16px .svg recommended"
+		},
+		{
+			"type": "richtext",
+			"id": "ticker_text",
+			"label": "Text",
+			"default": "<p>Announcement bar text</p><p>Announcement bar text</p><p>Announcement bar text</p>"
+		},
+		{
+			"type": "range",
+			"id": "desktop_movement_speed",
+			"label": "Movement speed (desktop)",
+			"min": 5,
+			"max": 100,
+			"unit": "s",
+			"default": 20
+		},
+		{
+			"type": "range",
+			"id": "mobile_movement_speed",
+			"label": "Movement speed (mobile)",
+			"min": 5,
+			"max": 100,
+			"unit": "s",
+			"default": 35
+		},
+		{
+			"type": "header",
+			"content": "Menu"
+		},
+		{
+			"type": "richtext",
+			"id": "ticker_text_desktop",
+			"label": "Text desktop",
+			"default": "<p>Announcement bar text</p>"
+		},
+		{
+			"type": "richtext",
+			"id": "ticker_text_mobile",
+			"label": "Text mobile",
+			"default": "<p>Announcement bar text</p>"
+		},
+		{
+			"type": "link_list",
+			"id": "additional_menu",
+			"label": "Additional menu",
+			"info": "Show first 3 links of the menu"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_socials",
+			"label": "Show socials",
+			"default": false
+		},
+		{
+			"type": "checkbox",
+			"id": "hide_menu_on_mobile",
+			"label": "Hide menu on mobile",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "color_background",
+			"id": "background_color",
+			"label": "Background",
+			"default": "#080606"
+		},
+		{
+			"type": "color",
+			"id": "text_color",
+			"label": "Text",
+			"default": "#ffffff"
+		},
+		{
+			"type": "color",
+			"id": "link_color",
+			"label": "Link",
+			"default": "#ffffff"
+		},
+		{
+			"type": "color",
+			"id": "text_timer",
+			"label": "Timer text",
+			"default": "#858585"
+		},
+		{
+			"type": "color",
+			"id": "number_timer",
+			"label": "Timer numbers",
+			"default": "#ffffff"
+		},
+		{
+			"type": "color",
+			"id": "button_color",
+			"label": "Timer button label",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "button_background",
+			"label": "Timer button background",
+			"default": "#1e1e1e"
+		},
+		{
+			"type": "color",
+			"id": "button_color_hover",
+			"label": "Timer button label (hover)",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "button_background_hover",
+			"label": "Timer button background (hover)",
+			"default": "#757575"
+		}
+	],
+	"blocks": [
+		{
+			"type": "text_slide",
+			"name": "Text slide",
+			"settings": [
+				{
+					"type": "select",
+					"id": "slider_layout",
+					"label": "Layout",
+					"options": [
+						{
+							"value": "countdown_timer",
+							"label": "Countdown timer"
+						},
+						{
+							"value": "simple_text",
+							"label": "Simple text"
+						}
+					],
+					"default": "simple_text"
+				},
+				{
+					"type": "header",
+					"content": "Simple text"
+				},
+				{
+					"type": "richtext",
+					"id": "text_slider_desktop",
+					"label": "Text desktop",
+					"default": "<p>Announcement bar text</p>"
+				},
+				{
+					"type": "richtext",
+					"id": "text_slider_mobile",
+					"label": "Text mobile",
+					"info": "If the field is empty, then the desktop text will be used"
+				},
+				{
+					"type": "header",
+					"content": "Countdown timer"
+				},
+				{
+					"type": "textarea",
+					"id": "text_slider_timer_desktop",
+					"label": "Text desktop",
+					"default": "Set the date for the timer"
+				},
+				{
+					"type": "textarea",
+					"id": "text_slider_timer_mobile",
+					"label": "Text mobile",
+					"info": "If the field is empty, then the desktop text will be used"
+				},
+				{
+					"type": "select",
+					"id": "slider_timer_type",
+					"label": "Choose date:",
+					"options": [
+						{
+							"value": "duration",
+							"label": "Duration"
+						},
+						{
+							"value": "end_date",
+							"label": "End Date"
+						}
+					],
+					"default": "end_date",
+					"info": "Duration — set a start time and timer length. End Date — set a specific end date."
+				},
+				{
+					"type": "number",
+					"id": "slider_timer_year",
+					"label": "Year",
+					"info": "Write year in the next format, example: 2025"
+				},
+				{
+					"type": "select",
+					"id": "slider_timer_month",
+					"label": "Month",
+					"options": [
+						{
+							"value": "0",
+							"label": "Jan"
+						},
+						{
+							"value": "1",
+							"label": "Feb"
+						},
+						{
+							"value": "2",
+							"label": "Mar"
+						},
+						{
+							"value": "3",
+							"label": "Apr"
+						},
+						{
+							"value": "4",
+							"label": "May"
+						},
+						{
+							"value": "5",
+							"label": "Jun"
+						},
+						{
+							"value": "6",
+							"label": "Jul"
+						},
+						{
+							"value": "7",
+							"label": "Aug"
+						},
+						{
+							"value": "8",
+							"label": "Sep"
+						},
+						{
+							"value": "9",
+							"label": "Oct"
+						},
+						{
+							"value": "10",
+							"label": "Nov"
+						},
+						{
+							"value": "11",
+							"label": "Dec"
+						}
+					],
+					"default": "0"
+				},
+				{
+					"type": "select",
+					"id": "slider_timer_day",
+					"label": "Day",
+					"options": [
+						{
+							"value": "1",
+							"label": "1"
+						},
+						{
+							"value": "2",
+							"label": "2"
+						},
+						{
+							"value": "3",
+							"label": "3"
+						},
+						{
+							"value": "4",
+							"label": "4"
+						},
+						{
+							"value": "5",
+							"label": "5"
+						},
+						{
+							"value": "6",
+							"label": "6"
+						},
+						{
+							"value": "7",
+							"label": "7"
+						},
+						{
+							"value": "8",
+							"label": "8"
+						},
+						{
+							"value": "9",
+							"label": "9"
+						},
+						{
+							"value": "10",
+							"label": "10"
+						},
+						{
+							"value": "11",
+							"label": "11"
+						},
+						{
+							"value": "12",
+							"label": "12"
+						},
+						{
+							"value": "13",
+							"label": "13"
+						},
+						{
+							"value": "14",
+							"label": "14"
+						},
+						{
+							"value": "15",
+							"label": "15"
+						},
+						{
+							"value": "16",
+							"label": "16"
+						},
+						{
+							"value": "17",
+							"label": "17"
+						},
+						{
+							"value": "18",
+							"label": "18"
+						},
+						{
+							"value": "19",
+							"label": "19"
+						},
+						{
+							"value": "20",
+							"label": "20"
+						},
+						{
+							"value": "21",
+							"label": "21"
+						},
+						{
+							"value": "22",
+							"label": "22"
+						},
+						{
+							"value": "23",
+							"label": "23"
+						},
+						{
+							"value": "24",
+							"label": "24"
+						},
+						{
+							"value": "25",
+							"label": "25"
+						},
+						{
+							"value": "26",
+							"label": "26"
+						},
+						{
+							"value": "27",
+							"label": "27"
+						},
+						{
+							"value": "28",
+							"label": "28"
+						},
+						{
+						"value": "29",
+						"label": "29"
+						},
+						{
+							"value": "30",
+							"label": "30"
+						},
+						{
+							"value": "31",
+							"label": "31"
+						}
+					],
+					"default": "1"
+				},
+				{
+					"type": "select",
+					"id": "slider_timer_hour",
+					"label": "Hour",
+					"options": [
+						{
+							"value": "0",
+							"label": "0"
+						},
+						{
+							"value": "1",
+							"label": "1"
+						},
+						{
+							"value": "2",
+							"label": "2"
+						},
+						{
+							"value": "3",
+							"label": "3"
+						},
+						{
+							"value": "4",
+							"label": "4"
+						},
+						{
+							"value": "5",
+							"label": "5"
+						},
+						{
+							"value": "6",
+							"label": "6"
+						},
+						{
+							"value": "7",
+							"label": "7"
+						},
+						{
+							"value": "8",
+							"label": "8"
+						},
+						{
+							"value": "9",
+							"label": "9"
+						},
+						{
+							"value": "10",
+							"label": "10"
+						},
+						{
+							"value": "11",
+							"label": "11"
+						},
+						{
+							"value": "12",
+							"label": "12"
+						},
+						{
+							"value": "13",
+							"label": "13"
+						},
+						{
+							"value": "14",
+							"label": "14"
+						},
+						{
+							"value": "15",
+							"label": "15"
+						},
+						{
+							"value": "16",
+							"label": "16"
+						},
+						{
+							"value": "17",
+							"label": "17"
+						},
+						{
+							"value": "18",
+							"label": "18"
+						},
+						{
+							"value": "19",
+							"label": "19"
+						},
+						{
+							"value": "20",
+							"label": "20"
+						},
+						{
+							"value": "21",
+							"label": "21"
+						},
+						{
+							"value": "22",
+							"label": "22"
+						},
+						{
+							"value": "23",
+							"label": "23"
+						}
+					],
+					"default": "0"
+				},
+				{
+					"type": "select",
+					"id": "slider_timer_timezone",
+					"label": "Timezone",
+					"options": [
+						{
+							"value": "+0",
+							"label": "GMT"
+						},
+						{
+							"value": "+1",
+							"label": "GMT+1:00"
+						},
+						{
+							"value": "+2",
+							"label": "GMT+2:00"
+						},
+						{
+							"value": "+3",
+							"label": "GMT+3:00"
+						},
+						{
+							"value": "+3.5",
+							"label": "GMT+3:30"
+						},
+						{
+							"value": "+4",
+							"label": "GMT+4:00"
+						},
+						{
+							"value": "+5",
+							"label": "GMT+5:00"
+						},
+						{
+							"value": "+5.5",
+							"label": "GMT+5:30"
+						},
+						{
+							"value": "+6",
+							"label": "GMT+6:00"
+						},
+						{
+							"value": "+7",
+							"label": "GMT+7:00"
+						},
+						{
+							"value": "+8",
+							"label": "GMT+8:00"
+						},
+						{
+							"value": "+9",
+							"label": "GMT+9:00"
+						},
+						{
+							"value": "+9.5",
+							"label": "GMT+9:30"
+						},
+						{
+							"value": "+10",
+							"label": "GMT+10:00"
+						},
+						{
+							"value": "+11",
+							"label": "GMT+11:00"
+						},
+						{
+							"value": "+12",
+							"label": "GMT+12:00"
+						},
+						{
+							"value": "-11",
+							"label": "GMT-11:00"
+						},
+						{
+							"value": "-10",
+							"label": "GMT-10:00"
+						},
+						{
+							"value": "-9",
+							"label": "GMT-9:00"
+						},
+						{
+							"value": "-8",
+							"label": "GMT-8:00"
+						},
+						{
+							"value": "-7",
+							"label": "GMT-7:00"
+						},
+						{
+							"value": "-6",
+							"label": "GMT-6:00"
+						},
+						{
+							"value": "-5",
+							"label": "GMT-5:00"
+						},
+						{
+							"value": "-4",
+							"label": "GMT-4:00"
+						},
+						{
+							"value": "-3.5",
+							"label": "GMT-3:30"
+						},
+						{
+							"value": "-3",
+							"label": "GMT-3:00"
+						},
+						{
+							"value": "-1",
+							"label": "GMT-1:00"
+						}
+					],
+					"default": "+0"
+				},
+				{
+					"type": "number",
+					"id": "slider_timer_duration",
+					"label": "Duration",
+					"info": "Enter time in hours — it will be converted into days and hours.",
+					"visible_if": "{{ block.settings.slider_timer_type == 'duration' }}"
+				},
+				{
+					"type": "checkbox",
+					"id": "slider_enable_timer_loop",
+					"label": "Loop timer",
+					"default": false,
+					"info": "If enabled, the timer will automatically restart from the same end date once it expires. Only works with timer type Duration.",
+					"visible_if": "{{ block.settings.slider_timer_type == 'duration' }}"
+				},
+				{
+					"type": "text",
+					"id": "slider_button_text",
+					"label": "Button label",
+					"default": "Shop now"
+				},
+				{
+					"type": "url",
+					"id": "slider_button_link",
+					"label": "Button link"
+				},
+				{
+					"type": "image_picker",
+					"id": "timer_icon",
+					"label": "Timer icon",
+					"info": "64 x 64px recommended"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

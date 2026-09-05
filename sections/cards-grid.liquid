@@ -1,0 +1,577 @@
+{% assign heading_first_line              = section.settings.heading_first_line %}
+{% assign heading_second_line             = section.settings.heading_second_line %}
+{% assign text 							  = section.settings.text %}
+{% assign cards_per_row 				  = section.settings.cards_per_row %}
+{% assign container 					  = section.settings.container_width %}
+{% assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance %}
+{% assign color_scheme 	                  = section.settings.color_scheme %}
+{% assign overlay_background_color        = section.settings.overlay_background_color %}
+{% assign overlay_text_color              = section.settings.overlay_text_color %}
+{% assign enable_bottom_rounded_corners   = section.settings.enable_bottom_rounded_corners %}
+
+{%- if enable_color_scheme_inheritance -%}
+	{% assign color_scheme = settings.main_color_scheme %}
+{%- endif -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{% capture styles %}
+	--container-width: {{ container_width }};
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px;
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px;
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px;
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px;
+	--overlay-background-color: {{ overlay_background_color }};
+	--overlay-text-color: {{ overlay_text_color }};
+	--overlay-border-color: {{ overlay_text_color | color_modify: 'alpha', 0.12 }};
+{% endcapture %}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- render 'adastra' with '/src/styles/cards-grid.scss' -%}
+
+<section
+	class="cards-grid js-animate{% if request.visual_preview_mode or section.index == 1 %} animated{% endif %} color-{{ color_scheme.id }} {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %}"
+	style="{{ styles }}">
+	<div class="container">
+		{% if heading_first_line != blank or heading_second_line != blank or text != blank %}
+			<div class="cards-grid__header need-animate tr-dur-1">
+				{% if heading_first_line != blank or heading_second_line != blank %}
+					<h2 class="section-title need-animate h1">
+						<span class="section-title__text-container">
+							<span
+								class="section-title__text {% if heading_second_line == blank %}text-center{% endif %}">
+								{{ heading_first_line }}
+							</span>
+						</span>
+
+						<span class="section-title__text-container">
+							<span
+								class="section-title__text {% if heading_first_line == blank %}text-center{% endif %}">
+								{{ heading_second_line }}
+							</span>
+						</span>
+					</h2>
+				{% endif %}
+
+				{% if text != blank %}
+					<div class="cards-grid__text rte">{{ text }}</div>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		{% if section.blocks.size > 0 %}
+			{%- capture row_class -%}
+				{% if section.blocks.size == 1 %}cards-grid__row--center-one{% endif %} {{- -}}
+				{% if section.blocks.size <= 2 %}cards-grid__row--center-two{% endif %} {{- -}}
+			{%- endcapture -%}
+
+			<div class="cards-grid__row {{ row_class }} need-animate">
+				{% assign delays = "0.25,0.75,1.25,1,0.5" | split: "," %}
+				{% assign items_per_row = 5 %}
+
+				{% assign delay_step = 0.2 %}
+
+				{% for block in section.blocks %}
+					{% assign image = block.settings.image %}
+					{% assign title = block.settings.title %}
+					{% assign text = block.settings.text %}
+					{% assign link_text = block.settings.link_text %}
+					{% assign link_url = block.settings.link_url %}
+					{% assign is_lazy = false %}
+
+					{% capture card_content %}
+						<div class="cards-grid__content-container">
+							{% if title != blank %}
+								<h3 class="cards-grid__item-title h5">
+									{{- title -}}
+								</h3>
+							{% endif %}
+
+							{% if text != blank %}
+								<div class="cards-grid__item-text rte">{{ text }}</div>
+							{% endif %}
+
+							{% if link_text != blank and link_url != blank %}
+								{% render 'button-link',
+									link_text: link_text,
+									link_url: link_url,
+									class: "cards-grid__item-link"
+								%}
+							{% endif %}
+						</div>
+					{% endcapture %}
+
+					{% if section.index > 1 %}
+						{% assign is_lazy = true %}
+					{% elsif section.index == 1 and forloop.index > 1 %}
+						{% assign is_lazy = true %}
+					{% endif %}
+
+					{% case cards_per_row %}
+						{% when "4" %}
+							{% assign image_width = 468 %}
+							{% assign image_width_1199 = 280 %}
+							{% assign image_height = 613 %}
+							{% assign image_height_1199 = 366 %}
+						{% when "5" %}
+							{% assign image_width = 370 %}
+							{% assign image_width_1199 = 219 %}
+							{% assign image_height = 485 %}
+							{% assign image_height_1199 = 287 %}
+					{% endcase %}
+
+					{% assign image_width_x2 = image_width | times: 2 %}
+					{% assign image_height_x2 = image_height | times: 2 %}
+
+					{% assign image_width_1199_x2 = image_width_1199 | times: 2 %}
+					{% assign image_height_1199_x2 = image_height_1199 | times: 2 %}
+
+					{% assign image_width_991 = 472 %}
+					{% assign image_height_991 = 618 %}
+					{% assign image_width_991_x2 = image_width_991 | times: 2 %}
+					{% assign image_height_991_x2 = image_height_991 | times: 2 %}
+
+					{% assign image_width_767 = 364 %}
+					{% assign image_height_767 = 382 %}
+					{% assign image_width_767_x2 = image_width_767 | times: 2 %}
+					{% assign image_height_767_x2 = image_height_767 | times: 2 %}
+
+					{% assign image_width_575 = 543 %}
+					{% assign image_height_575 = 570 %}
+					{% assign image_width_575_x2 = image_width_575 | times: 2 %}
+					{% assign image_height_575_x2 = image_height_575 | times: 2 %}
+
+					{% assign image_width_420 = 388 %}
+					{% assign image_height_420 = 407 %}
+					{% assign image_width_420_x2 = image_width_420 | times: 2 %}
+					{% assign image_height_420_x2 = image_height_420 | times: 2 %}
+
+					{% assign total_items = section.blocks.size %}
+					{% assign row_index = forloop.index0 | divided_by: items_per_row %}
+					{% assign position_in_row = forloop.index0 | modulo: items_per_row %}
+					{% assign last_index_in_row = row_index | times: items_per_row | plus: items_per_row | minus: 1 %}
+
+					{% if section.blocks.size > 5 %}
+						{% assign delay_step = delay_step | plus: 0.2 %}
+					{% else %}
+						{% assign delay_step = delays[position_in_row] %}
+					{% endif %}
+
+					{% capture item_styles %}
+						--delay-step: {{ delay_step }}s;
+					{% endcapture %}
+
+					<div
+						class="cards-grid__item js-cards-grid-item need-animate tr-dur-0-5 cards-grid__item--{{ cards_per_row }}"
+						style="{{ item_styles }}">
+						{% if image != blank %}
+							{%- capture img_focal -%}
+								--img-desktop-pos: {{ image.presentation.focal_point }};
+							{%- endcapture -%}
+
+							{% capture image_element %}
+								<picture {% if is_lazy %}class="lazy"{% endif %}>
+									{% if is_lazy %}
+										<source srcset="{{ image | image_url: width: 10, height: 10 }}"
+												data-srcset="{{ image | image_url: width: image_width_420, height: image_height_420 }} 1x,
+															 {{ image | image_url: width: image_width_420_x2, height: image_height_420_x2 }} 2x"
+												media="(max-width: 420px)"
+												width="{{ image_width_420 }}"
+												height="{{ image_height_420 }}"
+										>
+
+										<source srcset="{{ image | image_url: width: 10, height: 10 }}"
+												data-srcset="{{ image | image_url: width: image_width_575, height: image_height_575 }} 1x,
+															 {{ image | image_url: width: image_width_575_x2, height: image_height_575_x2 }} 2x"
+												media="(max-width: 575px)"
+												width="{{ image_width_575 }}"
+												height="{{ image_height_575 }}"
+										>
+
+										<source srcset="{{ image | image_url: width: 10, height: 10 }}"
+												data-srcset="{{ image | image_url: width: image_width_767, height: image_height_767 }} 1x,
+															 {{ image | image_url: width: image_width_767_x2, height: image_height_767_x2 }} 2x"
+												media="(max-width: 767px)"
+												width="{{ image_width_767 }}"
+												height="{{ image_height_767 }}"
+										>
+
+										<source srcset="{{ image | image_url: width: 10, height: 10 }}"
+												data-srcset="{{ image | image_url: width: image_width_991, height: image_height_991 }} 1x,
+															 {{ image | image_url: width: image_width_991_x2, height: image_height_991_x2 }} 2x"
+												media="(max-width: 991px)"
+												width="{{ image_width_991 }}"
+												height="{{ image_height_991 }}"
+										>
+
+										<source srcset="{{ image | image_url: width: 10, height: 10 }}"
+												data-srcset="{{ image | image_url: width: image_width_1199, height: image_height_1199 }} 1x,
+														 {{ image | image_url: width: image_width_1199_x2, height: image_height_1199_x2 }} 2x"
+												media="(max-width: 1199px)"
+												width="{{ image_width_1199 }}"
+												height="{{ image_height_1199 }}"
+										>
+
+										<img class="cards-grid__item-image"
+											 src="{{ image | image_url: width: 10, height: 10 }}"
+											 data-src="{{ image | image_url: width: image_width, height: image_height }}"
+											 data-srcset="{{ image | image_url: width: image_width, height: image_height }} 1x,
+													  {{ image | image_url: width: image_width_x2, height: image_height_x2 }} 2x"
+											 alt="{{ image.alt | escape }}"
+											{% if img_focal != blank %}
+												style="{{ img_focal }}"
+											{% endif %}
+											 width="{{ image_width }}"
+											 height="{{ image_height }}"
+										>
+									{% else %}
+										<source
+											srcset="{{ image | image_url: width: image_width_420, height: image_height_420 }} 1x,
+													{{ image | image_url: width: image_width_420_x2, height: image_height_420_x2 }} 2x"
+											media="(max-width: 420px)"
+											width="{{ image_width_420 }}"
+											height="{{ image_height_420 }}"
+										>
+
+										<source
+											srcset="{{ image | image_url: width: image_width_575, height: image_height_575 }} 1x,
+													{{ image | image_url: width: image_width_575_x2, height: image_height_575_x2 }} 2x"
+											media="(max-width: 575px)"
+											width="{{ image_width_575 }}"
+											height="{{ image_height_575 }}"
+										>
+
+										<source
+											srcset="{{ image | image_url: width: image_width_767, height: image_height_767 }} 1x,
+													{{ image | image_url: width: image_width_767_x2, height: image_height_767_x2 }} 2x"
+											media="(max-width: 767px)"
+											width="{{ image_width_767 }}"
+											height="{{ image_height_767 }}"
+										>
+
+										<source
+											srcset="{{ image | image_url: width: image_width_991, height: image_height_991 }} 1x,
+													{{ image | image_url: width: image_width_991_x2, height: image_height_991_x2 }} 2x"
+											media="(max-width: 991px)"
+											width="{{ image_width_991 }}"
+											height="{{ image_height_991 }}"
+										>
+
+										<source
+											srcset="{{ image | image_url: width: image_width_1199, height: image_height_1199 }} 1x,
+													{{ image | image_url: width: image_width_1199_x2, height: image_height_1199_x2 }} 2x"
+											media="(max-width: 1199px)"
+											width="{{ image_width_1199 }}"
+											height="{{ image_width_1199 }}"
+										>
+
+										<img class="cards-grid__item-image"
+											 src="{{ image | image_url: width: image_width, height: image_height }}"
+											 srcset="{{ image | image_url: width: image_width, height: image_height }} 1x,
+											{{ image | image_url: width: image_width_x2, height: image_height_x2 }} 2x"
+											 alt="{{ image.alt | escape }}"
+											{% if section.index == 1 and forloop.index < 3 %}
+												fetchpriority="high"
+											{% endif %}
+											{% if img_focal != blank %}
+												style="{{ img_focal }}"
+											{% endif %}
+											 width="{{ image_width }}"
+											 height="{{ image_height }}"
+										>
+									{% endif %}
+								</picture>
+							{% endcapture %}
+
+							<div class="cards-grid__item-image-wrapper">
+								{{ image_element }}
+								{{ card_content }}
+							</div>
+						{% else %}
+							<div class="cards-grid__item-image-wrapper">
+								{{- 'detailed-apparel-1' | placeholder_svg_tag: 'cards-grid__item-image cards-grid__item-image--placeholder' -}}
+								{{ card_content }}
+							</div>
+						{% endif %}
+
+						<button
+							class="cards-grid__button button-circle button-circle--small js-cards-grid-button"
+							aria-label="{{- "sections.cards_grid.button_aria" | t -}}">
+							<span class="button-circle__inner">
+								{%- render 'icons', icon: 'circle-decoration' -%}
+								{%- render 'icons', icon: 'plus', class: 'icon-inactive' -%}
+								{%- render 'icons', icon: 'minus', class: 'icon-active' -%}
+							</span>
+						</button>
+					</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+</section>
+
+{% if section.blocks.size > 0 %}
+	{%- render 'adastra' with '/src/scripts/cards-grid.js' -%}
+{% endif %}
+
+{% schema %}
+{
+	"name": "Cards grid",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"id": "heading_first_line",
+			"type": "inline_richtext",
+			"label": "Heading (first line)",
+			"default": "Cards grid"
+		},
+		{
+			"id": "heading_second_line",
+			"type": "inline_richtext",
+			"label": "Heading (second line)"
+		},
+		{
+			"type": "richtext",
+			"id": "text",
+			"label": "Text"
+		},
+		{
+			"type": "select",
+			"id": "cards_per_row",
+			"label": "Cards per row",
+			"default": "5",
+			"options": [
+				{
+					"value": "4",
+					"label": "4 per row"
+				},
+				{
+					"value": "5",
+					"label": "5 per row"
+				}
+			],
+			"info": "Only desktop"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "color_background",
+			"id": "overlay_background_color",
+			"label": "Overlay background",
+			"default": "rgba(22, 20, 20, 0.30)"
+		},
+		{
+			"type": "color",
+			"id": "overlay_text_color",
+			"label": "Text color",
+			"default": "#fff"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"type": "card",
+			"name": "Block",
+			"settings": [
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Heading",
+					"default": "Short heading"
+				},
+				{
+					"type": "textarea",
+					"id": "text",
+					"label": "Text",
+					"default": "Some short text about some feature on your site"
+				},
+				{
+					"type": "text",
+					"id": "link_text",
+					"label": "Link text",
+					"default": "Learn More"
+				},
+				{
+					"type": "url",
+					"id": "link_url",
+					"label": "Link URL"
+				},
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image",
+					"info": "548 x 718px recommended"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Cards grid",
+			"blocks": [
+				{
+					"type": "card"
+				},
+				{
+					"type": "card"
+				},
+				{
+					"type": "card"
+				},
+				{
+					"type": "card"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

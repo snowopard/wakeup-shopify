@@ -1,0 +1,97 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header mobile mega menu
+	Render header mobile mega menu
+	- megamenu_object: blocks object using for output media content.
+
+	Usage:
+	{%- render 'header-mobile-mega-menu', megamenu_object: megamenu_object -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- if first_level_link.links.size > 0 -%}
+	{%- assign back_image    				= megamenu_object.settings.banner_back_image -%}
+	{%- assign back_image_object_fit 		= megamenu_object.settings.banner_back_image_object_fit -%}
+	{%- assign main_image          			= megamenu_object.settings.banner_main_image -%}
+	{%- assign main_image_object_fit		= megamenu_object.settings.banner_main_image_object_fit -%}
+	{%- assign link_label         			= megamenu_object.settings.banner_link_label -%}
+	{%- assign link          				= megamenu_object.settings.banner_link -%}
+	{%- assign background_color       		= megamenu_object.settings.banner_background_color -%}
+	{%- assign background_ellipse_color		= megamenu_object.settings.banner_background_ellipse_color -%}
+	{%- assign border_color					= megamenu_object.settings.banner_border_color | color_modify: 'alpha', 0.12 -%}
+	{%- assign animation_delay_nested 		= 0 -%}
+
+	<div class="header-mobile__menu-container-inner header-mobile__menu-container-inner--small-offset header-mobile__menu-container-inner--big-gap">
+		<ul class="header-mobile__menu-list">
+			{%- for second_level_link in first_level_link.links -%}
+				<li class="header-mobile__menu-list-item {% if second_level_link.links.size > 0 %}header-mobile__menu-list-item--big-offset{%- else -%}header-mobile__menu-list-item--small-offset{%- endif -%}">
+					<div class="header-navigation-block">
+						{%- if second_level_link.links.size > 0 -%}
+							<div class="header-navigation-block_item header-mobile__animate header-mobile__animate--nested need-animate" style="--animation-delay: {{ animation_delay_nested }}s">
+								{%- if second_level_link.url != '#' -%}
+									<a class="header-navigation-item header-navigation-item--medium" href="{{- second_level_link.url -}}" {% if second_level_link.current %}aria-current="page"{% endif %}>
+										<span class="header-navigation-item__text">
+											{{- second_level_link.title | escape -}}
+										</span>
+									</a>
+								{%- else -%}
+									<p class="header-navigation-item header-navigation-item--no-hover header-navigation-item--medium">
+										<span class="header-navigation-item__text">
+											{{- second_level_link.title | escape -}}
+										</span>
+									</p>
+								{%- endif -%}
+							</div>
+
+							{%- assign animation_delay_nested = animation_delay_nested | plus: 0.06 -%}
+
+							<ul class="header-navigation-block__list">
+								{%- for third_level_link in second_level_link.links -%}
+									<li class="header-navigation-block__list-item header-mobile__animate header-mobile__animate--nested need-animate" style="--animation-delay: {{ animation_delay_nested }}s">
+										<a class="header-navigation-item header-navigation-item--small" href="{{- third_level_link.url -}}" {% if third_level_link.current %}aria-current="page"{% endif %}>
+											<span class="header-navigation-item__text">
+												{{- third_level_link.title | escape -}}
+											</span>
+										</a>
+									</li>
+
+									{%- assign animation_delay_nested = animation_delay_nested | plus: 0.06 -%}
+								{%- endfor -%}
+							</ul>
+						{%- else -%}
+							<div class="header-navigation-block_item header-mobile__animate header-mobile__animate--nested need-animate" style="--animation-delay: {{ animation_delay_nested }}s">
+								<a class="header-navigation-item header-navigation-item--medium" href="{{- second_level_link.url -}}" {% if second_level_link.current %}aria-current="page"{% endif %}>
+									<span class="header-navigation-item__text">
+										{{- second_level_link.title | escape -}}
+									</span>
+								</a>
+							</div>
+
+							{%- assign animation_delay_nested = animation_delay_nested | plus: 0.06 -%}
+						{%- endif -%}
+					</div>
+				</li>
+			{%- endfor -%}
+		</ul>
+
+		{%- if main_image != blank or main_image != blank -%}
+			<ul class="header-mobile__menu-list">
+				<li class="header-mobile__menu-list-item header-mobile__animate header-mobile__animate--nested need-animate" style="--animation-delay: {{ animation_delay_nested }}s">
+					{% render
+						'header-banner',
+						back_image: back_image,
+						back_image_object_fit: back_image_object_fit,
+						main_image: main_image,
+						main_image_object_fit: main_image_object_fit,
+						link_label: link_label,
+						link: link,
+						enable_lazy_load: true,
+						background_color: background_color,
+						background_ellipse_color: background_ellipse_color,
+						border_color: border_color
+					%}
+				</li>
+			</ul>
+		{%- endif -%}
+	</div>
+{%- endif -%}

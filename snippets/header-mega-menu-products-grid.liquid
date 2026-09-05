@@ -1,0 +1,56 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header mega menu products grid
+	Render header mega menu media grid
+	- menu: menu object (required)
+	- forloop: forloop object (required)
+	- first_level_link: first level link object (required)
+	- megamenu_object: blocks object using for output media content (required)
+
+	Usage:
+	{%- render 'header-mega-menu-products-grid', menu: menu, forloop: forloop, first_level_link: first_level_link, megamenu_object: megamenu_object -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign products = megamenu_object.settings.products -%}
+
+<div
+	id="headerMegaMenu:{{- menu.handle -}}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}"
+	class="header-mega-menu js-header-menu is-hidden"
+	data-menu-type="mega-menu"
+	style="height: 0"
+>
+	<span class="visually-hidden">
+		{{- "layout.navigation.mega_menu" | t -}}
+	</span>
+
+	<div class="header-mega-menu__container js-header-menu-scroll-container">
+		<div class="header-mega-menu__content-container js-header-menu-container">
+			<div class="header-mega-menu__grid">
+				<div class="header-mega-menu__grid-column">
+					<ul class="header-mega-menu__list header-mega-menu__list--products-grid">
+						{%- assign animation_delay = 0 -%}
+
+						{%- if products != blank -%}
+							{%- for product in products limit: 8 -%}
+								<li class="header-mega-menu__list-item header-mega-menu__animate need-animate" style="--animation-delay: {{ animation_delay }}s">
+									{%- render 'product-card-mini', product: product, enable_lazy_load: true -%}
+								</li>
+
+								{%- assign animation_delay = animation_delay | plus: 0.08 -%}
+							{%- endfor -%}
+						{%- else -%}
+							{%- for i in (1..8) -%}
+								<li class="header-mega-menu__list-item header-mega-menu__animate need-animate" style="--animation-delay: {{ animation_delay }}s">
+									{%- render 'product-card-mini', product: nil, enable_lazy_load: true -%}
+								</li>
+
+								{%- assign animation_delay = animation_delay | plus: 0.08 -%}
+							{%- endfor -%}
+						{%- endif -%}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

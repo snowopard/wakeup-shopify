@@ -1,0 +1,427 @@
+{%- layout none -%}
+
+{%- assign is_show_first_media_image        = settings.is_show_first_media_image -%}
+{%- assign quick_view_image_fit 			= settings.quick_view_image_fit -%}
+{%- assign show_unit_price 					= settings.is_show_unit_price -%}
+{%- assign currency_code_enabled 			= settings.currency_code_enabled -%}
+{%- assign default_image 					= settings.product_default_image -%}
+{%- assign quick_view_enable_buy_it_now 	= settings.quick_view_enable_buy_it_now -%}
+{%- assign media_layout                 	= settings.media_layout -%}
+{%- assign pagination_dynamic 				= false -%}
+{%- assign color_scheme      	           	= settings.quick_view_color_scheme -%}
+{%- assign enable_color_scheme_inheritance 	= settings.quick_view_enable_color_scheme_inheritance -%}
+{%- assign enable_vendor_and_sku = settings.quick_view_enable_vendor_and_sku -%}
+
+{%- assign add_to_card_button_text_color				= settings.quick_view_add_to_card_button_text_color -%}
+{%- assign add_to_card_button_background_color			= settings.quick_view_add_to_card_button_background_color -%}
+{%- assign add_to_card_button_border_color				= settings.quick_view_add_to_card_button_border_color -%}
+{%- assign add_to_card_button_border_outer_color		= settings.quick_view_add_to_card_button_border_outer_color -%}
+{%- assign add_to_card_button_text_color_hover			= settings.quick_view_add_to_card_button_text_color_hover -%}
+{%- assign add_to_card_button_background_color_hover	= settings.quick_view_add_to_card_button_background_color_hover -%}
+{%- assign add_to_card_button_border_color_hover		= settings.quick_view_add_to_card_button_border_color_hover -%}
+{%- assign add_to_card_button_border_outer_color_hover	= settings.quick_view_add_to_card_button_border_outer_color_hover -%}
+
+{%- capture add_to_card_button_styles -%}
+	--text-color: {{- add_to_card_button_text_color -}};  {{-  -}}
+	--background-color: {{- add_to_card_button_background_color -}};  {{-  -}}
+	--border-color: {{- add_to_card_button_border_color -}};  {{-  -}}
+	--border-outer-color: {{- add_to_card_button_border_outer_color -}};  {{-  -}}
+	--text-color-hover: {{- add_to_card_button_text_color_hover -}};  {{-  -}}
+	--background-color-hover: {{- add_to_card_button_background_color_hover -}};  {{-  -}}
+	--border-color-hover: {{- add_to_card_button_border_color_hover -}};  {{-  -}}
+	--border-outer-color-hover: {{- add_to_card_button_border_outer_color_hover -}};  {{-  -}}
+{%- endcapture -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.quick_view_main_color_scheme -%}
+{%- endif -%}
+
+{%- if product.media.size > 10 -%}
+	{% assign pagination_dynamic = true %}
+{%- endif -%}
+
+<div
+	class="drawer quick-view color-{{ color_scheme }} js-quick-view"
+	id="quick-view"
+	tabindex="-1"
+	data-modal-once="true"
+	aria-modal="true"
+	role="dialog"
+	data-section-type="product"
+	data-url="{{ product.url }}"
+>
+	<header class="quick-view__header">
+		<button
+			class="popup-close-icon-button focus-visible-outline"
+			data-target="quick-view"
+			aria-label="{{ "products.quick_view.close_popup" | t }}"
+			data-js-toggle="quick-view"
+		>
+			{% render 'icons', icon: 'menu-close' %}
+		</button>
+	</header>
+
+	<div class="drawer__body quick-view__body">
+		{%- assign is_image_visible = true -%}
+		{%- assign image = product.selected_or_first_available_variant.image | default: product.featured_image | default: default_image -%}
+
+		{%- if image == blank -%}
+			{%- assign is_image_visible = false -%}
+		{%- endif -%}
+
+		{%- assign show_arrows_on_mobile = false -%}
+
+		{%- assign is_stacked = false -%}
+
+		{%- if media_layout == "stacked" -%}
+			{%- assign is_stacked = true -%}
+		{%- endif -%}
+
+		<div class="quick-view__meta-scroll-wrapper">
+			<div class="quick-view__media {%- if is_image_visible == false %} is-hidden {%- endif %} js-quick-view-media" {% if media_layout == "stacked" %}tabindex="0"{% endif %}>
+			{%- capture style_one_image -%}
+				--aspect-ratio: {{- 1.0 | divided_by: image.aspect_ratio | times: 100 -}}%;
+			{%- endcapture -%}
+
+			{% if product.images.size > 1 %}
+				<div class="quick-view__slider swiper js-quick-view-slider"
+					 data-media-layout="{{ media_layout }}"
+					{% if is_show_first_media_image %}
+						data-is-show-first-media-image
+					{% endif %}
+				>
+					<div class="swiper-wrapper js-quick-view-slider-wrapper">
+						{% for media in product.media %}
+							{%- assign aspect_ratio = 1.0 | divided_by: media.aspect_ratio | times: 100 -%}
+
+							{%- capture placeholder_video -%}
+								{%- assign preview_image = media.preview_image -%}
+
+								<div class="quick-view__placeholder js-product-gallery-video-placeholder">
+									<picture>
+										<source
+											srcset="{{ preview_image | image_url: width: 318 }} 1x, {{ preview_image | image_url: width: 636 }} 2x"
+											media="(max-width: 360px)"
+											width="318"
+											height="318"
+										>
+
+										<source
+											srcset="{{ preview_image | image_url: width: 338 }} 1x, {{ preview_image | image_url: width: 676 }} 2x"
+											media="(max-width: 380px)"
+											width="338"
+											height="338"
+										>
+
+										<source
+											srcset="{{ preview_image | image_url: width: 438 }} 1x, {{ preview_image | image_url: width: 876 }} 2x"
+											media="(max-width: 480px)"
+											width="438"
+											height="438"
+										>
+
+										<source
+											srcset="{{ preview_image | image_url: width: 458 }} 1x, {{ preview_image | image_url: width: 916 }} 2x"
+											media="(max-width: 767px)"
+											width="458"
+											height="458"
+										>
+
+										<img
+											class="quick-view__placeholder-img"
+											src="{{ preview_image | image_url: width: 472 }}"
+											srcset="{{ preview_image | image_url: width: 472 }} 1x, {{ preview_image | image_url: width: 1444 }} 2x"
+											alt="{{ preview_image.alt }}"
+											width="472"
+											height="472"
+										>
+									</picture>
+
+									<button class="quick-view__placeholder-btn">
+										{%- render 'icons', icon: "play" -%}
+									</button>
+								</div>
+							{%- endcapture -%}
+
+
+							{%- if media.media_type == 'model' -%}
+								{%- assign aspect_ratio = 100 -%}
+							{%- endif -%}
+
+							{%- capture styles -%}
+								--aspect-ratio: {{- aspect_ratio -}}%;
+							{%- endcapture -%}
+
+							{%- case media.media_type -%}
+								{%- when 'image' -%}
+									<div class="swiper-slide" data-slide-index="{{ forloop.index0 }}">
+										<div
+											class="quick-view__image-wrapper js-quick-view-image-wrapper {{ quick_view_image_fit }}"
+											style="{{- styles -}}"
+											data-media-id="{{ media.id }}"
+										>
+											{%- render 'quick-view-image', image: media, is_stacked: is_stacked -%}
+										</div>
+									</div>
+								{%- when 'video' -%}
+									<div class="swiper-slide is-paused-video js-paused-video" data-slide-index="{{ forloop.index0 }}">
+										<div
+											class="quick-view__image-wrapper js-quick-view-image-wrapper {{ quick_view_image_fit }}"
+											style="{{- styles -}}"
+											data-media-id="{{ media.id }}"
+										>
+											{{- placeholder_video -}}
+
+											<video
+												class="quick-view__image js-video"
+												data-type="html"
+												tabindex="-1"
+												aria-hidden="true"
+												controls
+											>
+												{% for source in media.sources  %}
+													{%- if source.mime_type == 'video/mp4' -%}
+														<source
+															src="{{- source.url -}}#t=0.001"
+															type="{{- source.mime_type -}}"
+														>
+													{%- endif -%}
+												{% endfor %}
+											</video>
+										</div>
+									</div>
+								{%- when 'external_video' -%}
+									{%- assign show_arrows_on_mobile = true -%}
+
+									<div class="swiper-slide is-paused-video js-paused-video" data-slide-index="{{ forloop.index0 }}">
+										<div
+											class="quick-view__image-wrapper js-quick-view-image-wrapper {{ quick_view_image_fit }}"
+											style="{{- styles -}}"
+											data-media-id="{{ media.id }}"
+										>
+											{{- placeholder_video -}}
+
+											<div
+												class="quick-view__image js-video"
+												style="--aspect-ratio: {{ media.aspect_ratio | default: 1.0 }}"
+												data-type="{{- media.host -}}"
+												data-video-id="{{- media.external_id -}}"
+											>
+												{%- if media.host == 'youtube' -%}
+													<div
+														class="js-video-{{- media.host -}}"
+														data-video-id="{{- media.external_id -}}"
+														tabindex="-1"
+														aria-hidden="true"
+													></div>
+												{%- endif %}
+											</div>
+										</div>
+									</div>
+								{%- when 'model' -%}
+									{%- assign show_arrows_on_mobile = true -%}
+
+									<div class="swiper-slide is-paused-video" data-slide-index="{{ forloop.index0 }}">
+										<div
+											class="quick-view__image-wrapper js-quick-view-image-wrapper {{ quick_view_image_fit }}"
+											style="{{- styles -}}"
+											data-media-id="{{ media.id }}"
+										>
+											{% render 'quick-view-image', image: media, is_stacked: is_stacked %}
+
+											<button
+												class="quick-view__image-button is-paused-video js-paused-video js-quick-view-model-button"
+												aria-label="{{- 'products.product.ar_button' | t | escape -}}"
+											>
+												{%- render 'icons', icon: 'model' -%}
+											</button>
+
+											<span class="js-quick-view-model-content is-hidden">
+												{{ media | model_viewer_tag }}
+											</span>
+
+											<button
+												class="quick-view__model-view-button"
+												type="button"
+												data-shopify-xr
+												aria-label="{{ 'products.product.xr_button_label' | t }}"
+												data-shopify-model3d-id="{{- media.id -}}"
+												data-shopify-title="{{- product.title | escape -}}"
+												data-shopify-xr-hidden
+											>
+												{%- render 'icons', icon: 'model' -%}
+
+												{{- 'products.product.xr_button' | t -}}
+											</button>
+										</div>
+									</div>
+							{%- endcase -%}
+						{% endfor %}
+					</div>
+				</div>
+
+				<div class="slider-pagination quick-view__slider-pagination {% if media_layout == "stacked" %} quick-view__slider-pagination--mobile-only {% endif %} js-quick-view-slider-pagination-wrapper">
+					{% render 'swiper-button', direction: 'prev', class: "js-quick-view-slider-prev-btn" %}
+
+					<div class="custom-swiper-pagination js-quick-view-slider-pagination"></div>
+
+					{% render 'swiper-button', direction: 'next', class: "js-quick-view-slider-next-btn" %}
+				</div>
+			{% elsif product.images.size < 2 or default_image != blank %}
+				<div class="quick-view__image-wrapper {{ quick_view_image_fit }}" style="{{- style_one_image -}}">
+					{% render 'quick-view-image', image: image, is_stacked: is_stacked%}
+				</div>
+			{% endif %}
+		</div>
+			<div class="quick-view__meta">
+				<div class="quick-view__heading-wrapper">
+					<h2 class="quick-view__heading">
+						{{- product.title -}}
+					</h2>
+
+					{%- if enable_vendor_and_sku %}
+						{%- assign sku = product.selected_or_first_available_variant.sku -%}
+
+						<div class="quick-view__vendor-and-sku">
+							{%- if product.vendor != blank -%}
+								<div class="quick-view__vendor">
+									{{- product.vendor -}}
+								</div>
+							{%- endif -%}
+
+							<div class="quick-view__sku">
+								Art: <span class="quick-view__sku-content js-quick-view-sku">{{- sku -}}</span>
+							</div>
+						</div>
+					{%- endif -%}
+
+					<div class="quick-view__description">
+						{{- product.description | strip_html | truncatewords: 20 -}}
+					</div>
+
+					<a
+						class="quick-view__read-more focus-visible-outline js-quick-view-link"
+						href="{{- product.url -}}/?variant={{- product.selected_or_first_available_variant.id -}}"
+					>
+						<span>
+							{{- "products.quick_view.read_more" | t -}}
+						</span>
+					</a>
+
+					{%- assign status = 'in-stock' -%}
+
+					{%- if product.selected_or_first_available_variant.available == false -%}
+						{%- assign status = 'sold-out' -%}
+					{%- endif -%}
+
+					<div class="quick-view__status js-quick-view-status" data-status="{{- status -}}">
+						<div class="quick-view__status-icon">
+							{% render 'icons', icon: 'checkmark' %}
+							{% render 'icons', icon: 'close' %}
+						</div>
+
+						<div class="quick-view__status-text">
+							<span class="quick-view__status-text-in-stock">
+								{{- 'products.product.in_stock' | t -}}
+							</span>
+
+							<span class="quick-view__status-text-sold-out">
+								{{- 'products.product.sold_out' | t -}}
+							</span>
+
+							<span class="quick-view__status-text-unavailable">
+								{{- 'products.product.unavailable' | t -}}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				{%- assign show 					= settings.quick_view_timer_show -%}
+				{%- assign text 					= settings.quick_view_timer_text -%}
+				{%- assign type 					= settings.quick_view_timer_type -%}
+				{%- assign duration 				= settings.quick_view_timer_duration -%}
+				{%- assign enable_timer_loop 		= settings.quick_view_enable_timer_loop -%}
+				{%- assign promo_deadline 			= product.metafields.custom.promo_timer_date | date: '%s' -%}
+
+				{%- assign year 	= promo_deadline | date: "%Y"  -%}
+				{%  assign month 	= promo_deadline | date: "%m" | minus: 1 %}
+				{%- assign day 		= promo_deadline | date: "%d"  -%}
+				{%- assign hour 	= promo_deadline | date: "%H"  -%}
+				{%- assign minutes 	= promo_deadline | date: "%M"  -%}
+
+				{%- if show and promo_deadline != blank -%}
+					<div class="quick-view__promo-timer">
+						{% if text != blank %}
+							<div class="quick-view__promo-timer-text">
+								{{ text }}
+							</div>
+						{% endif %}
+
+						{%- render 'countdown-timer',
+							timer_type: type,
+							timer_duration: duration,
+							enable_timer_loop: enable_timer_loop,
+							timer_year: year,
+							timer_month: month,
+							timer_day: day,
+							timer_hour: hour,
+							timer_timezone: -4,
+							main_extra_class: product,
+							main_extra_class: "small",
+							without_animation: true
+						-%}
+					</div>
+				{%- endif -%}
+
+				{%- if product == settings.product_promo_product and settings.product_promo_product_description != blank -%}
+					<div class="quick-view__description rte js-quick-view-description">
+						{{ settings.product_promo_product_description }}
+					</div>
+				{%- endif -%}
+
+				{%- render 'quick-view-form', product: product, quick_view_enable_buy_it_now: quick_view_enable_buy_it_now -%}
+			</div>
+		</div>
+
+		<div class="quick-view_button-wrapper">
+			<button
+				class="button-simple button-simple--custom quick-view__button js-quick-view-submit-button"
+				form="quick-view-form"
+				style="{{- add_to_card_button_styles -}}"
+				data-add-to-card="{{- "products.product.add_to_cart" | t -}}"
+				data-sold-out="{{- "products.product.sold_out" | t -}}"
+				data-unavailable="{{- "products.product.unavailable" | t -}}"
+				{% if product.template_suffix == 'pre-order' %}
+					data-preorder
+				{% endif %}
+				type="submit"
+				{%- if product.selected_or_first_available_variant.available == false -%}
+					disabled
+				{%- endif -%}
+			>
+				{% render 'icons', icon: 'cart' %}
+				<span class="js-quick-view-submit-text">
+					{%- if product.selected_or_first_available_variant.available -%}
+						{% if product.template_suffix == 'pre-order' %}
+							{{- 'products.product.pre_order' | t -}}
+						{% else %}
+							{{- 'products.product.add_to_cart' | t -}}
+						{% endif %}
+					{%- else -%}
+						{{- "products.product.sold_out" | t -}}
+					{%- endif -%}
+				</span>
+			</button>
+		</div>
+	</div>
+
+	{%- capture models_json -%}
+		{{ product.media | where: 'media_type', 'model' | json }}
+	{%- endcapture -%}
+
+	{%- if models_json != "" -%}
+		<script type="application/json" id="ProductModelsJSON">
+				{{- models_json -}}
+		</script>
+	{%- endif -%}
+</div>

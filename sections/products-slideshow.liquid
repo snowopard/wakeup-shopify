@@ -1,0 +1,758 @@
+{%- render "adastra" with "/src/styles/products-slideshow.scss" -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_desktop -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+	}
+
+	@media screen and (max-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 	= section.settings.color_scheme -%}
+{%- assign container 		= section.settings.container_width -%}
+{%- assign has_ellipse 		= false -%}
+
+{%- if container == "inherit" -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--container-width: {{- container_width -}}; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top }}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom }}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{-  -}}
+{%- endcapture -%}
+
+{%- assign min = 1 -%}
+{%- assign max = 4 -%}
+{%- assign diff = max | minus: min -%}
+
+{%- if section.blocks.size > 0 -%}
+	<section
+		class="products-slideshow color-{{ color_scheme.id }} js-animate{% if request.visual_preview_mode or section.index == 1 %} animated{% endif %} js-products-slideshow"
+		style="{{- styles -}}"
+	>
+		{%- for block in section.blocks -%}
+			{%- assign background_image = block.settings.background_image -%}
+			{%- assign is_lazy 			= true -%}
+
+			{% if section.index == 1 and forloop.first %}
+				{% assign is_lazy = false %}
+			{% endif %}
+
+			{%- if background_image == blank -%}
+				{%- assign has_ellipse = true -%}
+			{%- endif -%}
+
+			{%- capture img_focal -%}
+				--img-pos: {{ background_image.presentation.focal_point }};
+			{%- endcapture -%}
+
+			{%- if background_image != blank -%}
+				<div
+					class="products-slideshow__background-wrapper{% if forloop.index == 1 %} is-active{% endif %} js-products-slideshow-background"
+					data-index="{{- forloop.index -}}"
+				>
+					<picture{% if is_lazy %} class="lazy"{% endif %}>
+						<source
+							{% if is_lazy %}
+								data-srcset="{{- background_image | image_url: width: 375 }} 1x, {{ background_image | image_url: width: 750 }} 2x"
+								srcset="{{- background_image | image_url: width: 10 }} 1x, {{ background_image | image_url: width: 10 }} 2x"
+							{% else %}
+								srcset="{{- background_image | image_url: width: 375 }} 1x, {{ background_image | image_url: width: 750 }} 2x"
+							{% endif %}
+							media="(max-width: 375px)"
+							width="375"
+							height="770"
+						>
+
+						<source
+							{% if is_lazy %}
+								data-srcset="{{- background_image | image_url: width: 420 }} 1x, {{ background_image | image_url: width: 840 }} 2x"
+								srcset="{{- background_image | image_url: width: 10 }} 1x, {{ background_image | image_url: width: 10 }} 2x"
+							{% else %}
+								srcset="{{- background_image | image_url: width: 420 }} 1x, {{ background_image | image_url: width: 840 }} 2x"
+							{% endif %}
+							media="(max-width: 420px)"
+							width="420"
+							height="782"
+						>
+
+						<source
+							{% if is_lazy %}
+								data-srcset="{{- background_image | image_url: width: 767 }} 1x, {{ background_image | image_url: width: 1534 }} 2x"
+								srcset="{{- background_image | image_url: width: 10 }} 1x, {{ background_image | image_url: width: 10 }} 2x"
+							{% else %}
+								srcset="{{- background_image | image_url: width: 767 }} 1x, {{ background_image | image_url: width: 1534 }} 2x"
+							{% endif %}
+							media="(max-width: 767px)"
+							width="767"
+							height="1087"
+						>
+
+						<source
+							{% if is_lazy %}
+								data-srcset="{{- background_image | image_url: width: 991 }} 1x, {{ background_image | image_url: width: 1992 }} 2x"
+								srcset="{{- background_image | image_url: width: 10 }} 1x, {{ background_image | image_url: width: 10 }} 2x"
+							{% else %}
+								srcset="{{- background_image | image_url: width: 991 }} 1x, {{ background_image | image_url: width: 1992 }} 2x"
+							{% endif %}
+							media="(max-width: 991px)"
+							width="991"
+							height="1076"
+						>
+
+						<source
+							{% if is_lazy %}
+								data-srcset="{{- background_image | image_url: width: 1199 }} 1x, {{ background_image | image_url: width: 1398 }} 2x"
+								srcset="{{- background_image | image_url: width: 10 }} 1x, {{ background_image | image_url: width: 10 }} 2x"
+							{% else %}
+								srcset="{{- background_image | image_url: width: 1199 }} 1x, {{ background_image | image_url: width: 1398 }} 2x"
+							{% endif %}
+							media="(max-width: 1199px)"
+							width="1199"
+							height="1201"
+						>
+
+						<source
+							{% if is_lazy %}
+								data-srcset="{{- background_image | image_url: width: 1500 }} 1x, {{ background_image | image_url: width: 3000 }} 2x"
+								srcset="{{- background_image | image_url: width: 10 }} 1x, {{ background_image | image_url: width: 10 }} 2x"
+							{% else %}
+								srcset="{{- background_image | image_url: width: 1500 }} 1x, {{ background_image | image_url: width: 3000 }} 2x"
+							{% endif %}
+							media="(max-width: 1500px)"
+							width="1500"
+							height="1014"
+						>
+
+						<img
+							class="products-slideshow__background"
+							{% if is_lazy %}
+								data-srcset="{{- background_image | image_url: width: 1920 }} 1x, {{ background_image | image_url: width: 3840 }} 2x"
+								srcset="{{- background_image | image_url: width: 10 }} 1x, {{ background_image | image_url: width: 10 }} 2x"
+								data-src="{{ background_image | image_url: width: 10 }}"
+								src="{{ background_image | image_url: width: 1920 }}"
+							{% else %}
+								srcset="{{- background_image | image_url: width: 1920 }} 1x, {{ background_image | image_url: width: 3840 }} 2x"
+								src="{{ background_image | image_url: width: 10 }}"
+							{% endif %}
+							alt="{{- background_image.alt | escape -}}"
+							style="{{- img_focal -}}"
+							width="1920"
+							height="988"
+						>
+					</picture>
+				</div>
+			{%- endif -%}
+		{%- endfor -%}
+
+		{%- if has_ellipse -%}
+			<div class="products-slideshow__product-ellipse-wrapper js-products-slideshow-product-ellipse-wrapper">
+				{%- for block in section.blocks -%}
+					{%- assign background_image = block.settings.background_image -%}
+
+					{%- if background_image == blank -%}
+						<div
+							class="products-slideshow__product-ellipse js-products-slideshow-product-ellipse{% if forloop.index == 1 %} is-active{% endif %}"
+							style="--color-ellipse: {{- block.settings.ellipse -}};"
+							data-index="{{- forloop.index -}}"
+						></div>
+					{%- endif -%}
+				{%- endfor -%}
+			</div>
+		{%- endif -%}
+
+		<div class="products-slideshow__container container js-image-mouse-move-wrapper">
+			<div class="products-slideshow__wrapper">
+				<div class="products-slideshow__mini-slider-container">
+					<div class="products-slideshow__mini-slider-container-border products-slideshow__mini-slider-container-border--left"></div>
+					<div class="products-slideshow__mini-slider-container-border products-slideshow__mini-slider-container-border--right"></div>
+
+					<div class="products-slideshow__mini-slider swiper js-products-slideshow-mini-slider">
+						<div class="products-slideshow__mini-slider-wrapper swiper-wrapper">
+							{%- for block in section.blocks -%}
+								{%- assign product 		= block.settings.product -%}
+								{%- assign mini_image 	= block.settings.product_image | default: product.featured_image -%}
+
+								<button
+									class="products-slideshow__mini-slide focus-visible-outline swiper-slide{% if forloop.index == 1 %} is-active{% endif %}"
+									data-index="{{- forloop.index -}}"
+								>
+									<span class="products-slideshow__mini-slide-border products-slideshow__mini-slide-border--top"></span>
+									<span class="products-slideshow__mini-slide-border products-slideshow__mini-slide-border--bottom"></span>
+
+									{%- if mini_image != blank -%}
+										<picture class="products-slideshow__mini-slide-wrapper lazy">
+											<source
+												data-srcset="{{ mini_image | image_url: width: 48 }} 1x,
+														 	 {{ mini_image | image_url: width: 96 }} 2x"
+												srcset="{{ mini_image | image_url: width: 10 }} 1x,
+														{{ mini_image | image_url: width: 20 }} 2x"
+												media="(max-width: 1199px)"
+											>
+
+											<img
+												class="products-slideshow__mini-image"
+												data-srcset="{{ mini_image | image_url: width: 64 }} 1x,
+														 	 {{ mini_image | image_url: width: 128 }} 2x"
+												srcset="{{ mini_image | image_url: width: 10 }} 1x,
+														{{ mini_image | image_url: width: 20 }} 2x"
+												data-src="{{ mini_image | image_url: width: 64 }}"
+												src="{{ mini_image | image_url: width: 10 }}"
+												alt="{{- mini_image.alt | escape -}}"
+											>
+										</picture>
+									{%- else -%}
+										<div class="products-slideshow__mini-slide-wrapper">
+											{%- assign random_number = "now" | date: "%N" | modulo: diff | plus: min -%}
+											{%- assign placeholder_svg_name = 'product-apparel-' | append: random_number -%}
+
+											{{- placeholder_svg_name | placeholder_svg_tag: 'products-slideshow__mini-image' -}}
+										</div>
+									{%- endif -%}
+								</button>
+							{%- endfor -%}
+						</div>
+					</div>
+				</div>
+
+				{%- for block in section.blocks -%}
+					{%- assign decor_image_first	= block.settings.decor_image_first -%}
+					{%- assign decor_image_second	= block.settings.decor_image_second -%}
+					{%- assign decor_image_third	= block.settings.decor_image_third -%}
+
+					{%- if decor_image_first != blank or decor_image_second != blank or decor_image_third != blank -%}
+						<div
+							class="products-slideshow__decor-image-container js-products-slideshow-decor-image-container{% if forloop.index == 1 %} is-active{% else %} is-opacity{% endif %}"
+							data-index="{{- forloop.index -}}"
+						>
+							{%- if decor_image_first != blank -%}
+								<picture class="products-slideshow__decor-image-wrapper products-slideshow__decor-image-wrapper--first lazy">
+									<source
+										data-srcset="{{ decor_image_first | image_url: width: 96 }} 1x,
+							 					 	 {{ decor_image_first | image_url: width: 192 }} 2x"
+										srcset="{{ decor_image_first | image_url: width: 10 }} 1x,
+												{{ decor_image_first | image_url: width: 20 }} 2x"
+										media="(max-width: 992px)"
+										width="96"
+										height="96"
+									>
+
+									<img
+										class="products-slideshow__decor-image js-image-mouse-move"
+										data-srcset="{{ decor_image_first | image_url: width: 135 }} 1x,
+												 	 {{ decor_image_first | image_url: width: 270 }} 2x"
+										srcset="{{ decor_image_first | image_url: width: 10 }} 1x,
+												{{ decor_image_first | image_url: width: 20 }} 2x"
+										data-src="{{ decor_image_first | image_url: width: 135 }}"
+										src="{{ decor_image_first | image_url: width: 10 }}"
+										alt="{{- decor_image_first.alt | escape -}}"
+										width="135"
+										height="135"
+									>
+								</picture>
+							{%- endif -%}
+
+							{%- if decor_image_second != blank -%}
+								<picture class="products-slideshow__decor-image-wrapper products-slideshow__decor-image-wrapper--second lazy">
+									<source
+										data-srcset="{{ decor_image_second | image_url: width: 130 }} 1x,
+							 						 {{ decor_image_second | image_url: width: 260 }} 2x"
+										srcset="{{ decor_image_second | image_url: width: 10 }} 1x,
+												{{ decor_image_second | image_url: width: 20 }} 2x"
+										media="(max-width: 992px)"
+										width="130"
+										height="130"
+									>
+
+									<img
+										class="products-slideshow__decor-image is-reverse-translate js-image-mouse-move"
+										data-srcset="{{ decor_image_second | image_url: width: 200 }},
+													 {{ decor_image_second | image_url: width: 400 }}"
+										srcset="{{ decor_image_second | image_url: width: 10 }} 1x,
+												{{ decor_image_second | image_url: width: 20 }} 2x"
+										data-src="{{ decor_image_second | image_url: width: 200 }}"
+										src="{{ decor_image_second | image_url: width: 10 }}"
+										alt="{{- decor_image_second.alt | escape -}}"
+										width="200"
+										height="200"
+									>
+								</picture>
+							{%- endif -%}
+
+							{%- if decor_image_third != blank -%}
+								<picture class="products-slideshow__decor-image-wrapper products-slideshow__decor-image-wrapper--third lazy">
+									<img
+										class="products-slideshow__decor-image js-image-mouse-move"
+										data-srcset="{{ decor_image_third | image_url: width: 222 }} 1x,
+												 	 {{ decor_image_third | image_url: width: 444 }} 2x"
+										srcset="{{ decor_image_third | image_url: width: 10 }} 1x,
+												{{ decor_image_third | image_url: width: 20 }} 2x"
+										data-src="{{ decor_image_third | image_url: width: 222 }}"
+										src="{{ decor_image_third | image_url: width: 10 }}"
+										alt="{{- decor_image_third.alt | escape -}}"
+										width="222"
+										height="222"
+									>
+								</picture>
+							{%- endif -%}
+						</div>
+					{%- endif -%}
+				{%- endfor -%}
+
+				<div class="products-slideshow__product-container">
+					<div class="products-slideshow__product-image-list">
+						{%- for block in section.blocks -%}
+							{%- assign product 					= block.settings.product -%}
+							{%- assign image 					= block.settings.product_image | default: product.featured_image -%}
+							{%- assign rotate_product_image 	= block.settings.rotate_product_image -%}
+							{%- assign is_lazy 					= true -%}
+
+							{% if section.index == 1 and forloop.first %}
+								{% assign is_lazy = false %}
+							{% endif %}
+
+							{%- capture img_focal -%}
+								--img-pos: {{ image.presentation.focal_point }};
+							{%- endcapture -%}
+
+							{%- if image != blank -%}
+								<div
+									class="products-slideshow__product-image-wrapper{% if rotate_product_image %} products-slideshow__product-image-wrapper--rotate{% endif %} js-products-slideshow-product-image-wrapper{% if forloop.index == 1 %} is-active{% endif %}"
+									data-index="{{- forloop.index -}}"
+								>
+									<picture class="products-slideshow__product-image-inner{% if is_lazy %} lazy{% endif %}">
+										<source
+											{% if is_lazy %}
+												data-srcset="{{ image | image_url: width: 330 }} 1x,
+														 	 {{ image | image_url: width: 660 }} 2x"
+												srcset="{{ image | image_url: width: 10 }} 1x,
+														{{ image | image_url: width: 20 }} 2x"
+											{% else %}
+												srcset="{{ image | image_url: width: 330 }} 1x,
+														{{ image | image_url: width: 660 }} 2x"
+											{% endif %}
+											media="(max-width: 375px)"
+											width="330"
+											height="330"
+										>
+
+										<source
+											{% if is_lazy %}
+												data-srcset="{{ image | image_url: width: 370 }} 1x,
+														 	 {{ image | image_url: width: 740 }} 2x"
+												srcset="{{ image | image_url: width: 10 }} 1x,
+													{{ image | image_url: width: 20 }} 2x"
+											{% else %}
+												srcset="{{ image | image_url: width: 370 }} 1x,
+													{{ image | image_url: width: 740 }} 2x"
+											{% endif %}
+											media="(max-width: 420px)"
+											width="370"
+											height="370"
+										>
+
+										<source
+											{% if is_lazy %}
+												data-srcset="{{ image | image_url: width: 675 }} 1x,
+														 	 {{ image | image_url: width: 1350 }} 2x"
+												srcset="{{ image | image_url: width: 10 }} 1x,
+													{{ image | image_url: width: 20 }} 2x"
+											{% else %}
+												srcset="{{ image | image_url: width: 675 }} 1x,
+														{{ image | image_url: width: 1350 }} 2x"
+											{% endif %}
+											media="(max-width: 767px)"
+											width="675"
+											height="675"
+										>
+
+										<source
+											{% if is_lazy %}
+												data-srcset="{{ image | image_url: width: 595 }} 1x,
+															 {{ image | image_url: width: 1190 }} 2x"
+												srcset="{{ image | image_url: width: 10 }} 1x,
+														{{ image | image_url: width: 20 }} 2x"
+											{% else %}
+												srcset="{{ image | image_url: width: 595 }} 1x,
+													{{ image | image_url: width: 1190 }} 2x"
+											{% endif %}
+											media="(max-width: 992px)"
+											width="595"
+											height="595"
+										>
+
+										<source
+											{% if is_lazy %}
+												data-srcset="{{ image | image_url: width: 720 }} 1x,
+														 	 {{ image | image_url: width: 1440 }} 2x"
+												srcset="{{ image | image_url: width: 10 }} 1x,
+													{{ image | image_url: width: 20 }} 2x"
+											{% else %}
+												srcset="{{ image | image_url: width: 720 }} 1x,
+														{{ image | image_url: width: 1440 }} 2x"
+											{% endif %}
+											media="(max-width: 1199px)"
+											width="720"
+											height="720"
+										>
+
+										<img
+											class="products-slideshow__product-image"
+											{% if is_lazy %}
+												data-srcset="{{ image | image_url: width: 600 }} 1x,
+														 	 {{ image | image_url: width: 1200 }} 2x"
+												srcset="{{ image | image_url: width: 10 }} 1x,
+														{{ image | image_url: width: 20 }} 2x"
+												data-src="{{ image | image_url: width: 600 }}"
+												src="{{ image | image_url: width: 10 }}"
+											{% else %}
+												srcset="{{ image | image_url: width: 600 }} 1x,
+														{{ image | image_url: width: 1200 }} 2x"
+												src="{{ image | image_url: width: 600 }}"
+											{% endif %}
+											alt="{{- image.alt | escape -}}"
+											width="600"
+											height="600"
+											style="{{- img_focal -}}"
+										>
+									</picture>
+								</div>
+							{%- endif -%}
+						{%- endfor -%}
+					</div>
+
+					<div
+						class="products-slideshow__product-slider swiper js-products-slideshow-product-slider"
+						dir="ltr"
+					>
+						<div class="products-slideshow__product-wrapper swiper-wrapper">
+							{%- for block in section.blocks -%}
+								{%- assign main_heading = block.settings.main_heading -%}
+
+								<div class="products-slideshow__product-slide swiper-slide js-product-slide">
+									{%- if main_heading != blank -%}
+										<h2 class="products-slideshow__product-title need-animate">
+											{{- main_heading -}}
+										</h2>
+									{%- endif -%}
+								</div>
+							{%- endfor -%}
+						</div>
+					</div>
+				</div>
+
+				<div
+					class="products-slideshow__content-slider swiper js-products-slideshow-content-slider"
+					dir="ltr"
+				>
+					<div class="products-slideshow__content-wrapper swiper-wrapper">
+						{%- for block in section.blocks -%}
+							{%- assign product 				= block.settings.product -%}
+							{%- assign product_subheading	= block.settings.product_subheading -%}
+							{%- assign product_description	= block.settings.product_description -%}
+							{%- assign button_label			= block.settings.button_label -%}
+
+							<div class="products-slideshow__content-slide swiper-slide js-content-slide" {% if forloop.first == false %}inert{% endif %}>
+								{%- if product.title != blank -%}
+									<h3 class="products-slideshow__content-title h3 need-animate">
+										{{- product.title -}}
+									</h3>
+								{%- endif -%}
+
+								{%- if product_subheading != blank -%}
+									<div class="products-slideshow__content-subheading need-animate">
+										{{- product_subheading -}}
+									</div>
+								{%- endif -%}
+
+								{%- if product_description != blank -%}
+									<div class="products-slideshow__content-text rte need-animate">
+										{{- product_description -}}
+									</div>
+								{%- endif -%}
+
+								{%- if button_label != blank -%}
+									<div class="products-slideshow__content-button-wrapper need-animate">
+										<a class="button button--primary" href="{{- product.url -}}">
+											<span class="button__outer"></span>
+											{{- button_label -}}
+										</a>
+									</div>
+								{%- endif -%}
+							</div>
+						{%- endfor -%}
+					</div>
+				</div>
+
+				<div class="products-slideshow__pagination-wrapper slider-pagination">
+					{% render 'swiper-button', direction: 'prev', class: "js-products-slideshow-navigation-prev" %}
+
+					<div class="custom-swiper-pagination js-products-slideshow-pagination"></div>
+
+					{% render 'swiper-button', direction: 'next', class: "js-products-slideshow-navigation-next" %}
+				</div>
+			</div>
+		</div>
+	</section>
+{%- endif -%}
+
+{%- render "adastra" with "/src/scripts/products-slideshow.js" -%}
+
+{% schema %}
+	{
+		"name": "Products slideshow",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"default": true,
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"default": "scheme_1",
+				"label": "Color scheme"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "select",
+				"id": "container_width",
+				"label": "Container width",
+				"options": [
+					{
+						"value": "1560px",
+						"label": "Default - 1440px"
+					},
+					{
+						"value": "2040px",
+						"label": "Large - 1920px"
+					},
+					{
+						"value": "100%",
+						"label": "Full width"
+					},
+					{
+						"value": "inherit",
+						"label": "Inherit of general setting"
+					}
+				],
+				"default": "inherit",
+				"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset top",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset bottom",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset top",
+				"default": 32
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset bottom",
+				"default": 32
+			}
+		],
+		"blocks": [
+			{
+				"name": "Product",
+				"type": "product",
+				"settings": [
+					{
+						"type": "product",
+						"id": "product",
+						"label": "Product"
+					},
+					{
+						"type": "text",
+						"id": "main_heading",
+						"label": "Main heading",
+						"default": "Main heading"
+					},
+					{
+						"type": "text",
+						"id": "product_subheading",
+						"label": "Product subheading"
+					},
+					{
+						"type": "richtext",
+						"id": "product_description",
+						"label": "Product description"
+					},
+					{
+						"type": "text",
+						"id": "button_label",
+						"label": "Button label",
+						"default": "Shop now"
+					},
+					{
+						"type": "image_picker",
+						"id": "product_image",
+						"label": "Product image",
+						"info": "1124 x 1124px recommended"
+					},
+					{
+						"type": "checkbox",
+						"id": "rotate_product_image",
+						"label": "Rotate product image",
+						"default": false
+					},
+					{
+						"type": "image_picker",
+						"id": "decor_image_first",
+						"label": "Decor image first",
+						"info": "270 x 270px recommended"
+					},
+					{
+						"type": "image_picker",
+						"id": "decor_image_second",
+						"label": "Decor image second",
+						"info": "400 x 400px recommended"
+					},
+					{
+						"type": "image_picker",
+						"id": "decor_image_third",
+						"label": "Decor image third",
+						"info": "This image is displayed only on desktop. 444 x 444px recommended"
+					},
+					{
+						"type": "image_picker",
+						"id": "background_image",
+						"label": "Background image",
+						"info": "Use instead of the background color. 3840 x 1976px recommended."
+					},
+					{
+						"type": "color",
+						"id": "ellipse",
+						"label": "Ellipse",
+						"default": "#FFB600"
+					}
+				]
+			}
+		],
+		"presets": [
+			{
+				"name": "Products slideshow",
+				"blocks": [
+					{
+						"type": "product",
+						"settings": {
+							"main_heading": "Product 1",
+							"product_description": "<p>Product description</p>"
+						}
+					},
+					{
+						"type": "product",
+						"settings": {
+							"main_heading": "Product 2",
+							"product_description": "<p>Product description</p>",
+							"ellipse": "rgba(196, 56, 152, 1)"
+						}
+					},
+					{
+						"type": "product",
+						"settings": {
+							"main_heading": "Product 3",
+							"product_description": "<p>Product description</p>"
+						}
+					}
+				]
+			}
+		]
+	}
+{% endschema %}

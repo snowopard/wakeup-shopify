@@ -1,0 +1,351 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: 404 template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/404-template.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign big_heading_image = section.settings.big_heading_image -%}
+{%- assign decor_image_first = section.settings.decor_image_first -%}
+{%- assign decor_image_second = section.settings.decor_image_second -%}
+{%- assign decor_image_third = section.settings.decor_image_third -%}
+{%- assign subheading = section.settings.subheading -%}
+{%- assign text = section.settings.text -%}
+{%- assign button_url = section.settings.button_url -%}
+{%- assign button_text = section.settings.button_text -%}
+{%- assign navigation_list = section.settings.navigation_list -%}
+{%- assign flashlight_color = section.settings.flashlight_color -%}
+{%- assign color_scheme = section.settings.color_scheme -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign enable_bottom_rounded_corners = section.settings.enable_bottom_rounded_corners -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% capture styles %}
+	--flashlight-color: {{ flashlight_color }}; {{- -}}
+	--inner-offset-top-desktop: {{- section.settings.inner_offset_top_desktop -}}px; {{- -}}
+	--inner-offset-bottom-desktop: {{- section.settings.inner_offset_bottom_desktop -}}px; {{- -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{- -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{- -}}
+{% endcapture %}
+
+<section
+	class="page-404 js-image-mouse-move-wrapper tr-dur-0-5 js-animate need-animate {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %} color-{{ color_scheme.id }}"
+		 style="{{ styles }}">
+	{% if decor_image_first != blank or decor_image_second != blank or decor_image_third != blank %}
+		{% if decor_image_first != blank %}
+			<div class="page-404__decor-image-wrapper page-404__decor-image-wrapper--first js-image-mouse-move">
+				<picture>
+					<img class="page-404__decor-image"
+						 src="{{ decor_image_first | image_url: width: 133, height: 133 }}"
+						 srcset="{{ decor_image_first | image_url: width: 133, height: 133 }}1x, {{ decor_image_first | image_url: width: 266, height: 266 }}2x"
+						 alt="{{ decor_image_first.alt | escape }}">
+				</picture>
+			</div>
+		{% endif %}
+
+		{% if decor_image_second != blank %}
+			<div
+				class="page-404__decor-image-wrapper page-404__decor-image-wrapper--second is-reverse-translate js-image-mouse-move">
+				<picture>
+					<img class="page-404__decor-image"
+						 src="{{ decor_image_second | image_url: width: 161, height: 161 }}"
+						 srcset="{{ decor_image_second | image_url: width: 161, height: 161 }}1x, {{ decor_image_second | image_url: width: 322, height: 322 }}2x"
+						 alt="{{ decor_image_second.alt | escape }}">
+				</picture>
+			</div>
+		{% endif %}
+
+		{% if decor_image_third != blank %}
+			<div
+				class="page-404__decor-image-wrapper page-404__decor-image-wrapper--third is-reverse-translate js-image-mouse-move">
+				<picture>
+					<img class="page-404__decor-image"
+						 src="{{ decor_image_third | image_url: width: 215, height: 215 }}"
+						 srcset="{{ decor_image_third | image_url: width: 215, height: 215 }}1x, {{ decor_image_third | image_url: width: 430, height: 430 }}2x"
+						 alt="{{ decor_image_third.alt | escape }}">
+				</picture>
+			</div>
+		{% endif %}
+	{% endif %}
+
+	<div class="flashlight-container__effect flashlight-container__effect--first"></div>
+	<div class="flashlight-container__effect flashlight-container__effect--second"></div>
+
+	<div class="page-404__container">
+		<div class="page-404__content">
+			<div class="section-title need-animate">
+				<div class="section-title__text-container">
+					<h1 class="page-404__heading section-title__text">
+						{% if big_heading_image != blank %}
+							{%- capture img_focal -%}
+								--img-focal: {{ big_heading_image.presentation.focal_point }};
+							{%- endcapture -%}
+
+							<span>4</span>
+							<div class="page-404__heading-aspect-ratio js-image-mouse-move">
+								<div class="page-404__heading-image-wrapper">
+									<picture>
+										<source
+											srcset="{{ big_heading_image | image_url: width: 100, height: 100 }} 1x, {{ big_heading_image | image_url: width: 200, height: 200 }} 2x"
+											media="(max-width: 1199px)">
+
+										<img
+											class="page-404__heading-image"
+											src="{{ big_heading_image | image_url: width: 280, height: 280 }}"
+											srcset="{{ big_heading_image | image_url: width: 280, height: 280 }} 1x, {{ big_heading_image | image_url: width: 560, height: 560 }} 2x"
+											style="{{ img_focal }}"
+											alt="{{ big_heading_image.alt | escape }}">
+									</picture>
+								</div>
+							</div>
+							<span>4</span>
+						{% else %}
+							404
+						{% endif %}
+					</h1>
+				</div>
+
+				{%- if subheading != blank -%}
+					<div class="section-title__text-container">
+						<h2 class="page-404__subheading section-title__text">
+							{{- subheading -}}
+						</h2>
+					</div>
+				{%- endif -%}
+			</div>
+
+			{%- if text != blank -%}
+				<div class="page-404__text-wrapper rte">
+					{{- text -}}
+				</div>
+			{%- endif -%}
+
+			{%- if button_url != blank and button_text != blank -%}
+				<div class="page-404__button">
+					<a class="button button--primary" href="{{- button_url -}}">
+						<span class="button__outer"></span>
+						{{- button_text -}}
+					</a>
+				</div>
+			{%- endif -%}
+
+			{% if linklists[navigation_list].links.size > 0 %}
+				<ul class="page-404__navigation-list">
+					{% assign delay_step = 1.5 %}
+
+					{% for link in linklists[navigation_list].links %}
+						{% assign delay_step = delay_step | plus: 0.2 %}
+
+						<li class="page-404__list-item" style="transition-delay: {{ delay_step }}s">
+							<a class="button-link focus-visible-outline" href="{{ link.url }}">
+								<span class="button-link__text-wrapper" data-text="{{ link.title }}">
+									<span class="button-link__text">
+										{{ link.title }}
+									</span>
+								</span>
+
+								<span class="button-link__icons">
+									{% render 'icons', icon: 'arrow-right', class: 'icon-base' %}
+									{% render 'icons', icon: 'arrow-right', class: 'icon-hover' %}
+								</span>
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		</div>
+	</div>
+</section>
+
+{%- schema -%}
+	{
+		"name": "Page 404",
+		"settings": [
+			{
+				"type": "image_picker",
+				"id": "big_heading_image",
+				"label": "Big heading image",
+				"info": "Add image to display Big heading. 540 x 540px recommended"
+			},
+			{
+				"type": "inline_richtext",
+				"id": "subheading",
+				"label": "Subheading",
+				"default": "Page not found"
+			},
+			{
+				"type": "richtext",
+				"id": "text",
+				"label": "Text"
+			},
+			{
+				"type": "text",
+				"id": "button_text",
+				"label": "Button label",
+				"default": "Home page"
+			},
+			{
+				"type": "url",
+				"id": "button_url",
+				"label": "Button link",
+				"default": "/"
+			},
+			{
+				"type": "link_list",
+				"id": "navigation_list",
+				"label": "Navigation",
+				"info": "Displays only top-level menu items"
+			},
+			{
+				"type": "image_picker",
+				"id": "decor_image_first",
+				"label": "Decorative image first",
+				"info": "266 x 266px recommended"
+			},
+			{
+				"type": "image_picker",
+				"id": "decor_image_second",
+				"label": "Decorative image second",
+				"info": "322 x 322px recommended"
+			},
+			{
+				"type": "image_picker",
+				"id": "decor_image_third",
+				"label": "Decorative image third",
+				"info": "430 x 430px recommended"
+			},
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"default": true,
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"label": "Color scheme",
+				"default": "scheme-1"
+			},
+			{
+				"type": "color",
+				"id": "flashlight_color",
+				"label": "Flashlight",
+				"default": "#538BF6"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_bottom_rounded_corners",
+				"label": "Enable bottom rounded corners",
+				"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+				"default": false
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 0
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset top",
+				"default": 50
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset bottom",
+				"default": 100
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset top",
+				"default": 30
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset bottom",
+				"default": 50
+			}
+		]
+	}
+{%- endschema -%}

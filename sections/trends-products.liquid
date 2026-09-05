@@ -1,0 +1,635 @@
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- render 'adastra' with '/src/styles/trend-products.scss' -%}
+
+{%- assign min = 1 -%}
+{%- assign max = 4 -%}
+{%- assign diff = max | minus: min -%}
+
+{% assign heading_first_line  			   = section.settings.heading_first_line %}
+{% assign heading_second_line 			   = section.settings.heading_second_line %}
+{% assign container			 			   = section.settings.container_width %}
+{% assign enable_color_scheme_inheritance  = section.settings.enable_color_scheme_inheritance %}
+{% assign color_scheme					   = section.settings.color_scheme %}
+{% assign image_desktop 	 			   = section.settings.image_desktop %}
+{% assign image_mobile 					   = section.settings.image_mobile | default: image_desktop %}
+{% assign is_lazy 						   = false %}
+
+{% if section.index > 1 %}
+	{% assign is_lazy = true %}
+{% endif %}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{% capture styles %}
+	--container-width: {{ container_width }};
+	--inner-offset-top-desktop: {{- section.settings.inner_offset_top_desktop -}}px; {{- -}}
+	--inner-offset-bottom-desktop: {{- section.settings.inner_offset_bottom_desktop -}}px; {{- -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{- -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{- -}}
+{% endcapture %}
+
+<section
+	class="trend-products js-trend-products-section js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} color-{{ color_scheme.id }}"
+	style="{{ styles }}">
+	{%- if heading_first_line != blank or heading_second_line != blank -%}
+		<h2 class="h1 trend-products__title section-title container need-animate">
+			{%- if heading_first_line != blank -%}
+				<span class="section-title__text-container">
+					<span class="section-title__text">
+						{{- heading_first_line -}}
+					</span>
+				</span>
+			{%- endif -%}
+
+			{%- if heading_second_line != blank -%}
+				<span class="section-title__text-container">
+					<span class="section-title__text">
+						{{- heading_second_line -}}
+					</span>
+				</span>
+			{%- endif -%}
+		</h2>
+	{%- endif -%}
+
+	<div class="trend-products__container">
+		<div class="trend-products__aspect-ratio-container">
+			<div class="trend-products__image-wrapper need-animate tr-dur-0-5">
+				{% if image_desktop != blank %}
+					<picture {% if is_lazy %}class="lazy"{% endif %}>
+						<source
+							{% if is_lazy %}
+								data-srcset="{{ image_mobile | image_url: width: 375, crop: 'center' }} 1x, {{ image_mobile | image_url: width: 750, crop: 'center' }} 2x"
+								srcset="{{ image_mobile | image_url: width: 10 }} 1x, {{ image_mobile | image_url: width: 10 }} 2x"
+							{% else %}
+								srcset="{{ image_mobile | image_url: width: 375, crop: 'center' }} 1x, {{ image_mobile | image_url: width: 750, crop: 'center' }} 2x"
+							{% endif %}
+							media="(max-width: 375px)"
+							width="375"
+							height="220"
+						/>
+
+						<source
+							{% if is_lazy %}
+								data-srcset="{{ image_mobile | image_url: width: 420, crop: 'center' }} 1x, {{ image_mobile | image_url: width: 840, crop: 'center' }} 2x"
+								srcset="{{ image_mobile | image_url: width: 10 }} 1x, {{ image_mobile | image_url: width: 10 }} 2x"
+							{% else %}
+								srcset="{{ image_mobile | image_url: width: 420, crop: 'center' }} 1x, {{ image_mobile | image_url: width: 840, crop: 'center' }} 2x"
+							{% endif %}
+							media="(max-width: 420px)"
+							width="420"
+							height="246"
+						/>
+
+						<source
+							{% if is_lazy %}
+								data-srcset="{{ image_mobile | image_url: width: 575, crop: 'center' }} 1x, {{ image_mobile | image_url: width: 1150, crop: 'center' }} 2x"
+								srcset="{{ image_mobile | image_url: width: 10 }} 1x, {{ image_mobile | image_url: width: 10 }} 2x"
+							{% else %}
+								srcset="{{ image_mobile | image_url: width: 575, crop: 'center' }} 1x, {{ image_mobile | image_url: width: 1150, crop: 'center' }} 2x"
+							{% endif %}
+							media="(max-width: 575px)"
+							width="575"
+							height="337"
+						/>
+
+						<source
+							{% if is_lazy %}
+								data-srcset="{{ image_mobile | image_url: width: 767, crop: 'center' }} 1x, {{ image_mobile | image_url: width: 1534, crop: 'center' }} 2x"
+								srcset="{{ image_mobile | image_url: width: 10 }} 1x, {{ image_mobile | image_url: width: 10 }} 2x"
+							{% else %}
+								srcset="{{ image_mobile | image_url: width: 767, crop: 'center' }} 1x, {{ image_mobile | image_url: width: 1534, crop: 'center' }} 2x"
+							{% endif %}
+							media="(max-width: 767px)"
+							width="767"
+							height="450"
+						/>
+
+						<source
+							{% if is_lazy %}
+								data-srcset="{{ image_desktop | image_url: width: 991, crop: 'center' }} 1x, {{ image_desktop | image_url: width: 1982, crop: 'center' }} 2x"
+								srcset="{{ image_desktop | image_url: width: 10 }} 1x, {{ image_desktop | image_url: width: 10 }} 2x"
+							{% else %}
+								srcset="{{ image_desktop | image_url: width: 991, crop: 'center' }} 1x, {{ image_desktop | image_url: width: 1982, crop: 'center' }} 2x"
+							{% endif %}
+							media="(max-width: 991px)"
+							width="991"
+							height="425"
+						/>
+
+						<source
+							{% if is_lazy %}
+								data-srcset="{{ image_desktop | image_url: width: 1500, crop: 'center' }} 1x, {{ image_desktop | image_url: width: 3000, crop: 'center' }} 2x"
+								srcset="{{ image_desktop | image_url: width: 10 }} 1x, {{ image_desktop | image_url: width: 10 }} 2x"
+							{% else %}
+								srcset="{{ image_desktop | image_url: width: 1500, crop: 'center' }} 1x, {{ image_desktop | image_url: width: 3000, crop: 'center' }} 2x"
+							{% endif %}
+							media="(max-width: 1500px)"
+							width="1500"
+							height="643"
+						/>
+
+						<img
+							{% if is_lazy %}
+								src="{{ image_desktop | image_url: width: 10 }}"
+								data-src="{{ image_desktop | image_url: width: 1920 }}"
+								data-srcset="{{ image_desktop | image_url: width: 1920 }} 1x, {{ image_desktop | image_url: width: 3840 }} 2x"
+							{% else %}
+								src="{{ image_desktop | image_url: width: 1920 }}"
+								srcset="{{ image_desktop | image_url: width: 1920 }} 1x, {{ image_desktop | image_url: width: 3840 }} 2x"
+							{% endif %}
+							class="trend-products__image"
+							alt="{{ image_desktop.alt | escape }}">
+					</picture>
+				{% else %}
+					{{ 'detailed-apparel-1' | placeholder_svg_tag: "trend-products__image" }}
+				{% endif %}
+			</div>
+
+			{% if section.blocks.size > 0 %}
+				{% assign delay_spot_step = 1 | divided_by: 2 %}
+
+				{% for block in section.blocks %}
+					{% assign spot_label = block.settings.spot_label %}
+					{% assign product = block.settings.product %}
+					{% assign product_image = block.settings.product_image | default: product.featured_image %}
+					{% assign y_pos_desktop = block.settings.vertical_position_desktop %}
+					{% assign x_pos_desktop = block.settings.horizontal_position_desktop %}
+					{% assign y_pos_mobile = block.settings.vertical_position_mobile %}
+					{% assign x_pos_mobile = block.settings.horizontal_position_mobile %}
+					{% assign delay_spot_step = delay_spot_step | plus: 0.2 %}
+
+					{% assign use_placeholder = false %}
+
+					{% if block.settings.product == nill %}
+						{% assign use_placeholder = true %}
+					{% endif %}
+
+					{%- capture floating_class -%}
+						{%- if y_pos_desktop >= 50 -%}
+							trend-product__floating--top
+						{%- else -%}
+							trend-product__floating--bottom
+						{%- endif -%}
+					{%- endcapture -%}
+
+					{%- capture spot_offset -%}
+						{% if x_pos_desktop > 80 or y_pos_desktop > 80 %}
+							trend-product__spot-offset--desktop
+						{%- endif -%}
+
+						{% if x_pos_mobile > 80 or y_pos_mobile > 80 %}
+							trend-product__spot-offset--mobile
+						{% endif %}
+					{%- endcapture -%}
+
+					{% capture spot_styles %}
+						--y-pos-desktop: {{ y_pos_desktop }}%;
+						--x-pos-desktop: {{ x_pos_desktop }}%;
+						--y-pos-mobile: {{ y_pos_mobile }}%;
+						--x-pos-mobile: {{ x_pos_mobile }}%;
+						--delay-spot: {{ delay_spot_step }}s
+					{% endcapture %}
+
+					<div class="trend-product need-animate tr-dur-0-8 {{ spot_offset }}" style="{{ spot_styles }}">
+						<button
+							class="button-circle focus-visible-outline js-trend-products-spot"
+							data-target="{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}"
+							aria-label="{{ 'sections.trend_products.open_popup' | t: title: product.title | escape }}"
+							aria-controls="{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}"
+						>
+								<span class="button-circle__inner">
+									{%- render 'icons', icon: 'circle-decoration' -%}
+									{%- render 'icons', icon: 'plus', class: 'icon-inactive' -%}
+									{%- render 'icons', icon: 'minus', class: 'icon-active' -%}
+								</span>
+						</button>
+
+						<div id="{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}"
+							 class="trend-product__popup {{ floating_class }} js-trend-product-popup"
+						>
+							<button type="button"
+									class="trend-product__popup-close-button focus-visible-outline js-trend-product-popup-close-button tr-dur-0-3"
+									aria-label="{{- 'general.accessibility.close_modal' | t | escape -}}"
+							>
+								{% render 'icons', icon: 'close' %}
+							</button>
+
+							<div class="trend-product__popup-content-wrapper">
+								{% if product != blank %}
+									{% if product_image != blank %}
+										<a href="{{ product.url }}"
+										   class="trend-product__popup-image-wrapper focus-visible-outline">
+											<picture class="lazy">
+												<source
+													data-srcset="{{ product_image | image_url: width: 120, crop: 'center' }} 1x, {{ product_image | image_url: width: 240, crop: 'center' }} 2x"
+													srcset="{{ product_image | image_url: width: 10 }} 1x, {{ product_image | image_url: width: 10 }} 2x"
+													media="(max-width: 767px)"
+												>
+
+												<img class="trend-product__popup-image"
+													 src="{{ product_image | image_url: width: 10 }}"
+													 data-src="{{ product_image | image_url: width: 180 }}"
+													 data-srcset="{{ product_image | image_url: width: 180 }} 1x, {{ product_image | image_url: width: 360 }} 2x"
+													 alt="{{ product_image.alt | escape }}"
+												>
+											</picture>
+										</a>
+									{% endif %}
+
+									<div class="trend-product__popup-content">
+										<a href="{{ product.url }}"
+										   class="trend-product__popup-title focus-visible-outline"
+										>
+											{{- product.title -}}
+										</a>
+
+										<div class="trend-product__popup-price">
+											{% render 'price', product: product %}
+										</div>
+
+										<button
+											class="button-simple button-simple--primary button-simple--full-width trend-product__popup-button trend-product__popup-button--desktop focus-visible-outline js-add-to-cart"
+											type="button"
+											data-product-handle="{{- product.handle -}}"
+											data-min-quantity="{{- product.selected_or_first_available_variant.quantity_rule.min -}}"
+											{% if product.template_suffix == 'pre-order' %}data-preorder{% endif %}
+											{% if product.has_only_default_variant or product.variants.size == 1 %}
+												data-variant-id="{{- product.variants[0].id -}}"
+											{% endif %}
+											{% unless product.available %}
+												disabled
+											{% endunless %}
+										>
+											{% if product.available %}
+												{%- if product.has_only_default_variant or product.variants.size == 1 -%}
+													{% if product.template_suffix == 'pre-order' %}
+														{{- 'products.product.pre_order' | t -}}
+													{% else %}
+														{{- 'products.product.add_to_cart' | t -}}
+													{% endif %}
+												{%- else -%}
+													{{- 'products.product.open_quick_view' | t -}}
+												{%- endif -%}
+											{% else %}
+												{{- 'products.product.sold_out' | t -}}
+											{% endif %}
+										</button>
+									</div>
+								{% elsif use_placeholder %}
+									{%- assign random_number = "now" | date: "%N" | modulo: diff | plus: min -%}
+									{%- assign placeholer_svg_name = 'product-apparel-' | append: random_number -%}
+
+									<div class="trend-product__popup-image-wrapper">
+										{{- placeholer_svg_name | placeholder_svg_tag: 'trend-product__popup-image trend-product__popup-image--placeholder' -}}
+									</div>
+
+									<div class="trend-product__popup-content">
+										<p class="trend-product__popup-title">
+											{{- 'products.product_card.product_title' | t -}}
+										</p>
+
+										<div class="trend-product__popup-price">
+											{% render 'price', product: product %}
+										</div>
+
+										<button
+											class="button-simple button-simple--primary button-simple--full-width trend-product__popup-button trend-product__popup-button--desktop focus-visible-outline js-add-to-cart"
+											data-min-quantity="{{- product.selected_or_first_available_variant.quantity_rule.min -}}"
+											type="button"
+											disabled
+											{% if product.template_suffix == 'pre-order' %}data-preorder{% endif %}
+										>
+											{{- 'products.product.sold_out' | t -}}
+										</button>
+									</div>
+								{% endif %}
+							</div>
+
+							<div class="trend-product__popup-button-wrapper">
+								<button
+									class="button-simple button-simple--primary button-simple--full-width focus-visible-outline js-add-to-cart"
+									type="button"
+									data-product-handle="{{- product.handle -}}"
+									data-min-quantity="{{- product.selected_or_first_available_variant.quantity_rule.min -}}"
+									{% if product.template_suffix == 'pre-order' %}data-preorder{% endif %}
+									{% if product.has_only_default_variant or product.variants.size == 1 %}
+										data-variant-id="{{- product.variants[0].id -}}"
+									{% endif %}
+									{% unless product.available %}
+										disabled
+									{% endunless %}
+								>
+									{% if product.available %}
+										{%- if product.has_only_default_variant or product.variants.size == 1 -%}
+											{% if product.template_suffix == 'pre-order' %}
+												{{- 'products.product.pre_order' | t -}}
+											{% else %}
+												{{- 'products.product.add_to_cart' | t -}}
+											{% endif %}
+										{%- else -%}
+											{{- 'products.product.open_quick_view' | t -}}
+										{%- endif -%}
+									{% else %}
+										{{- 'products.product.sold_out' | t -}}
+									{% endif %}
+								</button>
+							</div>
+						</div>
+
+						{% if product != blank %}
+							<div
+								class="trend-product__spot-label tr-dur-0-8 {{ floating_class }}">{{ spot_label | default: product.title }}</div>
+						{% elsif use_placeholder %}
+							<div
+								class="trend-product__spot-label tr-dur-0-8 {{ floating_class }}">{{- 'products.product_card.product_title' | t -}}</div>
+						{% endif %}
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+
+	{%- render 'adastra' with '/src/scripts/section-trend-products.js' -%}
+</section>
+
+{% schema %}
+{
+	"name": "Trend products",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "inline_richtext",
+			"id": "heading_first_line",
+			"label": "Heading (first line)",
+			"default": "<em>Trend products</em>"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading_second_line",
+			"label": "Heading (second line)"
+		},
+		{
+			"type": "image_picker",
+			"id": "image_desktop",
+			"label": "Image desktop",
+			"info": "3120 x 1338px recommended"
+		},
+		{
+			"type": "image_picker",
+			"id": "image_mobile",
+			"label": "Image mobile",
+			"info": "1534 x 900px recommended"
+		},
+		{
+			"type": "header",
+			"content": "Color"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1400px",
+					"label": "Default - 1400px"
+				},
+				{
+					"value": "1920px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 32
+		}
+	],
+	"max_blocks": 5,
+	"blocks": [
+		{
+			"type": "product",
+			"name": "Product",
+			"limit": 5,
+			"settings": [
+				{
+					"type": "text",
+					"id": "spot_label",
+					"label": "Spot label",
+					"info": "The text color matches the icon color in the Spot. The color settings for the Spot are inherited from the general Circle button settings."
+				},
+				{
+					"type": "product",
+					"id": "product",
+					"label": "Product"
+				},
+				{
+					"type": "image_picker",
+					"id": "product_image",
+					"label": "Product image",
+					"info": "Select a custom image instead of a product image. 360 x 360px recommended"
+				},
+				{
+					"type": "range",
+					"id": "horizontal_position_desktop",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"unit": "%",
+					"label": "Spot horizontal position desktop",
+					"default": 20
+				},
+				{
+					"type": "range",
+					"id": "vertical_position_desktop",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"unit": "%",
+					"label": "Spot vertical position desktop",
+					"default": 20
+				},
+				{
+					"type": "range",
+					"id": "horizontal_position_mobile",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"unit": "%",
+					"label": "Spot horizontal position mobile",
+					"default": 20
+				},
+				{
+					"type": "range",
+					"id": "vertical_position_mobile",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"unit": "%",
+					"label": "Spot vertical position mobile",
+					"default": 20
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Trend products",
+			"blocks": [
+				{
+					"type": "product",
+					"settings": {
+						"horizontal_position_desktop": 20,
+						"vertical_position_desktop": 20,
+						"horizontal_position_mobile": 20,
+						"vertical_position_mobile": 20
+					}
+				},
+				{
+					"type": "product",
+					"settings": {
+						"horizontal_position_desktop": 50,
+						"vertical_position_desktop": 30,
+						"horizontal_position_mobile": 50,
+						"vertical_position_mobile": 30
+					}
+				},
+				{
+					"type": "product",
+					"settings": {
+						"horizontal_position_desktop": 70,
+						"vertical_position_desktop": 40,
+						"horizontal_position_mobile": 70,
+						"vertical_position_mobile": 40
+					}
+				}
+			]
+		}
+	]
+}
+{% endschema %}

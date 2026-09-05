@@ -1,0 +1,148 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+ Snippet: Media card overlay
+	- heading: Heading string,
+	- link_label: Link label string,
+	- link_url: Link url string,
+	- open_link_in_new_tab: boolean; open link in new tab,
+	- image: image object,
+	- is_lazy: boolean,
+	- size: desktop image size (optional, default: 465, number),
+	- tablet_size: tablet image size (optional, default: size, number),
+	- mobile_size: mobile image size (optional, default: tablet_size, number)
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/media-card-overlay.scss' -%}
+
+{%- assign size				= size | default: 465 -%}
+{%- assign tablet_size		= tablet_size | default: size -%}
+{%- assign mobile_size		= mobile_size | default: tablet_size -%}
+
+{%- assign size_2x				= size | times: 2 -%}
+{%- assign tablet_size_2x		= tablet_size | times: 2 -%}
+{%- assign mobile_size_2x		= mobile_size | times: 2 -%}
+
+{%- assign small_mobile_size	= mobile_size | divided_by: 1.2 | round -%}
+{%- assign small_mobile_size_2x	= small_mobile_size | times: 2 -%}
+
+{%- if is_lazy == nil -%}
+	{%- assign is_lazy = true -%}
+{%- endif -%}
+
+<div class="media-card-overlay" style="{{ styles }}">
+	{%- capture card_content -%}
+		{% if heading != blank or link_label != blank %}
+			<div class="media-card-overlay__content-container">
+				{%- if heading != blank -%}
+					<h3 class="media-card-overlay__item-title h5">
+						{{- heading -}}
+					</h3>
+				{%- endif -%}
+
+				{%- if link_label != blank and link_url != blank -%}
+					{%- render 'button-link',
+						link_text: link_label,
+						link_url: link_url,
+						class: "media-card-overlay__item-link",
+						open_link_in_new_tab: open_link_in_new_tab
+					-%}
+				{%- endif -%}
+			</div>
+		{% endif %}
+	{%- endcapture -%}
+
+	{%- if image != blank -%}
+		{%- capture img_focal -%}
+			--img-desktop-pos: {{ image.presentation.focal_point }};
+		{%- endcapture -%}
+
+		{%- capture image_element -%}
+			<picture {% if is_lazy %}class="lazy"{% endif %}>
+				{%- if is_lazy -%}
+					<source srcset="{{ image | image_url: width: 10 }}"
+							data-srcset="{{ image | image_url: width: small_mobile_size }} 1x,
+										 {{ image | image_url: width: small_mobile_size_2x }} 2x"
+							media="(max-width: 360px)"
+							width="{{ small_mobile_size }}"
+					>
+
+					<source
+						srcset="{{ image | image_url: width: mobile_size }} 1x,
+								{{ image | image_url: width: mobile_size_2x }} 2x"
+						media="(max-width: 420px)"
+						width="{{ small_mobile_size }}"
+					>
+
+					<source srcset="{{ image | image_url: width: 10 }}"
+							data-srcset="{{ image | image_url: width: tablet_size }} 1x,
+										 {{ image | image_url: width: tablet_size_x2 }} 2x"
+							media="(max-width: 767px)"
+							width="{{ mobile_size }}"
+					>
+
+					<img class="media-card-overlay__item-image"
+						 src="{{ image | image_url: width: 10 }}"
+						 data-src="{{ image | image_url: width: size }}"
+						 data-srcset="{{ image | image_url: width: size }} 1x,
+									  {{ image | image_url: width: size_2x }} 2x"
+						 alt="{{ image.alt | escape }}"
+						{% if img_focal != blank %}
+							style="{{ img_focal }}"
+						{% endif %}
+						 width="{{ size }}"
+					>
+				{%- else -%}
+					<source
+						srcset="{{ image | image_url: width: small_mobile_size }} 1x,
+								{{ image | image_url: width: small_mobile_size_2x }} 2x"
+						media="(max-width: 360px)"
+						width="{{ small_mobile_size }}"
+					>
+
+					<source
+						srcset="{{ image | image_url: width: mobile_size }} 1x,
+								{{ image | image_url: width: mobile_size_2x }} 2x"
+						media="(max-width: 420px)"
+						width="{{ small_mobile_size }}"
+					>
+
+					<source
+						srcset="{{ image | image_url: width: tablet_size }} 1x,
+								{{ image | image_url: width: tablet_size_x2 }} 2x"
+						media="(max-width: 767px)"
+						width="{{ mobile_size }}"
+					>
+
+					<img class="media-card-overlay__item-image"
+						 src="{{ image | image_url: width: size }}"
+						 srcset="{{ image | image_url: width: size }} 1x,
+								{{ image | image_url: width: size_2x }} 2x"
+						 alt="{{ image.alt | escape }}"
+						{% if img_focal != blank %}
+							style="{{ img_focal }}"
+						{% endif %}
+						 width="{{ size }}"
+					>
+				{%- endif -%}
+			</picture>
+		{%- endcapture -%}
+
+		<div class="media-card-overlay__image-wrapper">
+			{% if link_url != blank %}
+				<a href="{{ link_url }}" {% if open_link_in_new_tab %}target="_blank"{% endif %}>
+					{{- image_element -}}
+				</a>
+			{% else %}
+				{{- image_element -}}
+			{% endif %}
+
+			{{- card_content -}}
+		</div>
+	{%- else -%}
+		<div class="media-card-overlay__image-wrapper">
+			{{- 'detailed-apparel-1' | placeholder_svg_tag: 'media-card-overlay__item-image media-card-overlay__item-image--placeholder' -}}
+			{{- card_content -}}
+		</div>
+	{%- endif -%}
+</div>

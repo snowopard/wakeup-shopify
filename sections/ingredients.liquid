@@ -1,0 +1,453 @@
+{% include "adastra" with "/src/styles/ingredients.scss" %}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign heading_first_line 	= section.settings.heading_first_line -%}
+{%- assign heading_second_line 	= section.settings.heading_second_line -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme			= section.settings.color_scheme -%}
+{%- assign enable_bottom_rounded_corners	= section.settings.enable_bottom_rounded_corners -%}
+{%- assign container 			= section.settings.container_width -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme	= settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == "inherit" -%}
+	{% assign container_width = settings.container_width %}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture section_styles -%}
+	--container-width: {{ container_width }}; {{  -}}
+	--animation-card-color: {{ animation_card_color }}; {{  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{  -}}
+{%- endcapture -%}
+
+<section class="ingredients color-{{ color_scheme.id }}{% if enable_bottom_rounded_corners %} section-bottom-rounded{% endif %} js-animate{% if request.visual_preview_mode or section.index == 1 %} animated{% endif %} js-ingredients"
+		 style="{{- section_styles -}}"
+>
+	<div class="ingredients__container container">
+		{%- if heading_first_line != blank or heading_second_line != blank -%}
+			<h2 class="ingredients__heading section-title section-title--center need-animate">
+				{%- if heading_first_line != blank -%}
+					<span class="section-title__text-container">
+						<span class="section-title__text{% if heading_second_line == blank %} text-center{% endif %}">
+							{{- heading_first_line -}}
+						</span>
+					</span>
+				{%- endif -%}
+
+				{%- if heading_second_line != blank -%}
+					<span class="section-title__text-container">
+						<span class="section-title__text{% if heading_first_line == blank %} text-center{% else %} text-right{% endif %}">
+							{{- heading_second_line -}}
+						</span>
+					</span>
+				{%- endif -%}
+			</h2>
+		{%- endif -%}
+
+		{%- if section.blocks.size > 0 -%}
+			{%- assign delay_step = 0.125 -%}
+
+			<ul class="ingredients__list">
+				{%- for block in section.blocks -%}
+					{%- assign delay_step = delay_step | plus: 0.125 -%}
+
+					{% if block.type == "small_card" %}
+						{%- assign block_image 		= block.settings.block_image -%}
+						{%- assign title 			= block.settings.title -%}
+						{%- assign animation_card_color	= block.settings.animation_card_color -%}
+
+						{%- capture block_styles -%}
+							--animation-card-color: {{ animation_card_color }};
+							--delay-step: {{ delay_step }}s;
+						{%- endcapture -%}
+
+						{%- if block_image != blank or title != blank -%}
+							<li class="ingredients__item ingredients__item--small-card need-animate js-ingredients-item"
+								style="{{ block_styles }}"
+							>
+								{%- if block_image != blank -%}
+									<picture>
+										<source
+											srcset="{{ block_image | image_url: width: 80, height: 80 }} 1x,
+												 	{{ block_image | image_url: width: 160, height: 160 }} 2x"
+											media="(max-width: 991px)"
+										>
+
+										<img
+											class="ingredients__item-img"
+											src="{{ block_image | image_url: width: 100, height: 100 }}"
+											srcset="{{ block_image | image_url: width: 100, height: 100 }} 1x,
+												 	{{ block_image | image_url: width: 200, height: 200 }} 2x"
+											alt="{{- block_image.alt | escape -}}"
+											loading="lazy"
+										>
+									</picture>
+								{%- endif -%}
+
+								{% if title != blank %}
+									<div class="ingredients__item-heading">
+										{{- title -}}
+									</div>
+								{%- endif -%}
+
+								<div class="ingredients__item-flashlight-clipper">
+									<div class="ingredients__item-flashlight-effect js-ingredients-item-flashlight-effect"></div>
+								</div>
+							</li>
+						{%- endif -%}
+					{% elsif block.type == "big_card" %}
+						{%- assign block_image 		= block.settings.block_image -%}
+						{%- assign title 			= block.settings.title -%}
+						{%- assign block_text 		= block.settings.block_text -%}
+						{%- assign use_big_heading 	= block.settings.use_big_heading -%}
+						{%- assign animation_card_color	= block.settings.animation_card_color -%}
+						{%- assign is_big_heading 	= false -%}
+
+						{%- if block_image != blank and use_big_heading == false -%}
+							{%- assign is_big_heading = true -%}
+						{%- endif -%}
+
+						{%- capture block_styles -%}
+							--animation-card-color: {{ animation_card_color }};
+							--delay-step: {{ delay_step }}s;
+						{%- endcapture -%}
+
+						{%- if block_image != blank or title != blank or block_text != blank -%}
+							<li class="ingredients__item ingredients__item--big-card{% if is_big_heading %} ingredients__item--big-heading{% endif %} need-animate js-ingredients-item"
+								style="{{ block_styles }}"
+							>
+								{%- if is_big_heading -%}
+									<picture>
+										<source
+											srcset="{{ block_image | image_url: width: 100, height: 100 }} 1x,
+												 	{{ block_image | image_url: width: 200, height: 200 }} 2x"
+											media="(max-width: 991px)"
+										>
+
+										<img
+											class="ingredients__item-img"
+											src="{{ block_image | image_url: width: 170, height: 170 }}"
+											srcset="{{ block_image | image_url: width: 170, height: 170 }} 1x,
+												 {{ block_image | image_url: width: 340, height: 340 }} 2x"
+											alt="{{- block_image.alt | escape -}}"
+										>
+									</picture>
+								{%- endif -%}
+
+								{%- if title != blank or block_text != blank -%}
+									{%- if is_big_heading -%}
+										<div class="ingredients__item-inner">
+									{%- endif -%}
+
+									{% if title != blank %}
+										<div class="ingredients__item-heading{% if block_image == blank or use_big_heading %} h2{% endif %}">
+											{{- title -}}
+										</div>
+									{%- endif -%}
+
+									{% if block_text != blank %}
+										<div class="ingredients__item-text">
+											{{- block_text -}}
+										</div>
+									{%- endif -%}
+									{%- if is_big_heading -%}
+										</div>
+									{%- endif -%}
+								{%- endif -%}
+
+								<div class="ingredients__item-flashlight-clipper">
+									<div class="ingredients__item-flashlight-effect js-ingredients-item-flashlight-effect"></div>
+								</div>
+							</li>
+						{%- endif -%}
+					{% endif %}
+				{%- endfor -%}
+			</ul>
+		{%- endif -%}
+	</div>
+</section>
+
+{% include "adastra" with "/src/scripts/ingredients.js" %}
+
+{% schema %}
+	{
+		"name": "Ingredients",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+			{
+				"id": "heading_first_line",
+				"type": "inline_richtext",
+				"label": "Heading first line"
+			},
+			{
+				"id": "heading_second_line",
+				"type": "inline_richtext",
+				"label": "Heading second line"
+			},
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"default": true,
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"default": "scheme_1",
+				"label": "Color scheme"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "select",
+				"id": "container_width",
+				"label": "Container width",
+				"options": [
+					{
+						"value": "1560px",
+						"label": "Default - 1440px"
+					},
+					{
+						"value": "2040px",
+						"label": "Large - 1920px"
+					},
+					{
+						"value": "100%",
+						"label": "Full width"
+					},
+					{
+						"value": "inherit",
+						"label": "Inherit of general setting"
+					}
+				],
+				"default": "inherit",
+				"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_bottom_rounded_corners",
+				"label": "Enable bottom rounded corners",
+				"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+				"default": false
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset top",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset bottom",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset top",
+				"default": 32
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset bottom",
+				"default": 32
+			}
+		],
+		"blocks": [
+			{
+				"name": "Small card",
+				"type": "small_card",
+				"settings": [
+					{
+						"type": "image_picker",
+						"id": "block_image",
+						"label": "Image",
+						"info": "200 x 200px recommended"
+					},
+					{
+						"type": "text",
+						"id": "title",
+						"label": "Heading",
+						"default": "Small block heading"
+					},
+					{
+						"type": "header",
+						"content": "Colors"
+					},
+					{
+						"type": "color",
+						"id": "animation_card_color",
+						"label": "Animation card color",
+						"default": "#538BF6"
+					}
+				]
+			},
+			{
+				"name": "Big card",
+				"type": "big_card",
+				"settings": [
+					{
+						"type": "image_picker",
+						"id": "block_image",
+						"label": "Image",
+						"info": "340 x 340px recommended"
+					},
+					{
+						"type": "textarea",
+						"id": "title",
+						"label": "Heading",
+						"default": "Big block heading"
+					},
+					{
+						"type": "textarea",
+						"id": "block_text",
+						"label": "Text",
+						"default": "Block text"
+					},
+					{
+						"type": "checkbox",
+						"id": "use_big_heading",
+						"label": "Use big heading",
+						"default": true,
+						"info": "If enabled, images will not be shown."
+					},
+					{
+						"type": "header",
+						"content": "Colors"
+					},
+					{
+						"type": "color",
+						"id": "animation_card_color",
+						"label": "Animation card color",
+						"default": "#538BF6"
+					}
+				]
+			}
+		],
+		"presets": [
+			{
+				"name": "Ingredients",
+				"settings": {
+					"heading_first_line": "<em>Heading primary</em>",
+					"heading_second_line": "Heading secondary"
+				},
+				"blocks": [
+					{
+						"type": "big_card"
+					},
+					{
+						"type": "small_card"
+					},
+					{
+						"type": "small_card"
+					},
+					{
+						"type": "small_card"
+					},
+					{
+						"type": "small_card"
+					},
+					{
+						"type": "small_card"
+					},
+					{
+						"type": "small_card"
+					},
+					{
+						"type": "big_card",
+						"settings": {
+							"animation_card_color": "#FFB600"
+						}
+					}
+				]
+			}
+		]
+	}
+{% endschema %}

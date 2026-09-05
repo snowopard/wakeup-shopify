@@ -1,0 +1,442 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: List collections
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign heading_first_line = section.settings.heading_first_line -%}
+{%- assign heading_second_line = section.settings.heading_second_line -%}
+{%- assign text = section.settings.text -%}
+{%- assign custom_collections = section.settings.custom_collections -%}
+{%- assign show_description = section.settings.show_collection_description -%}
+{%- assign show_product_image = section.settings.show_product_image -%}
+{%- assign image_object_fit = section.settings.image_object_fit -%}
+{%- assign sort_by = section.settings.sort_by -%}
+{%- assign paginate_by = section.settings.paginate_by -%}
+{%- assign container = section.settings.container_width -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme = section.settings.color_scheme -%}
+{%- assign enable_bottom_rounded_corners = section.settings.enable_bottom_rounded_corners -%}
+{%- assign color_text = section.settings.color_text -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{%- capture styles -%}
+	--container-width: {{- container_width -}}; {{- -}}
+	--color-text: {{- color_text -}}; {{- -}}
+	--inner-offset-top-desktop: {{- section.settings.inner_offset_top_desktop -}}px; {{- -}}
+	--inner-offset-bottom-desktop: {{- section.settings.inner_offset_bottom_desktop -}}px; {{- -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{- -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{- -}}
+{%- endcapture -%}
+
+{%- if collections.size > 0 or custom_collections.count > 0 -%}
+	{% if custom_collections.count > 0 %}
+		{% assign collections = custom_collections %}
+	{% endif %}
+
+	{% case sort_by %}
+		{% when "title_reverse" %}
+			{% assign sorted_collections = collections | sort: 'title' | reverse %}
+		{% when "published_at_reverse" %}
+			{% assign sorted_collections = collections | sort: 'published_at' | reverse %}
+		{% when "products_count_reverse" %}
+			{% assign sorted_collections = collections | sort: 'products_count' | reverse %}
+		{% else %}
+			{% assign sorted_collections = collections | sort: sort_by %}
+	{% endcase %}
+
+	{%- capture collections_grid -%}
+		{%- if custom_collections.count > 0 -%}
+			<div class="list-collections__row">
+				{% assign delay_step = 0 %}
+				{% assign header_delay_step = 0.5 %}
+				{% assign button_delay_step = 1 %}
+
+				{%- for collection in sorted_collections -%}
+					{% if section.index > 1 %}
+						{% assign is_lazy = true %}
+					{% elsif section.index == 1 and forloop.index > 2 %}
+						{% assign is_lazy = true %}
+					{% endif %}
+
+					{% assign delay_step = delay_step | plus: 0.2 %}
+					{% assign header_delay_step = header_delay_step | plus: 0.2 %}
+					{% assign button_delay_step = button_delay_step | plus: 0.2 %}
+
+					{% capture animation_styles %}
+						--card-transition-delay: {{ delay_step }}s;
+						--header-transition-delay: {{ header_delay_step }}s;
+						--button-transition-delay: {{ button_delay_step }}s;
+					{% endcapture %}
+
+					<div class="list-collections__col need-animate tr-dur-0-5"
+						 style="{{ animation_styles }}">
+						{%- render 'list-collections-card',
+							collection: collection,
+							image: collection.featured_image,
+							show_description: show_description,
+							show_product_image: show_product_image,
+							is_lazy: is_lazy,
+							image_object_fit: image_object_fit
+						-%}
+					</div>
+				{%- endfor -%}
+			</div>
+		{%- else -%}
+			{%- paginate collections by paginate_by -%}
+				<div class="list-collections__row">
+					{% assign delay_step = 0 %}
+					{% assign header_delay_step = 0.5 %}
+					{% assign button_delay_step = 1 %}
+
+					{%- for collection in collections -%}
+						{% if section.index > 1 %}
+							{% assign is_lazy = true %}
+						{% elsif section.index == 1 and forloop.index > 2 %}
+							{% assign is_lazy = true %}
+						{% endif %}
+
+						{% assign delay_step = delay_step | plus: 0.2 %}
+						{% assign header_delay_step = header_delay_step | plus: 0.2 %}
+						{% assign button_delay_step = button_delay_step | plus: 0.2 %}
+
+						{% capture animation_styles %}
+							--card-transition-delay: {{ delay_step }}s;
+							--header-transition-delay: {{ header_delay_step }}s;
+							--button-transition-delay: {{ button_delay_step }}s;
+						{% endcapture %}
+
+						<div class="list-collections__col need-animate tr-dur-0-5"
+							 style="{{ animation_styles }}">
+							{%- render 'list-collections-card',
+								collection: collection,
+								image: collection.featured_image,
+								show_description: show_description,
+								show_product_image: show_product_image,
+								is_lazy: is_lazy,
+								image_object_fit: image_object_fit
+							-%}
+						</div>
+					{%- endfor -%}
+				</div>
+
+				{%- if paginate.pages > 1 -%}
+					<div class="list-collections__pagination-wrapper">
+						{%- render 'pagination', paginate: paginate -%}
+					</div>
+				{%- endif -%}
+			{%- endpaginate -%}
+		{%- endif -%}
+	{%- endcapture -%}
+{%- endif -%}
+
+{%- if collections_grid != blank -%}
+	{%- capture list_collections -%}
+		<div class="container">
+			{%- if heading_first_line != blank or heading_second_line != blank -%}
+				<h2 class="h1 section-title section-title--center need-animate">
+					{%- if heading_first_line != blank -%}
+						<span class="section-title__text-container">
+							<span
+								class="section-title__text text-center">
+								{{- heading_first_line -}}
+							</span>
+						</span>
+					{%- endif -%}
+
+					{%- if heading_second_line != blank -%}
+						<span class="section-title__text-container">
+							<span
+								class="section-title__text text-center">
+								{{- heading_second_line -}}
+							</span>
+						</span>
+					{%- endif -%}
+				</h2>
+			{%- endif -%}
+
+			{% if text != blank %}
+				<div class="list-collections__text rte need-animate tr-dur-0-5">
+					{{ text }}
+				</div>
+			{% endif %}
+
+			{%- if collections_grid != blank -%}
+				{{- collections_grid -}}
+			{%- endif -%}
+		</div>
+	{%- endcapture -%}
+{%- endif -%}
+
+{%- if list_collections != blank -%}
+	{%- render 'adastra' with '/src/styles/list-collections.scss' -%}
+
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+			}
+		}
+	{%- endstyle -%}
+
+	<section
+		class="list-collections js-animate {% if request.visual_preview_mode %}animated{% endif %} {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %} color-{{ color_scheme.id }}"
+		style="{{ styles }}">
+		{{- list_collections -}}
+	</section>
+{%- endif -%}
+
+{%- schema -%}
+{
+	"name": "List collections",
+	"settings": [
+		{
+			"type": "collection_list",
+			"id": "custom_collections",
+			"label": "Custom collections",
+			"info": "Display a custom collections instead of all collections list"
+		},
+		{
+			"type": "select",
+			"id": "sort_by",
+			"options": [
+				{
+					"value": "title",
+					"label": "Alphabetically, A-Z"
+				},
+				{
+					"value": "title_reverse",
+					"label": "Alphabetically, Z-A"
+				},
+				{
+					"value": "published_at_reverse",
+					"label": "Date, new to old"
+				},
+				{
+					"value": "published_at",
+					"label": "Date, old to new"
+				},
+				{
+					"value": "products_count_reverse",
+					"label": "Product count, high to low"
+				},
+				{
+					"value": "products_count",
+					"label": "Product count, low to high"
+				}
+			],
+			"label": "Sort collections by:",
+			"info": "Works only for custom collections"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading_first_line",
+			"label": "Heading (first line)",
+			"default": "All collections"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading_second_line",
+			"label": "Heading (second line)"
+		},
+		{
+			"type": "richtext",
+			"id": "text",
+			"label": "Text"
+		},
+		{
+			"type": "range",
+			"id": "paginate_by",
+			"min": 4,
+			"max": 50,
+			"step": 1,
+			"label": "Paginate by",
+			"default": 6,
+			"info": "Pagination works only with the standard list of collections. Does not work for custom collections"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_collection_description",
+			"label": "Show collection description",
+			"info": "Only desktop. Description will be truncated to 4 lines.",
+			"default": false
+		},
+		{
+			"type": "checkbox",
+			"id": "show_product_image",
+			"label": "Show product image",
+			"default": false
+		},
+		{
+			"type": "select",
+			"id": "image_object_fit",
+			"label": "Product image object fit",
+			"options": [
+				{
+					"value": "cover",
+					"label": "Cover"
+				},
+				{
+					"value": "contain",
+					"label": "Contain"
+				}
+			],
+			"default": "cover"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "color",
+			"id": "color_text",
+			"label": "Text",
+			"default": "#ffffff"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 24
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 24
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 20
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 20
+		}
+	]
+}
+{%- endschema -%}

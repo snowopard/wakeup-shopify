@@ -1,0 +1,403 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Cart template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/cart.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- capture default_heading -%}
+	{{- "cart.general.title" | t -}}
+{%- endcapture -%}
+
+{%- assign heading 							= section.settings.heading | default: default_heading -%}
+{%- assign order_summary_heading 			= section.settings.order_summary_heading -%}
+{%- assign container 						= section.settings.container_width -%}
+{%- assign enable_bottom_rounded_corners   	= section.settings.enable_bottom_rounded_corners -%}
+{%- assign enable_color_scheme_inheritance  = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 				    = section.settings.color_scheme -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{%- capture section_styles -%}
+	--container-width: {{ container_width }}; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px; {{- -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{- -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{- -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px;
+{%- endcapture -%}
+
+{%- for block in section.blocks -%}
+	{%- case block.type -%}
+		{%- when 'shipping' -%}
+		{%- assign is_shipping_enabled = 'true' -%}
+	{%- endcase -%}
+{%- endfor -%}
+
+{%- capture blocks -%}
+	{%- for block in section.blocks -%}
+		{% if block.type == "@app" %}
+			{%- render block -%}
+		{% endif %}
+	{%- endfor -%}
+{%- endcapture -%}
+
+{%- capture custom_liquid_block  -%}
+	{%- for block in section.blocks -%}
+		{%- case block.type -%}
+			{%- when 'custom_liquid' -%}
+				{{ block.settings.custom_liquid }}
+		{%- endcase -%}
+	{%- endfor -%}
+{%- endcapture -%}
+
+<section
+	class="cart-template color-{{ color_scheme.id }} {% if cart.empty? %}is-empty{% endif %} {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %} js-animate {% if request.visual_preview_mode %}animated{% endif %}"
+	style="{{- section_styles -}}"
+	data-section-id="{{- section.id -}}"
+	data-section-type="cart-template"
+>
+	<div class="cart-template__container container js-cart-container">
+		<div class="cart-template__content js-cart-content">
+			{%- if cart.empty? -%}
+				{%- render 'cart-empty' -%}
+			{%- else -%}
+				<h1 class="h1 cart-template__title">
+					{{- heading -}}
+				</h1>
+
+				<div class="cart-template__row">
+					<div class="cart-template__col cart-template__col--main need-animate">
+						<div class="cart-items">
+							<form action="{{- routes.cart_url -}}" id="cart-{{- section.id -}}" class="cart-items__form" method="post">
+								<div class="cart-items__head">
+									<div class="cart-items__col cart-items__col--main">
+										{{- 'cart.label.product' | t -}}
+									</div>
+
+									<div class="cart-items__col cart-items__col--price">
+										{{- 'cart.label.price' | t -}}
+									</div>
+
+									<div class="cart-items__col cart-items__col--quantity">
+										{{- 'cart.label.quantity' | t -}}
+									</div>
+
+									<div class="cart-items__col cart-items__col--summary">
+										{{- 'cart.label.total' | t -}}
+									</div>
+
+									<div class="cart-items__col cart-items__col--actions"></div>
+								</div>
+
+								<div class="cart-items__body">
+									{%- unless cart.empty? -%}
+										{%- for item in cart.items -%}
+											{% render 'cart-item', item: item %}
+										{%- endfor -%}
+									{%- endunless -%}
+								</div>
+							</form>
+						</div>
+
+						{% if settings.show_shipping_rates_calculator %}
+							<div class="cart-template__shipping">
+								{%- render 'cart-shipping-calculator' -%}
+							</div>
+						{% endif %}
+					</div>
+
+					<div class="cart-template__col cart-template__col--sidebar need-animate">
+						{%- render 'cart-footer', section: section, cart_drawer: false -%}
+					</div>
+				</div>
+			{%- endif -%}
+		</div>
+
+		{%- if blocks != '' or custom_liquid_block != blank -%}
+			<div class="cart-template__blocks">
+				{% if blocks != '' %}
+					{{- blocks -}}
+				{% endif %}
+
+				{% if custom_liquid_block != blank %}
+					{{ custom_liquid_block }}
+				{% endif %}
+			</div>
+		{%- endif -%}
+	</div>
+
+	{%- render "preloader" -%}
+</section>
+
+{%- render 'adastra' with '/src/scripts/cart-template.js' -%}
+
+{% schema %}
+{
+	"name": "Cart",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Cart settings"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "Shopping cart"
+		},
+		{
+			"type": "text",
+			"id": "order_summary_heading",
+			"label": "Order summary heading",
+			"default": "Order Summary"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_payments",
+			"label": "Show payment icons",
+			"default": true
+		},
+		{
+			"type": "text",
+			"id": "payments_title",
+			"label": "Payment icons heading",
+			"default": "We accept"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "If you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 50
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 50
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 40
+		}
+	],
+	"blocks": [
+		{
+			"type": "@app"
+		},
+		{
+			"name": "Custom liquid",
+			"type": "custom_liquid",
+			"settings": [
+			{
+				"type": "liquid",
+				"id": "custom_liquid",
+				"label": "Custom liquid",
+				"info": "Simple custom liquid"
+			}
+			]
+		},
+		{
+			"name": "Shipping bar",
+			"type": "shipping",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "number",
+					"id": "amount",
+					"label": "Free shipping amount",
+					"default": 100
+				},
+				{
+					"type": "textarea",
+					"id": "message",
+					"label": "Shipping message",
+					"default": "You are only {amount} away from free shipping",
+					"info": "The pattern {amount} will be replaced with the remaining amount"
+				},
+				{
+					"type": "textarea",
+					"id": "congratulatory_message",
+					"label": "Shipping congratulatory message",
+					"default": "You got free shipping"
+				},
+				{
+					"type": "header",
+					"content": "Colors"
+				},
+				{
+					"type": "color_background",
+					"id": "block_background",
+					"label": "Background",
+					"default": "rgba(255,255,255, 0.06)"
+				},
+				{
+					"type": "color",
+					"id": "text_color",
+					"label": "Text",
+					"default": "#fff"
+				},
+				{
+					"type": "color",
+					"id": "amount_color",
+					"label": "Amount text",
+					"default": "#fff"
+				},
+				{
+					"type": "color_background",
+					"id": "amount_bg",
+					"label": "Amount background",
+					"default": "linear-gradient(85.71deg, #CF1D5D 0.03%, rgba(255, 113, 12, 0.6) 100%)"
+				},
+				{
+					"type": "color",
+					"id": "bar_color",
+					"label": "Progress bar background color",
+					"default": "#585b61"
+				},
+				{
+					"type": "color",
+					"id": "fill_color",
+					"label": "Progress bar fill color",
+					"default": "#FF710C"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

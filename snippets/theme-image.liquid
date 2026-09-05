@@ -1,0 +1,125 @@
+{% doc %}
+Render an image
+
+@param {object} image - desktop image object
+@param {object} [mobile_image] - mobile image object
+@param {string} [mobile_breakpoint] - breakpoint for start to use mobile image. Must be one of the breakpoints value
+@param {string} [img_class] - class for img tag
+@param {string} [picture_class] - class for picture tag
+@param {string} [alt] - alt for image
+@param {string} [style] - content for the style tag. For example, focal point or css-variables
+@param {boolean} [lazy] - enable/disable lazy load
+@param {number} src_width - width of the image for the initial desktop size
+@param {number} [src_height] - height of the image for the initial desktop size
+@param {string} [src_crop] - image crop position. Used together with src_height or heights
+@param {string} [breakpoints] - breakpoints for the source tags
+@param {string} [widths] - breakpoints for the image widths for each breakpoint
+@param {string} [heights] - breakpoints for the image heights for each breakpoint
+@param {string} [svg_placeholder_name] - name of the svg_placeholder
+
+@example
+
+{% render 'theme-image'
+	image: image_desktop,
+	mobile_image: image_mobile,
+	mobile_breakpoint: '991',
+	img_class: 'image-with-text__image',
+	picture_class: 'image-with-text__image-wrapper',
+	alt: image_desktop.alt,
+	style: img_focal,
+	lazy: lazy,
+	src_width: 800,
+	src_height: '',
+	src_crop: "center",
+	breakpoints: '375, 420, 575, 767, 991, 1440',
+	widths: '343, 388, 543, 736, 959, 578',
+	heights: '343, 388, 543, 736, 959, 578',
+	svg_placeholder_name: 'hero-apparel-1'
+%}
+{% enddoc %}
+
+{% if image != blank %}
+	{% if lazy == nil %}
+		{% assign lazy = true %}
+	{% endif %}
+
+	{% if mobile_image == nil %}
+		{% assign mobile_image = image %}
+	{% endif %}
+
+	{% assign image_display = image %}
+
+	{% if mobile_breakpoint == nil %}
+		{% assign mobile_breakpoint = '991' %}
+	{% endif %}
+
+	{% if mobile_breakpoint != blank %}
+		{% assign mobile_breakpoint = mobile_breakpoint | plus: 0 %}
+	{% endif %}
+
+	{% assign src_width_x2 		= src_width | times: 2 %}
+	{% assign src_height_x2 	= src_height | times: 2 %}
+
+	{% assign breakpoints_arr = breakpoints | split: ', ' %}
+	{% assign widths_arr = widths | split: ', ' %}
+	{% assign heights_arr = heights | split: ', ' %}
+
+	{% assign src_crop = src_crop | default: "center" %}
+
+	<picture class="{{ picture_class }}">
+		{% for breakpoint in breakpoints_arr %}
+			{% assign breakpoint_num 		= breakpoint | plus: 0 %}
+			{% assign breakpoint_width 		= widths_arr[forloop.index0] %}
+			{% assign breakpoint_height 	= heights_arr[forloop.index0] %}
+			{% assign breakpoint_width_2x 	= breakpoint_width | times: 2 %}
+			{% assign breakpoint_height_2x 	= breakpoint_height | times: 2 %}
+
+			{% if mobile_breakpoint != blank and mobile_image != image and breakpoint_num <= mobile_breakpoint %}
+				{% assign image_display = mobile_image %}
+			{% else %}
+				{% assign image_display = image %}
+			{% endif %}
+
+			{% if heights != blank %}
+				<source
+					srcset="{{ image_display | image_url: width: breakpoint_width, height: breakpoint_height, crop: src_crop }} 1x, {{ image_display | image_url: width: breakpoint_width_2x, height: breakpoint_height_2x, crop: src_crop }} 2x"
+					media="(max-width: {{ breakpoint }}px)"
+				>
+			{% else %}
+				<source
+					srcset="{{ image_display | image_url: width: breakpoint_width }} 1x, {{ image_display | image_url: width: breakpoint_width_2x }} 2x"
+					media="(max-width: {{ breakpoint }}px)"
+				>
+			{% endif %}
+		{% endfor %}
+
+		<img class="{{ img_class }}"
+			{% if lazy %}
+				fetchpriority="low"
+				loading="lazy"
+			{% else %}
+				fetchpriority="high"
+				loading="eager"
+			{% endif %}
+			{% if src_height != blank %}
+				src="{{ image_display | image_url: width: src_width, height: src_height, crop: src_crop }}"
+				srcset="{{ image_display | image_url: width: src_width, height: src_height, crop: src_crop }} 1x, {{ image_display | image_url: width: src_width_x2, height: src_height_x2, crop: src_crop }} 2x"
+			{% else %}
+				src="{{ image_display | image_url: width: src_width }}"
+				srcset="{{ image_display | image_url: width: src_width }} 1x, {{ image_display | image_url: width: src_width_x2 }} 2x"
+			{% endif %}
+			 alt="{{ alt | default: image.alt | escape }}"
+			{% if style != blank %}
+				style="{{ style }}"
+			{% endif %}
+		>
+	</picture>
+{% else %}
+	{% if svg_placeholder_name == nil %}
+		{% assign svg_placeholder_name = 'detailed-apparel-1' %}
+	{% endif %}
+
+	<div class="{{ picture_class }} svg-placeholder-wrapper">
+		{{ svg_placeholder_name | placeholder_svg_tag: img_class }}
+	</div>
+{% endif %}

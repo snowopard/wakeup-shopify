@@ -1,0 +1,38 @@
+{% assign description_truncated = product.description | strip_html | truncatewords: 20 %}
+{% assign description_truncated_2 = product.description | strip_html | truncatewords: 22 %}
+
+{% if description_truncated_2.size > description_truncated.size %}
+	<div id="product-extra-description-{{ section.id }}" class="product-extra-description color-{{ color_scheme }} js-animate">
+		<div class="product-extra-description__container">
+			{% if product.featured_image != blank %}
+				<div class="product-extra-description__image-wrapper">
+					<h2 class="product-extra-description__title product-extra-description__title--on-image h1 section-title need-animate">
+						<div class="section-title__text-container">
+							<div class="section-title__text">{{ product.title }}</div>
+						</div>
+					</h2>
+
+					<picture class="lazy">
+						<img class="product-extra-description__image"
+							 src="{{ product.featured_image | image_url: width: 10 }}"
+							 srcset="{{ product.featured_image | image_url: width: 10 }}"
+							 data-srcset="{{ product.featured_image | image_url: width: 614 }} 1x,
+									{{ product.featured_image | image_url: width: 1228 }} 2x"
+							 data-src="{{ product.featured_image | image_url: width: 614 }}"
+
+							 alt="{{ product.featured_image.alt | escape }}"
+						>
+					</picture>
+				</div>
+			{% else %}
+				<h2 class="product-extra-description__title h1 section-title need-animate">
+					<div class="section-title__text-container">
+						<div class="section-title__text">{{ product.title }}</div>
+					</div>
+				</h2>
+			{% endif %}
+
+			<div class="product-extra-description__rte need-animate rte js-animate">{{ product.description }}</div>
+		</div>
+	</div>
+{% endif %}

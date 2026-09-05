@@ -1,0 +1,523 @@
+{%- render "adastra" with "/src/styles/scrolling-text.scss" -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_desktop -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+	}
+
+	@media screen and (max-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign image 				= section.settings.image -%}
+{%- assign image_object_fit 	= section.settings.image_object_fit -%}
+{%- assign enable_image_blur 	= section.settings.enable_image_blur -%}
+{%- assign image_opacity 		= section.settings.image_opacity -%}
+{%- assign decor_image_first 	= section.settings.decor_image_first -%}
+{%- assign decor_image_second 	= section.settings.decor_image_second -%}
+{%- assign decor_image_third 	= section.settings.decor_image_third -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 		= section.settings.color_scheme -%}
+{%- assign ellipse 				= section.settings.ellipse -%}
+{%- assign container 			= section.settings.container_width -%}
+{%- assign enable_bottom_rounded_corners = section.settings.enable_bottom_rounded_corners -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == "inherit" -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container_width -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--image-object-fit: {{ image_object_fit -}}; {{  -}}
+	--image-opacity: {{ image_opacity -}}%; {{  -}}
+	--ellipse-color: {{ ellipse -}}; {{  -}}
+	--container-width: {{ container_width -}}; {{  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{  -}}
+{%- endcapture -%}
+
+{%- capture decor_image_wrapper -%}
+	{%- if decor_image_first != blank -%}
+		<picture class="scrolling-text__decor-image-wrapper scrolling-text__decor-image-wrapper--first lazy">
+			<source
+				data-srcset="{{ decor_image_first | image_url: width: decor_image_size_992 }} 1x,
+							 {{ decor_image_first | image_url: width: decor_image_size_992_2x }} 2x"
+				srcset="{{ decor_image_first | image_url: width: 10 }} 1x,
+						{{ decor_image_first | image_url: width: 20 }} 2x"
+				media="(max-width: 992px)"
+				width="{{- decor_image_size_992 -}}"
+				height="{{- decor_image_size_992 -}}"
+			>
+
+			<img
+				class="scrolling-text__decor-image js-image-mouse-move"
+				data-srcset="{{ decor_image_first | image_url: width: decor_image_size }} 1x,
+							 {{ decor_image_first | image_url: width: decor_image_size_2x }} 2x"
+				srcset="{{ decor_image_first | image_url: width: 10 }} 1x,
+						{{ decor_image_first | image_url: width: 20 }} 2x"
+				data-src="{{ decor_image_first | image_url: width: decor_image_size }}"
+				src="{{ decor_image_first | image_url: width: 10 }}"
+				alt="{{- decor_image_first.alt | escape -}}"
+			>
+		</picture>
+	{%- endif -%}
+
+	{%- if decor_image_second != blank -%}
+		<picture class="scrolling-text__decor-image-wrapper scrolling-text__decor-image-wrapper--second lazy">
+			<source
+				data-srcset="{{ decor_image_second | image_url: width: decor_image_size_992 }} 1x,
+							 {{ decor_image_second | image_url: width: decor_image_size_992_2x }} 2x"
+				srcset="{{ decor_image_second | image_url: width: 10 }} 1x,
+						{{ decor_image_second | image_url: width: 20 }} 2x"
+				media="(max-width: 992px)"
+				width="{{- decor_image_size_992 -}}"
+				height="{{- decor_image_size_992 -}}"
+			>
+
+			<img
+				class="scrolling-text__decor-image js-image-mouse-move"
+				data-srcset="{{ decor_image_second | image_url: width: decor_image_size }} 1x,
+							 {{ decor_image_second | image_url: width: decor_image_size_2x }} 2x"
+				srcset="{{ decor_image_second | image_url: width: 10 }} 1x,
+						{{ decor_image_second | image_url: width: 20 }} 2x"
+				data-src="{{ decor_image_second | image_url: width: decor_image_size }}"
+				src="{{ decor_image_second | image_url: width: 10 }}"
+				alt="{{- decor_image_second.alt | escape -}}"
+			>
+		</picture>
+	{%- endif -%}
+
+	{%- if decor_image_third != blank -%}
+		<picture class="scrolling-text__decor-image-wrapper scrolling-text__decor-image-wrapper--third lazy">
+			<source
+				data-srcset="{{ decor_image_third | image_url: width: decor_image_size_992 }} 1x,
+							 {{ decor_image_third | image_url: width: decor_image_size_992_2x }} 2x"
+				srcset="{{ decor_image_third | image_url: width: 10 }} 1x,
+						{{ decor_image_third | image_url: width: 20 }} 2x"
+				media="(max-width: 992px)"
+				width="{{- decor_image_size_992 -}}"
+				height="{{- decor_image_size_992 -}}"
+			>
+
+			<img
+				class="scrolling-text__decor-image is-reverse-translate js-image-mouse-move"
+				data-srcset="{{ decor_image_third | image_url: width: decor_image_size }} 1x,
+							 {{ decor_image_third | image_url: width: decor_image_size_2x }} 2x"
+				srcset="{{ decor_image_third | image_url: width: 10 }} 1x,
+						{{ decor_image_third | image_url: width: 20 }} 2x"
+				data-src="{{ decor_image_third | image_url: width: decor_image_size }}"
+				src="{{ decor_image_third | image_url: width: 10 }}"
+				alt="{{- decor_image_third.alt | escape -}}"
+			>
+		</picture>
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- if section.blocks.size > 0 -%}
+	<section
+		class="scrolling-text{% if enable_image_blur %} scrolling-text--blur{% endif %}{% if enable_bottom_rounded_corners %} section-bottom-rounded{% endif %} color-{{ color_scheme.id }}"
+		style="{{- styles -}}"
+	>
+		<div class="scrolling-text__container container js-image-mouse-move-wrapper">
+			{%- if image != blank -%}
+				{%- assign decor_image_size_992 	= 70 -%}
+				{%- assign decor_image_size_992_2x 	= decor_image_size_992 | times: 2 -%}
+
+				{%- assign decor_image_size 	= 140 -%}
+				{%- assign decor_image_size_2x 	= decor_image_size | times: 2 -%}
+
+				<div class="scrolling-text__image-container">
+					{{- decor_image_wrapper -}}
+
+					<div class="scrolling-text__image-wrap js-animate{% if request.visual_preview_mode or section.index == 1 %} animated{% endif %}">
+						{%- capture img_focal -%}
+							--img-pos: {{ image.presentation.focal_point }};
+						{%- endcapture -%}
+
+						<picture class="scrolling-text__image-inner lazy">
+							<source
+								data-srcset="{{ image | image_url: width: 255 }} 1x,
+											 	 {{ image | image_url: width: 510 }} 2x"
+								srcset="{{ image | image_url: width: 10 }} 1x,
+											{{ image | image_url: width: 20 }} 2x"
+								media="(max-width: 375px)"
+								width="255"
+								height="255"
+							>
+
+							<source
+								data-srcset="{{ image | image_url: width: 296 }} 1x,
+											 	 {{ image | image_url: width: 592 }} 2x"
+								srcset="{{ image | image_url: width: 10 }} 1x,
+											{{ image | image_url: width: 20 }} 2x"
+								media="(max-width: 420px)"
+								width="296"
+								height="296"
+							>
+
+							<source
+								data-srcset="{{ image | image_url: width: 612 }} 1x,
+											 	 {{ image | image_url: width: 1224 }} 2x"
+								srcset="{{ image | image_url: width: 10 }} 1x,
+											{{ image | image_url: width: 20 }} 2x"
+								media="(max-width: 767px)"
+								width="612"
+								height="612"
+							>
+
+							<img
+								class="scrolling-text__image"
+								data-srcset="{{ image | image_url: width: 614 }} 1x,
+											 	 {{ image | image_url: width: 1228 }} 2x"
+								srcset="{{ image | image_url: width: 10 }} 1x,
+											{{ image | image_url: width: 20 }} 2x"
+								data-src="{{ image | image_url: width: 614 }}"
+								src="{{ image | image_url: width: 10 }}"
+								alt="{{- image.alt | escape -}}"
+								width="614"
+								height="614"
+								style="{{- img_focal -}}"
+							>
+						</picture>
+					</div>
+				</div>
+			{%- else -%}
+				{{- decor_image_wrapper -}}
+			{%- endif -%}
+
+			<div class="scrolling-text__wrapper">
+				{%- for block in section.blocks -%}
+					{%- assign heading 		= block.settings.heading -%}
+					{%- assign text 		= block.settings.text -%}
+					{%- assign block_image 	= block.settings.block_image -%}
+
+					{%- if heading != blank or text != blank or block_image != blank -%}
+						<div class="scrolling-text__item js-animate{% if request.visual_preview_mode %} animated{% endif %}">
+							{%- if block_image != blank -%}
+								<div class="scrolling-text__item-image-wrap">
+									<picture class="lazy">
+										<source
+											data-srcset="{{ block_image | image_url: width: 64 }} 1x,
+											 			 {{ block_image | image_url: width: 128 }} 2x"
+											srcset="{{ block_image | image_url: width: 10 }} 1x,
+													{{ block_image | image_url: width: 20 }} 2x"
+											media="(max-width: 992px)"
+											width="64"
+											height="64"
+										>
+
+										<img
+											class="scrolling-text__item-image"
+											data-srcset="{{ block_image | image_url: width: 80 }} 1x,
+														 {{ block_image | image_url: width: 160 }} 2x"
+											srcset="{{ block_image | image_url: width: 10 }} 1x,
+													{{ block_image | image_url: width: 20 }} 2x"
+											data-src="{{ block_image | image_url: width: 80 }}"
+											src="{{ block_image | image_url: width: 10 }}"
+											alt="{{- block_image.alt | escape -}}"
+											width="80"
+											height="80"
+										>
+									</picture>
+								</div>
+							{%- endif -%}
+
+							{%- if heading != blank or text != blank -%}
+								<div class="scrolling-text__item-inner">
+									{%- if heading != blank -%}
+										<h3 class="scrolling-text__item-heading h4">
+											{{- heading -}}
+										</h3>
+									{%- endif -%}
+
+									{%- if text != blank -%}
+										<div class="scrolling-text__item-text rte">
+											{{- text -}}
+										</div>
+									{%- endif -%}
+								</div>
+							{%- endif -%}
+						</div>
+					{%- endif -%}
+				{%- endfor -%}
+			</div>
+		</div>
+	</section>
+{%- endif -%}
+
+{%- schema -%}
+	{
+		"name": "Scrolling text",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+			{
+				"type": "image_picker",
+				"id": "image",
+				"label": "Image",
+				"info": "Images are displayed for desktop only. 1228 x 1228px recommended"
+			},
+			{
+				"type": "select",
+				"id": "image_object_fit",
+				"label": "Image object fit",
+				"options": [
+					{
+						"value": "contain",
+						"label": "Contain"
+					},
+					{
+						"value": "cover",
+						"label": "Cover"
+					}
+				],
+				"default": "cover"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_image_blur",
+				"label": "Enable image blur",
+				"default": true
+			},
+			{
+				"type": "range",
+				"id": "image_opacity",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "%",
+				"label": "Image opacity",
+				"default": 50
+			},
+			{
+				"type": "image_picker",
+				"id": "decor_image_first",
+				"label": "Decor image first",
+				"info": "If you fill in the 'image' settings, the decorative pictures will be sticky. Images are displayed for desktop only. 214 x 214px recommended"
+			},
+			{
+				"type": "image_picker",
+				"id": "decor_image_second",
+				"label": "Decor image second",
+				"info": "If you fill in the 'image' settings, the decorative pictures will be sticky. Images are displayed for desktop only. 214 x 214px recommended"
+			},
+			{
+				"type": "image_picker",
+				"id": "decor_image_third",
+				"label": "Decor image third",
+				"info": "If you fill in the 'image' settings, the decorative pictures will be sticky. Images are displayed for desktop only. 214 x 214px recommended"
+			},
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"default": true,
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"default": "scheme_1",
+				"label": "Color scheme"
+			},
+			{
+				"type": "color",
+				"id": "ellipse",
+				"label": "Ellipse",
+				"default": "#C43898"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "select",
+				"id": "container_width",
+				"label": "Container width",
+				"options": [
+					{
+						"value": "1560px",
+						"label": "Default - 1440px"
+					},
+					{
+						"value": "2040px",
+						"label": "Large - 1920px"
+					},
+					{
+						"value": "100%",
+						"label": "Full width"
+					},
+					{
+						"value": "inherit",
+						"label": "Inherit of general setting"
+					}
+				],
+				"default": "inherit",
+				"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_bottom_rounded_corners",
+				"label": "Enable bottom rounded corners",
+				"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+				"default": false
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset top",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset bottom",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset top",
+				"default": 32
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset bottom",
+				"default": 32
+			}
+		],
+		"blocks": [
+			{
+				"name": "Content",
+				"type": "content",
+				"settings": [
+					{
+						"type": "text",
+						"id": "heading",
+						"label": "Heading"
+					},
+					{
+						"type": "richtext",
+						"id": "text",
+						"label": "Text"
+					},
+					{
+						"type": "image_picker",
+						"id": "block_image",
+						"label": "Image",
+						"info": "80 x 80px .svg recommended"
+					}
+				]
+			}
+		],
+		"presets": [
+			{
+				"name": "Scrolling text",
+				"blocks": [
+					{
+						"type": "content",
+						"settings": {
+							"heading": "Heading",
+							"text": "<p>Text that describe content of block</p>"
+						}
+					},
+					{
+						"type": "content",
+						"settings": {
+							"heading": "Heading 2",
+							"text": "<p>Text that describe content of block</p>"
+						}
+					},
+					{
+						"type": "content",
+						"settings": {
+							"heading": "Heading 3",
+							"text": "<p>Text that describe content of block</p>"
+						}
+					},
+					{
+						"type": "content",
+						"settings": {
+							"heading": "Heading 4",
+							"text": "<p>Text that describe content of block</p>"
+						}
+					}
+				]
+			}
+		]
+	}
+{%- endschema -%}

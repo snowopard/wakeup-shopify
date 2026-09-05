@@ -1,0 +1,156 @@
+.product-tabs {
+  padding-top: var(--inner-offset-top-mobile);
+  padding-bottom: var(--inner-offset-bottom-mobile);
+  background-color: var(--color-background);
+}
+.product-tabs .product-tabs__heading {
+  margin-bottom: 32px;
+}
+.product-tabs .product-tabs__tabs-wrapper {
+  text-align: center;
+  overflow: auto;
+  margin: 0 -16px;
+  margin-bottom: 24px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.product-tabs .product-tabs__tabs-wrapper::-webkit-scrollbar {
+  display: none;
+}
+.product-tabs .product-tabs__tabs-wrapper .tabs.need-animate:after,
+.product-tabs .product-tabs__tabs-wrapper .tabs.need-animate .tabs__item {
+  opacity: 0;
+  transition-duration: var(--timing-base);
+  transition-property: opacity;
+}
+.product-tabs .product-tabs__tabs-wrapper .tabs.need-animate:after {
+  transition-delay: 0.2s;
+}
+.product-tabs .product-tabs__tabs-wrapper .tabs__item {
+  outline-offset: -7px;
+}
+.product-tabs .product-tabs__tabs-inner {
+  padding: 0 16px;
+}
+.product-tabs .product-tabs__slider {
+  display: none;
+  margin: 0 -8px;
+  animation-name: fadeIn;
+  animation-duration: var(--timing-base);
+}
+.product-tabs .product-tabs__slider.is-active {
+  display: block;
+}
+.product-tabs .product-tabs__slider:not(.swiper-initialized) {
+  overflow-x: auto;
+}
+.product-tabs .product-tabs__slider:not(.swiper-initialized) .product-tabs__row {
+  display: flex;
+}
+.product-tabs .product-tabs__slider:not(.swiper-initialized) .product-tabs__col {
+  width: 50%;
+}
+.product-tabs .product-tabs__slider:not(.swiper-initialized) .product-tabs__slider-pagination {
+  display: none;
+}
+.product-tabs .product-tabs__slider:not(.swiper-initialized)::-webkit-scrollbar {
+  display: none;
+  height: 7px;
+}
+.product-tabs .product-tabs__row.swiper-wrapper {
+  align-items: unset;
+}
+.product-tabs .product-tabs__col {
+  height: auto;
+  padding: 0 8px;
+}
+.product-tabs .product-tabs__slider-pagination {
+  margin-top: 32px;
+}
+.product-tabs .swiper-pagination-bullets {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+  padding-bottom: 4px;
+}
+.product-tabs .swiper-pagination-bullets.swiper-pagination-lock {
+  display: none;
+}
+.product-tabs .product-tabs__slider.need-animate {
+  opacity: 0;
+  transition-property: opacity;
+}
+.product-tabs.need-animate {
+  opacity: 0;
+  transform: translateY(70px);
+  transition-property: opacity, transform;
+  transition-duration: var(--animate-time);
+}
+.product-tabs.animated.need-animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+.product-tabs.animated .product-tabs__slider.need-animate {
+  opacity: 1;
+}
+.product-tabs.animated .tabs.need-animate:after,
+.product-tabs.animated .tabs.need-animate .tabs__item {
+  opacity: 1;
+}
+@media (max-width: 480.98px) {
+  .product-tabs .product-tabs__slider:not(.swiper-initialized) .product-tabs__col {
+    width: 100%;
+  }
+}
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .product-tabs .product-tabs__row.product-tabs__row--center-tablet {
+    justify-content: center;
+  }
+}
+@media (min-width: 768px) {
+  .product-tabs {
+    padding-top: var(--inner-offset-top);
+    padding-bottom: var(--inner-offset-bottom);
+  }
+  .product-tabs .product-tabs__heading {
+    margin-bottom: 48px;
+  }
+  .product-tabs .product-tabs__col {
+    width: 100%;
+  }
+  .product-tabs .product-tabs__slider:not(.swiper-initialized) .product-tabs__col.product-tabs__col--3 {
+    flex: 0 0 33.33333%;
+  }
+  .product-tabs .product-tabs__slider:not(.swiper-initialized) .product-tabs__col.product-tabs__col--4 {
+    flex: 0 0 33.33333%;
+  }
+}
+@media (min-width: 992px) {
+  .product-tabs .product-tabs__row.product-tabs__row--center-desktop {
+    justify-content: center;
+  }
+  .product-tabs .product-tabs__slider-pagination {
+    margin-top: 48px;
+  }
+}
+@media (max-width: 1199.98px) {
+  .product-tabs .product-tabs__slider {
+    margin: 0 -16px;
+    padding: 0 8px;
+  }
+}
+@media (min-width: 1200px) {
+  .product-tabs .product-tabs__slider:not(.swiper-initialized) .product-tabs__col.product-tabs__col--3 {
+    flex: 0 0 33.33333%;
+  }
+  .product-tabs .product-tabs__slider:not(.swiper-initialized) .product-tabs__col.product-tabs__col--4 {
+    flex: 0 0 25%;
+  }
+  .product-tabs .product-tabs__tabs-wrapper {
+    margin: 0 -60px;
+    margin-bottom: 48px;
+  }
+  .product-tabs .product-tabs__tabs-inner {
+    padding: 0 60px;
+  }
+}

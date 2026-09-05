@@ -1,0 +1,132 @@
+.timer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: var(--color-text-primary);
+}
+.timer.small {
+  margin-bottom: 8px;
+  justify-content: center;
+}
+.timer.small .timer__clock {
+  width: 40px;
+  height: 40px;
+  margin-top: 2px;
+  margin-bottom: 0;
+  margin-inline-end: 12px;
+}
+.timer.small .timer__clock .icon {
+  width: 20px;
+  height: 20px;
+}
+.timer.small .timer__label {
+  text-align: center;
+}
+.timer.small .timer__col + .timer__col {
+  position: relative;
+  margin-inline-start: 14px;
+}
+.timer.small .timer__col + .timer__col::after {
+  content: ":";
+  position: absolute;
+  top: 50%;
+  inset-inline-start: -6px;
+  font-size: calc(var(--body-font-size) * 1.375);
+  font-weight: bold;
+  color: currentColor;
+  transform: translate(-50%, -50%);
+  line-height: 1.09;
+}
+.timer.small .timer__col + .timer__col .timer__values::after {
+  content: none;
+}
+.timer.small .timer__value {
+  font-size: calc(var(--body-font-size) * 1.375);
+  line-height: 1.09;
+}
+.timer .timer__clock {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  margin-inline-end: 16px;
+  border-radius: 50%;
+}
+.timer .timer__clock .icon {
+  width: 24px;
+  height: 24px;
+}
+.timer .timer__clock-circle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  transform: rotate(-90deg);
+}
+.timer .timer__clock-circle-animate {
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: var(--timing-base);
+}
+.timer .timer__clock-circle-animate.is-active {
+  opacity: 1;
+}
+.timer .timer__values {
+  display: flex;
+  justify-content: center;
+}
+.timer .timer__col + .timer__col {
+  margin-inline-start: 15px;
+}
+.timer .timer__col + .timer__col .timer__values {
+  position: relative;
+}
+.timer .timer__col + .timer__col .timer__values::after {
+  content: ":";
+  position: absolute;
+  top: 50%;
+  inset-inline-start: -8px;
+  font-size: calc(var(--body-font-size) * 2);
+  font-weight: bold;
+  color: currentColor;
+  transform: translate(-50%, -50%);
+}
+.timer .timer__value {
+  min-width: 0.7em;
+  font-family: var(--base-font-family);
+  font-size: calc(var(--body-font-size) * 2);
+  line-height: 1.5;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+}
+.timer .timer__label {
+  opacity: 0.5;
+  margin-top: 2px;
+  font-size: calc(var(--body-font-size) * 0.75);
+  font-weight: 500;
+}
+@media (max-width: 374.98px) {
+  .timer .timer__value {
+    font-size: calc(var(--body-font-size) * 1.5);
+  }
+}
+@media (min-width: 576px) {
+  .timer .timer__col + .timer__col {
+    margin-inline-start: 16px;
+  }
+  .timer .timer__col + .timer__col .timer__values::after {
+    inset-inline-start: -8px;
+  }
+}
+body.rtl .timer .timer__col + .timer__col .timer__values::after {
+  transform: translate(50%, -50%);
+}
+body.rtl .timer.small .timer__col + .timer__col::after {
+  transform: translate(50%, -50%);
+}

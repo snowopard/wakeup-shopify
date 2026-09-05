@@ -1,0 +1,25 @@
+.product-countdown-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  padding-top: var(--offset-top-mobile);
+  padding-bottom: var(--offset-bottom-mobile);
+  text-align: center;
+  color: var(--color-text-primary);
+}
+.product-countdown-timer .product-countdown-timer__heading {
+  opacity: 0.6;
+  font-size: calc(var(--body-font-size) * 0.875);
+  font-weight: normal;
+  line-height: 1.43;
+  word-break: break-word;
+}
+@media (min-width: 1200px) {
+  .product-countdown-timer {
+    padding-top: var(--offset-top-desktop);
+    padding-bottom: var(--offset-bottom-desktop);
+  }
+}

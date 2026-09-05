@@ -1,0 +1,98 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Snippet: Video type
+------------------------------------------------------------------------------
+{% endcomment %}
+
+{%- if html_video_desktop != blank -%}
+	{%- capture html_video -%}
+		<video
+			class="video__player js-video{% if type == 'popup' %} is-hidden{% endif %}"
+			data-device="desktop"
+			data-type="html"
+			muted
+			controls
+			playsinline
+			preload="none"
+			tabindex="0"
+		>
+			{%- for source in html_video_desktop.sources -%}
+				{%- if source.mime_type == 'video/mp4' -%}
+					<source src="{{- source.url -}}" type="{{- source.mime_type -}}">
+				{%- endif -%}
+			{%- endfor -%}
+		</video>
+
+		<video
+			class="video__player video__player--mobile js-video{% if type == 'popup' %} is-hidden{% endif %}"
+			data-device="mobile"
+			data-type="html"
+			muted
+			controls
+			playsinline
+			preload="none"
+		>
+			{%- for source in html_video_mobile.sources -%}
+				{%- if source.mime_type == 'video/mp4' -%}
+					<source src="{{- source.url -}}" type="{{- source.mime_type -}}">
+				{%- endif -%}
+			{%- endfor -%}
+		</video>
+	{%- endcapture -%}
+{%- endif -%}
+
+{%- if external_video_url_desktop != nil -%}
+	{%- capture external_video -%}
+		{%- if external_video_url_desktop.type == 'youtube' -%}
+			<div
+				class="video__player js-video{% if type == 'popup' %} is-hidden{% endif %}"
+				data-device="desktop"
+				data-type="{{- external_video_url_desktop.type -}}"
+				{% if type == 'inline' %}data-lazy{% endif %}
+			>
+				<div
+					class="js-video-youtube"
+					data-video-id="{{- external_video_url_desktop.id -}}"
+				></div>
+			</div>
+		{%- else -%}
+			<div
+				class="video__player js-video{% if type == 'popup' %} is-hidden{% endif %}"
+				data-device="desktop"
+				data-video-id="{{- external_video_url_desktop.id -}}"
+				data-type="{{- external_video_url_desktop.type -}}"
+			{% if type == 'inline' %}data-lazy{% endif %}
+			></div>
+		{%- endif -%}
+
+		{%- if external_video_url_mobile.type == 'youtube' -%}
+			<div
+				class="video__player video__player--mobile js-video{% if type == 'popup' %} is-hidden{% endif %}"
+				data-device="mobile"
+				data-type="{{- external_video_url_mobile.type -}}"
+				{% if type == 'inline' %}data-lazy{% endif %}
+			>
+				<div
+					class="js-video-youtube"
+					data-video-id="{{- external_video_url_mobile.id -}}"
+					aria-label="{{- close_modal | escape -}}"
+				></div>
+			</div>
+		{%- else -%}
+			<div
+				class="video__player video__player--mobile js-video{% if type == 'popup' %} is-hidden{% endif %}"
+				data-device="mobile"
+				data-video-id="{{- external_video_url_mobile.id -}}"
+				data-type="{{- external_video_url_mobile.type -}}"
+				{% if type == 'inline' %}data-lazy{% endif %}
+			></div>
+		{%- endif -%}
+	{%- endcapture -%}
+{%- endif -%}
+
+{%- case video_type -%}
+	{%- when 'html' -%}
+		{{- html_video -}}
+	{%- when 'youtube_vimeo' -%}
+		{{- external_video -}}
+{%- endcase -%}

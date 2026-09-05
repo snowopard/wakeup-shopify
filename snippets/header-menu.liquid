@@ -1,0 +1,209 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header menu
+	Render header menu
+	- menu: Menu object (required)
+	- menu_type_desktop: type of rendered menu, dropdown menu or mega menu
+	- burger_menu: Burger menu object
+	- burger_menu_label: Burger menu label
+	- blocks: transfer block object for mega menu
+	- open_menu_type: open menu type (click / hover)
+	- enable_first_level_link: enable first level link
+
+	Usage:
+	{%- render 'header-menu', menu: menu, menu_type_desktop: menu_type_desktop, blocks: blocks -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- if burger_menu != blank and burger_menu.links.size > 0 -%}
+	{%- assign enable_burger_menu = true -%}
+{%- endif -%}
+
+{%- if menu != blank and menu.links.size > 0 -%}
+	{%- assign enable_menu = true -%}
+{%- endif -%}
+
+{%- capture block_styles -%}
+	--menu-decoration-border-part-color: var(--header-main-menu-outer-border); {{-  -}}
+	--menu-decoration-border-color: var(--header-main-menu-border-color); {{-  -}}
+{%- endcapture -%}
+
+
+{%- if enable_menu or enable_burger_menu -%}
+	<nav class="header-menu" aria-label="{{- "layout.navigation.main_menu" | t | escape -}}">
+		<div class="header-menu-main js-header-main-menu">
+
+			<div class="header-menu-main__container menu-decoration js-menu-decoration" style="{{- block_styles | strip_newlines -}}">
+				<svg class="menu-decoration__decoration" aria-hidden="true" focusable="false" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<rect class="menu-decoration__decoration-border-part js-menu-decoration-border-part" width="100%" height="100%" x="1" y="1" rx="8" stroke-width="2" stroke-linecap="round" stroke="currentColor"></rect>
+					<rect class="menu-decoration__decoration-border-part js-menu-decoration-border-part" width="100%" height="100%" x="1" y="1" rx="8" stroke-width="2" stroke-linecap="round" stroke="currentColor"></rect>
+					<rect class="menu-decoration__decoration-border" width="100%" height="100%" x="1" y="1" rx="8" stroke-width="1" stroke-linecap="round" stroke="currentColor"></rect>
+				</svg>
+
+				<ul class="header-menu-main__list js-menu-decoration-container">
+					{%- if enable_burger_menu -%}
+						<li class="header-menu-main__list-item">
+							<button
+								class="header-menu-main__item js-menu-decoration-item"
+								type="button"
+								aria-expanded="false"
+								aria-controls="headerBurgerMenu"
+								data-type="drawer"
+								data-drawer-level="1"
+								data-multi-drawer-toggle="headerBurgerMenu"
+							>
+								<span class="header-menu-main__item-inner">
+									<span class="header-menu-main__item-icon">
+										{% render 'icons', icon: 'menu' %}
+									</span>
+									{{ burger_menu_label }}
+								</span>
+							</button>
+						</li>
+					{%- endif -%}
+
+					{%- for first_level_link in menu.links -%}
+						{%- assign has_megamenu = false -%}
+						{%- assign megamenu_object = "" -%}
+
+						{%- for block in blocks -%}
+							{%- assign menu_handle = block.settings.menu_handle | handleize -%}
+
+							{%- if first_level_link.handle == menu_handle -%}
+								{%- if block.type == 'megamenu' -%}
+									{%- if first_level_link.links != blank -%}
+										{%- assign has_megamenu = true -%}
+										{%- assign megamenu_object = block -%}
+
+										{%- break -%}
+									{%- endif -%}
+								{%- else -%}
+									{%- assign has_megamenu = true -%}
+									{%- assign megamenu_object = block -%}
+
+									{%- break -%}
+								{%- endif -%}
+							{%- endif -%}
+						{%- endfor -%}
+
+						<li class="header-menu-main__list-item">
+							{%- if menu_type_desktop == "megamenu" or menu_type_desktop == "both" -%}
+								{%- assign show_mega_menu = true -%}
+							{%- endif -%}
+
+							{%- if menu_type_desktop == "dropdown" or menu_type_desktop == "both" -%}
+								{%- assign show_dropdown = true -%}
+							{%- endif -%}
+
+							{%- assign first_level_link_url = first_level_link.url -%}
+							{%- assign has_first_level_link_url = false -%}
+
+							{%- if first_level_link_url != '#' and enable_first_level_link and open_menu_type == 'hover' -%}
+								{%- assign has_first_level_link_url = true -%}
+							{%- endif -%}
+
+							{%- if has_megamenu and show_mega_menu -%}
+								<button
+									class="header-menu-main__item header-menu-main__item--small js-header-menu-toggler js-header-menu-item js-menu-decoration-item"
+									type="button"
+									data-target="headerMegaMenu:{{- menu.handle -}}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}"
+									aria-controls="headerMegaMenu:{{- menu.handle -}}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}"
+									aria-expanded="false"
+									{% if has_first_level_link_url %} data-href="{{ first_level_link_url }}"{% endif %}
+								>
+										<span class="header-menu-main__item-inner">
+											{{ first_level_link.title | escape }}
+											<span class="header-menu-main__item-toggle-icon">
+												{% render 'icons', icon: 'arrow-down' %}
+											</span>
+										</span>
+								</button>
+							{%- elsif first_level_link.links != blank and show_dropdown -%}
+								<button
+									class="header-menu-main__item js-header-menu-toggler js-header-menu-item js-menu-decoration-item"
+									type="button"
+									data-target="headerDesktopMenu:{{- menu.handle -}}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}"
+									aria-controls="headerDesktopMenu:{{- menu.handle -}}-{{ forloop.index }}-{{- first_level_link.title | handleize -}}"
+									aria-expanded="false"
+									{% if has_first_level_link_url != blank %} data-href="{{ first_level_link_url }}"{% endif %}
+								>
+										<span class="header-menu-main__item-inner">
+											{{ first_level_link.title | escape }}
+											<span class="header-menu-main__item-toggle-icon">
+												{% render 'icons', icon: 'arrow-down' %}
+											</span>
+										</span>
+								</button>
+							{%- else -%}
+								<a
+									class="header-menu-main__item js-header-menu-item js-menu-decoration-item"
+									href="{{- first_level_link.url -}}"
+									{% if first_level_link.current %}
+										aria-current="page"
+									{% endif %}
+								>
+									<span class="header-menu-main__item-inner">
+										{{ first_level_link.title | escape }}
+									</span>
+								</a>
+							{%- endif -%}
+						</li>
+					{%- endfor -%}
+				</ul>
+			</div>
+		</div>
+
+		<div class="header-menu-nested">
+			{%- for first_level_link in menu.links -%}
+				{%- assign has_megamenu = false -%}
+				{%- assign megamenu_object = "" -%}
+
+				{%- for block in blocks -%}
+					{%- assign menu_handle = block.settings.menu_handle | handleize -%}
+
+					{%- if first_level_link.handle == menu_handle -%}
+						{%- if block.type == 'megamenu' -%}
+							{%- if first_level_link.links != blank -%}
+								{%- assign has_megamenu = true -%}
+								{%- assign megamenu_object = block -%}
+
+								{%- break -%}
+							{%- endif -%}
+						{%- else -%}
+							{%- assign has_megamenu = true -%}
+							{%- assign megamenu_object = block -%}
+
+							{%- break -%}
+						{%- endif -%}
+					{%- endif -%}
+				{%- endfor -%}
+
+
+				{%- if menu_type_desktop == "megamenu" or menu_type_desktop == "both" -%}
+					{%- assign show_mega_menu = true -%}
+				{%- endif -%}
+
+				{%- if menu_type_desktop == "dropdown" or menu_type_desktop == "both" -%}
+					{%- assign show_dropdown = true -%}
+				{%- endif -%}
+
+				{%- if has_megamenu and show_mega_menu -%}
+					{%- case megamenu_object.type -%}
+						{% when "megamenu" %}
+							{%- render 'header-mega-menu',menu: menu, forloop: forloop, first_level_link: first_level_link, megamenu_object: megamenu_object -%}
+						{% when "megamenu-products-grid" %}
+							{%- render 'header-mega-menu-products-grid', menu: menu, forloop: forloop, first_level_link: first_level_link, megamenu_object: megamenu_object -%}
+						{% when "megamenu-media" %}
+							{%- render 'header-mega-menu-media-grid', menu: menu, forloop: forloop, first_level_link: first_level_link, megamenu_object: megamenu_object -%}
+					{%- endcase -%}
+				{%- elsif first_level_link.links != blank and show_dropdown -%}
+					{%- render 'header-menu-dropdown', menu: menu, forloop: forloop, first_level_link: first_level_link, enable_second_level_links: enable_second_level_links, open_menu_type: open_menu_type -%}
+				{%- endif -%}
+			{%- endfor -%}
+		</div>
+
+		{%- if enable_burger_menu -%}
+			{%- render 'header-burger-menu', burger_menu: burger_menu -%}
+		{%- endif -%}
+	</nav>
+{%- endif -%}

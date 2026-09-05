@@ -1,0 +1,380 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Register template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- render "adastra" with "/src/styles/account-entrance.scss" -%}
+
+{%- assign image_desktop                   = section.settings.image_desktop -%}
+{%- assign image_mobile                    = section.settings.image_mobile | default: image_desktop -%}
+{%- assign decorative_image_first          = section.settings.decorative_image_first -%}
+{%- assign decorative_image_second         = section.settings.decorative_image_second -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme                    = section.settings.color_scheme -%}
+{%- assign enable_bottom_rounded_corners   = section.settings.enable_bottom_rounded_corners -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- assign background_brightness = color_scheme.settings.color_background | color_brightness -%}
+{%- if background_brightness < 128 -%}
+	{%- assign modified_background_color = color_scheme.settings.color_background | color_lighten: 13 | color_modify: 'alpha', 0.90 -%}
+{%- else -%}
+	{%- assign modified_background_color = color_scheme.settings.color_background | color_darken: 3 | color_modify: 'alpha', 0.90 -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--form-background-color: {{- modified_background_color -}}; {{- -}}
+	--inner-offset-top-desktop: {{- section.settings.inner_offset_top_desktop -}}px; {{- -}}
+	--inner-offset-bottom-desktop: {{- section.settings.inner_offset_bottom_desktop -}}px; {{- -}}
+	--inner-offset-top-mobile: {{- section.settings.inner_offset_top_mobile -}}px; {{- -}}
+	--inner-offset-bottom-mobile: {{- section.settings.inner_offset_bottom_mobile -}}px; {{- -}}
+{%- endcapture -%}
+
+<section class="account-entrance container js-image-mouse-move-wrapper need-animate color-{{ color_scheme.id }} js-animate{% if enable_bottom_rounded_corners %} section-bottom-rounded{% endif %}" style="{{ styles }}">
+	<div class="account-entrance__background">
+		{% if decorative_image_first != blank %}
+			<img
+				class="account-entrance__decorative-image account-entrance__decorative-image--first tr-dur-0-3 is-reverse-translate js-image-mouse-move need-animate"
+				data-image-scale="1.1"
+				data-animation-speed="1.5"
+				srcset="{{ decorative_image_first | image_url: width: 140 }} 1x, {{ decorative_image_first | image_url: width: 280 }} 2x"
+				src="{{- decorative_image_first | image_url: width: 140 -}}"
+				alt="{{- decorative_image_first.alt -}}"
+				width="140"
+			/>
+		{% endif %}
+
+		{% if decorative_image_second != blank %}
+			<img
+				class="account-entrance__decorative-image account-entrance__decorative-image--second tr-dur-0-3 is-reverse-translate js-image-mouse-move need-animate"
+				data-image-scale="0.9"
+				data-animation-speed="1.5"
+				srcset="{{ decorative_image_second | image_url: width: 140 }} 1x, {{ decorative_image_second | image_url: width: 280 }} 2x"
+				src="{{- decorative_image_second | image_url: width: 140 -}}"
+				alt="{{- decorative_image_second.alt -}}"
+				width="140"
+			/>
+		{% endif %}
+
+		{% if image_desktop != blank %}
+			<picture class="account-entrance__image-wrapper">
+				<source
+					srcset="{{ image_mobile | image_url: width: 420 }} 1x, {{ image_mobile | image_url: width: 840 }} 2x"
+					media="(max-width: 420px)"
+				>
+
+				<source
+					srcset="{{ image_mobile | image_url: width: 575 }} 1x, {{ image_mobile | image_url: width: 1150 }} 2x"
+					media="(max-width: 575px)"
+				>
+
+				<source
+					srcset="{{ image_mobile | image_url: width: 767 }} 1x, {{ image_mobile | image_url: width: 1534 }} 2x"
+					media="(max-width: 767px)"
+				>
+
+				<source
+					srcset="{{ image_desktop | image_url: width: 991 }} 1x, {{ image_desktop | image_url: width: 1982 }} 2x"
+					media="(max-width: 991px)"
+				>
+
+				<source
+					srcset="{{ image_desktop | image_url: width: 1199 }} 1x, {{ image_desktop | image_url: width: 2398 }} 2x"
+					media="(max-width: 1199px)"
+				>
+
+				<source
+					srcset="{{ image_desktop | image_url: width: 1500 }} 1x, {{ image_desktop | image_url: width: 3000 }} 2x"
+					media="(max-width: 1500px)"
+				>
+
+				<img
+					class="account-entrance__image need-animate tr-dur-0-5"
+					src="{{ image_desktop | image_url: width: 1920 }}"
+					srcset="{{ image_desktop | image_url: width: 1920 }} 1x, {{ image_desktop | image_url: width: 3840 }} 2x"
+					alt="{{ image_desktop.alt | escape }}"
+					style="--img-pos-desktop: {{ image_desktop.presentation.focal_point }}; --img-pos-mobile: {{ image_mobile.presentation.focal_point }};"
+				>
+			</picture>
+		{% endif %}
+	</div>
+
+	<div class="account-entrance__container need-animate tr-dur-0-5">
+		{%- form "create_customer", class: "account-entrance__form" -%}
+			<div class="account-entrance__heading-wrapper">
+				<h1 class="account-entrance__heading h3 text-center">
+					{{- "customer.register.title" | t -}}
+				</h1>
+
+				{%- if form.errors -%}
+					<h2 class="account-entrance__error-title h5 text-center" tabindex="-1" autofocus>
+						<span class="visually-hidden">{{ 'general.accessibility.error' | t }}</span>
+
+						{{ 'general.accessibility.form_error_title' | t }}
+					</h2>
+
+					{{- form.errors | default_errors -}}
+				{%- endif -%}
+
+				<p class="visually-hidden account-entrance__errors js-password-not-match">
+					{{- "customer.register.password_not_match" | t -}}
+				</p>
+			</div>
+
+			<div class="account-entrance__input-wrapper input-wrapper">
+				<input
+					class="input account-entrance__input"
+					id="FirstName"
+					name="customer[first_name]"
+					type="text"
+					{%- if form.first_name -%} value="{{- form.first_name -}}" {%- endif %}
+					placeholder="{{- 'customer.register.first_name_placeholder' | t -}}"
+					aria-label="{{- 'customer.register.first_name_aria_label' | t | escape -}}"
+					required
+				/>
+
+				<label class="input-label" for="FirstName">
+					{{- "customer.register.first_name" | t -}}
+				</label>
+			</div>
+
+			<div class="account-entrance__input-wrapper input-wrapper">
+				<input
+					class="input account-entrance__input"
+					id="LastName"
+					name="customer[last_name]"
+					type="text"
+					aria-label="{{- 'customer.register.last_name_aria_label' | t | escape -}}"
+					placeholder="{{- 'customer.register.last_name_placeholder' | t -}}"
+					{% if form.last_name %} value="{{- form.last_name -}}" {% endif %}
+				/>
+
+				<label class="input-label" for="LastName">
+					{{- "customer.register.last_name" | t -}}
+				</label>
+			</div>
+
+			<div class="account-entrance__input-wrapper input-wrapper">
+				<input
+					class="input account-entrance__input"
+					id="Email"
+					name="customer[email]"
+					type="email"
+					aria-label="{{- 'customer.register.email_aria_label' | t | escape -}}"
+					{% if form.email %} value="{{- form.email -}}" {% endif %}
+					placeholder="{{- 'customer.register.email_placeholder' | t -}}"
+					autocomplete="off"
+					autocapitalize="off"
+					required
+				/>
+
+				<label class="input-label" for="Email">
+					{{- "customer.register.email" | t -}}
+				</label>
+			</div>
+
+			<div class="account-entrance__input-wrapper">
+				<div class="account-entrance__password-wrapper">
+					<div class="input-wrapper">
+						<input
+							class="input account-entrance__input account-entrance__input--password js-input-password"
+							id="CreatePassword"
+							type="password"
+							name="customer[password]"
+							placeholder="{{- 'customer.register.password_placeholder' | t -}}"
+							aria-label="{{- 'customer.register.password_aria_label' | t | escape -}}"
+							required
+						/>
+
+						<label class="input-label" for="CreatePassword">
+							{{- "customer.register.password" | t -}}
+						</label>
+					</div>
+
+					<button
+						type="button"
+						class="focus-visible-outline account-entrance__password-icon js-show-password"
+						aria-label="{{- 'customer.account.show_password' | t -}}"
+					>
+						<span class="account-entrance__password-icon-content">
+							{%- render "icons", icon: "password-eye" -%}
+						</span>
+					</button>
+				</div>
+			</div>
+
+			<button type="submit" class="button button--primary account-entrance__button">
+				<span class="button__outer"></span>
+				{{- 'customer.register.submit' | t -}}
+			</button>
+
+			<div class="account-entrance__create">
+				<span class="account-entrance__new-customer">
+					{{- "customer.register.have_account" | t -}}
+				</span>
+
+				{% assign signin_text = "customer.register.sign_in" | t %}
+				{% render 'button-link', link_text: signin_text, link_url: routes.account_login_url, class: 'account-entrance__link' %}
+			</div>
+		{%- endform -%}
+	</div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/template-customers-register.js' -%}
+
+{% schema %}
+{
+	"name": "Register template",
+	"settings": [
+		{
+			"type": "image_picker",
+			"id": "image_desktop",
+			"label": "Image desktop",
+			"info": "3840px width recommended"
+		},
+		{
+			"type": "image_picker",
+			"id": "image_mobile",
+			"label": "Image mobile",
+			"info": "1534px width recommended"
+		},
+		{
+			"type": "image_picker",
+			"id": "decorative_image_first",
+			"label": "The first decorative image",
+			"info": "280px width recommended"
+		},
+		{
+			"type": "image_picker",
+			"id": "decorative_image_second",
+			"label": "The second decorative image",
+			"info": "280px width recommended"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 40
+		}
+	]
+}
+{%- endschema -%}

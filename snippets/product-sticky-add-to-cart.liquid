@@ -1,0 +1,62 @@
+<div class="product-sticky-add-to-cart js-sticky-add-to-cart">
+	<div class="product-sticky-add-to-cart__container">
+		<div class="product-sticky-add-to-cart__col product-sticky-add-to-cart__col--mobile">
+			<div class="product-sticky-add-to-cart__title">
+				{{ product.title }}
+			</div>
+		</div>
+
+		<div class="product-sticky-add-to-cart__col product-sticky-add-to-cart__col--action">
+			{%- render 'price',
+				product: product,
+				use_variant: use_variant,
+				show_unit_price: settings.is_show_unit_price,
+				currency_code_enabled: settings.is_currency_code_enabled,
+				price_class: 'product-price',
+				hide_from_price: true,
+				show_taxes_included: false
+			-%}
+
+			{% assign form_id = 'product_form_' | append: product.id %}
+
+			<button
+				form="{{- form_id -}}"
+				type="submit"
+				style="{{- add_to_card_button_styles -}}"
+				class="product-sticky-add-to-cart__button add-to-cart button-simple button-simple--custom js-sticky-add-to-cart-button
+					{% unless product.first_available_variant.available %}
+						disabled
+					{% endunless %}
+				"
+				{% unless product.first_available_variant.available %}
+					disabled
+				{% endunless %}
+				{% if product.template_suffix == 'pre-order' %}
+					data-preorder
+				{% endif %}
+			>
+				{%- render 'icons', icon: 'cart' -%}
+
+				<span class="js-product-add-to-cart-button-text">
+					{% if product.selected_or_first_available_variant == null %}
+						{{ 'products.product.unavailable' | t }}
+					{% elsif product.first_available_variant.available %}
+						{% if product.template_suffix == 'pre-order' %}
+							{{- 'products.product.pre_order' | t -}}
+						{% else %}
+							{{- 'products.product.add_to_cart' | t -}}
+						{% endif %}
+					{% else %}
+						{{- 'products.product.sold_out' | t -}}
+					{% endif %}
+				</span>
+			</button>
+		</div>
+	</div>
+
+	<style>
+		html .footer {
+			padding-bottom: 80px;
+		}
+	</style>
+</div>

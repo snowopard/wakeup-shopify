@@ -1,0 +1,448 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header menu
+	Render header menu
+	- section_styles: section styles (required)
+	- menu: menu object (required)
+	- burger_menu: burger menu object
+	- burger_menu_label: burger menu label
+	- blocks: header blocks
+	- is_show_language_selector: condition for render language localization snippet
+	- is_show_country_selector: condition for render country localization snippet
+	- show_country_full_name: show full name for localization form
+	- localization_form_text: localization form text color
+	- localization_form_border: localization form border color
+	- localization_form_background: localization form background color
+	- open_burger_menu_enclosed_items_on_mobile: condition for displaying the burger menu list on the first level
+	- is_enable_search: condition for render search button
+
+	Usage:
+	{%- render 'header-mobile-menu', menu: menu, blocks: blocks, section_styles: section_styles, is_show_language_selector: is_show_language_selector, is_show_country_selector: is_show_country_selector, localization_form_text: localization_form_text, localization_form_border: localization_form_border, localization_form_background: localization_form_background, burger_menu: burger_menu -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+<div
+	id="headerDrawerMenu"
+	class="header-mobile"
+	data-menu-type="main"
+	role="dialog"
+	aria-labelledby="headerDrawerMenuTitle"
+	style="{{- section_styles | strip_newlines -}}"
+>
+	<p class="is-hidden" id="headerDrawerMenuTitle">
+		{{- "layout.navigation.drawer_menu" | t | escape -}}
+	</p>
+
+	<nav class="header-mobile__menu js-mobile-header-main-menu" aria-label="{{ "layout.navigation.drawer_menu" | t | escape }}">
+		<div class="header-mobile__menu-header">
+			<div class="header-mobile__menu-header-column header-mobile__menu-header-column--right">
+				<button
+					class="button-icon-circle header-mobile__menu-button"
+					type="button"
+					data-target="headerDrawerMenu"
+					data-js-toggle="headerToggleMenuDrawer"
+					aria-expanded="false"
+					aria-controls="headerDrawerMenu"
+					aria-label="{{- "layout.navigation.close_drawer_menu" | t | escape -}}"
+				>
+					{%- render 'icons', icon: 'circle-decoration-border-2', class: 'icon icon-circle-decoration-border' -%}
+					{%- render 'icons', icon: 'menu-close' -%}
+				</button>
+			</div>
+		</div>
+
+		<div class="header-mobile__menu-container header-mobile__menu-container--main js-mobile-header-menu-scroll-container">
+			<div class="header-mobile__menu-container-inner header-mobile__menu-container-inner--medium-offset header-mobile__menu-container-inner--medium-gap">
+				{%- assign animation_delay = 0 -%}
+
+				{%- if is_enable_search -%}
+					<div class="header-mobile__search header-mobile__animate header-mobile__animate--main need-animate" style="--animation-delay: {{ animation_delay }}s">
+						<button
+							type="button"
+							class="header-mobile__search-input"
+							data-target="headerDrawerSearch"
+							data-js-toggle="searchToggleDrawer"
+							aria-expanded="false"
+							aria-controls="headerDrawerSearch"
+							aria-label="{{- "layout.navigation.search" | t | escape -}}"
+						>
+							{%- render 'icons', icon: 'search-secondary' -%}
+
+							<span class="header__search-input-label">
+								{{- "layout.navigation.search_input" | t -}}
+							</span>
+						</button>
+					</div>
+
+					{%- assign animation_delay = animation_delay | plus: 0.06 -%}
+				{%- endif -%}
+
+				{%- if burger_menu != blank and burger_menu.links.size > 0 -%}
+					{%- assign enable_burger_menu = true -%}
+				{%- endif -%}
+
+				{%- if menu != blank and menu.links.size > 0 -%}
+					{%- assign enable_menu = true -%}
+				{%- endif -%}
+
+				{%- if enable_menu or enable_burger_menu -%}
+					<ul class="header-mobile__menu-list">
+						{%- if enable_burger_menu and open_burger_menu_enclosed_items_on_mobile == false -%}
+							<li class="header-mobile__menu-list-item header-mobile__menu-list-item--medium-offset">
+								<div class="header-mobile__animate header-mobile__animate--main need-animate" style="--animation-delay: {{ animation_delay }}s">
+									<button
+										class="header-navigation-item js-mobile-header-menu-toggler"
+										type="button"
+										data-target="headerMobileMenuBurger:{{- burger_menu.handle -}}-{{- burger_menu.title | handleize -}}"
+										aria-controls="headerMobileMenuBurger:{{- burger_menu.handle -}}-{{- burger_menu.title | handleize -}}"
+										aria-expanded="false"
+									>
+										<span class="header-navigation-item__text">
+											{{ burger_menu_label }}
+										</span>
+
+										<span class="header-navigation-item__toggle-icon">
+											{%- render 'icons', icon: 'arrow-right-bold' -%}
+										</span>
+									</button>
+								</div>
+
+								{%- assign animation_delay_nested = 0 -%}
+
+								<div
+									id="headerMobileMenuBurger:{{- burger_menu.handle -}}-{{- burger_menu.title | handleize -}}"
+									data-menu-type="nested"
+									class="header-mobile__menu-nested-drawer header-mobile__menu-nested-drawer--nested js-mobile-header-menu is-hidden"
+								>
+									<div class="header-mobile__menu">
+										<div class="header-mobile__menu-header">
+											<div class="header-mobile__menu-header-column">
+												<button
+													class="button-icon-circle header-mobile__menu-button js-mobile-header-menu-toggler"
+													type="button"
+													data-target="headerMobileMenuBurger:{{- burger_menu.handle -}}-{{- burger_menu.title | handleize -}}"
+													aria-controls="headerMobileMenuBurger:{{- burger_menu.handle -}}-{{- burger_menu.title | handleize -}}"
+													aria-expanded="false"
+													aria-label="{{- burger_menu.title -}}"
+												>
+													{%- render 'icons', icon: 'circle-decoration-border-2', class: 'icon icon-circle-decoration-border' -%}
+													{%- render 'icons', icon: 'arrow-left-bold' -%}
+												</button>
+											</div>
+
+											<div class="header-mobile__menu-header-column">
+												<span class="header-mobile__menu-heading">
+													{{- burger_menu.title -}}
+												</span>
+											</div>
+
+											<div class="header-mobile__menu-header-column">
+												<button
+													class="button-icon-circle header-mobile__menu-button"
+													type="button"
+													data-target="headerDrawerMenu"
+													data-js-toggle="headerToggleMenuDrawer"
+													aria-expanded="false"
+													aria-controls="headerDrawerMenu"
+													aria-label="{{- "layout.navigation.close_drawer_menu" | t | escape -}}"
+												>
+													{%- render 'icons', icon: 'circle-decoration-border-2', class: 'icon icon-circle-decoration-border' -%}
+													{%- render 'icons', icon: 'menu-close' -%}
+												</button>
+											</div>
+										</div>
+
+										<div class="header-mobile__menu-container header-mobile__menu-container--nested js-mobile-header-menu-scroll-container">
+											<div class="header-mobile__menu-container-inner">
+												<ul class="header-mobile__menu-list">
+													{%- for first_level_link in burger_menu.links -%}
+														{%- assign product_icon = "" -%}
+														{%- assign item_icon = "" -%}
+
+														<li class="header-mobile__menu-list-item">
+															{%- if first_level_link.links.size > 0 -%}
+																{% if first_level_link.type == 'collection_link' %}
+																	{%- assign product_icon = first_level_link.object.products[0].featured_image -%}
+																{%- elsif first_level_link.type == 'product_link' -%}
+																	{%- assign product_icon = first_level_link.object.featured_image -%}
+																{%- endif -%}
+
+																{%- assign item_icon = first_level_link.object.metafields.custom.menu_icon | default: product_icon -%}
+
+																<div class="header-mobile__animate header-mobile__animate--nested need-animate" style="--animation-delay: {{ animation_delay_nested }}s">
+																	<button
+																		class="header-navigation-item-highlight {% if item_icon != blank %}header-navigation-item-highlight--small{% endif %} js-mobile-header-menu-toggler"
+																		type="button"
+																		data-target="headerMobileMenuBurger:{{- burger_menu.handle -}}-{{ forloop.index }}-{{- burger_menu.title | handleize -}}-{{- first_level_link.title | handleize -}}"
+																		aria-controls="headerMobileMenuBurger:{{- burger_menu.handle -}}-{{ forloop.index }}-{{- burger_menu.title | handleize -}}-{{- first_level_link.title | handleize -}}"
+																		aria-expanded="false"
+																	>
+																		{%- if item_icon != blank -%}
+																			<span class="header-navigation-item-highlight__icon-wrapper">
+																				<picture class="lazy">
+																					<img
+																						class="header-navigation-item-highlight__icon"
+																						src="{{ item_icon | image_url: width: 10 }}"
+																						srcset="{{ item_icon | image_url: width: 10 }} 1x"
+																						data-src="{{ item_icon | image_url: width: 60 }}"
+																						data-srcset="{{ item_icon | image_url: width: 60 }} 1x, {{ item_icon | image_url: width: 120 }} 2x"
+																						alt="{{- item_icon.alt -}}"
+																						fetchpriority="low"
+																					>
+																				</picture>
+																			</span>
+																		{%- endif -%}
+
+																		<span class="header-navigation-item-highlight__text">
+																			{{ first_level_link.title | escape }}
+																		</span>
+
+																		<span class="header-navigation-item-highlight__toggle-icon">
+																			{%- render 'icons', icon: 'arrow-right-bold' -%}
+																		</span>
+																	</button>
+																</div>
+
+																{%- assign animation_delay_nested = animation_delay_nested | plus: 0.08 -%}
+
+																{%- assign animation_delay_deep_nested = 0 -%}
+
+																<div
+																	id="headerMobileMenuBurger:{{- burger_menu.handle -}}-{{ forloop.index }}-{{- burger_menu.title | handleize -}}-{{- first_level_link.title | handleize -}}"
+																	data-menu-type="deep-nested"
+																	class="header-mobile__menu-nested-drawer header-mobile__menu-nested-drawer--deep-nested js-mobile-header-menu is-hidden"
+																>
+																	<div class="header-mobile__menu">
+																		<div class="header-mobile__menu-header">
+																			<div class="header-mobile__menu-header-column">
+																				<button
+																					class="button-icon-circle header-mobile__menu-button js-mobile-header-menu-toggler"
+																					type="button"
+																					data-target="headerMobileMenuBurger:{{- burger_menu.handle -}}-{{ forloop.index }}-{{- burger_menu.title | handleize -}}-{{- first_level_link.title | handleize -}}"
+																					aria-controls="headerMobileMenuBurger:{{- burger_menu.handle -}}-{{ forloop.index }}-{{- burger_menu.title | handleize -}}-{{- first_level_link.title | handleize -}}"
+																					aria-expanded="false"
+																					aria-label="{{- first_level_link.title -}}"
+																				>
+																					{%- render 'icons', icon: 'circle-decoration-border-2', class: 'icon icon-circle-decoration-border' -%}
+																					{%- render 'icons', icon: 'arrow-left-bold' -%}
+																				</button>
+																			</div>
+
+																			<div class="header-mobile__menu-header-column">
+																				<span class="header-mobile__menu-heading">
+																					{{- first_level_link.title -}}
+																				</span>
+																			</div>
+
+																			<div class="header-mobile__menu-header-column">
+																				<button
+																					class="button-icon-circle header-mobile__menu-button"
+																					type="button"
+																					data-target="headerDrawerMenu"
+																					data-js-toggle="headerToggleMenuDrawer"
+																					aria-expanded="false"
+																					aria-controls="headerDrawerMenu"
+																					aria-label="{{- "layout.navigation.close_drawer_menu" | t | escape -}}"
+																				>
+																					{%- render 'icons', icon: 'circle-decoration-border-2', class: 'icon icon-circle-decoration-border' -%}
+																					{%- render 'icons', icon: 'menu-close' -%}
+																				</button>
+																			</div>
+																		</div>
+
+																		<div class="header-mobile__menu-container header-mobile__menu-container--deep-nested js-mobile-header-menu-scroll-container">
+																			<div class="header-mobile__menu-container-inner header-mobile__menu-container-inner--small-offset">
+																				<ul class="header-mobile__menu-list">
+																					{%- for second_level_link in first_level_link.links -%}
+																						<li class="header-mobile__menu-list-item {% if second_level_link.links.size > 0 %}header-mobile__menu-list-item--big-offset{%- else -%}header-mobile__menu-list-item--small-offset{%- endif -%}">
+																							<div class="header-navigation-block">
+																								{%- if second_level_link.links.size > 0 -%}
+																									<div class="header-navigation-block_item header-mobile__animate header-mobile__animate--deep-nested need-animate" style="--animation-delay: {{ animation_delay_deep_nested }}s">
+																										{%- if second_level_link.url != '#' -%}
+																											<a class="header-navigation-item header-navigation-item--medium"
+																											   href="{{- second_level_link.url -}}"
+																											   {% if second_level_link.current %}aria-current="page"{% endif %}>
+																												<span class="header-navigation-item__text">
+																													{{- second_level_link.title | escape -}}
+																												</span>
+																											</a>
+																										{%- else -%}
+																											<p class="header-navigation-item header-navigation-item--no-hover header-navigation-item--medium">
+																												<span class="header-navigation-item__text">
+																													{{- second_level_link.title | escape -}}
+																												</span>
+																											</p>
+																										{%- endif -%}
+																									</div>
+
+																									{%- assign animation_delay_deep_nested = animation_delay_deep_nested | plus: 0.08 -%}
+
+																									<ul class="header-navigation-block__list">
+																										{%- for third_level_link in second_level_link.links -%}
+																											<li class="header-navigation-block__list-item header-mobile__animate header-mobile__animate--deep-nested need-animate" style="--animation-delay: {{ animation_delay_deep_nested }}s">
+																												<a class="header-navigation-item header-navigation-item--small"
+																												   href="{{- third_level_link.url -}}"
+																												   {% if third_level_link.current %}aria-current="page"{% endif %}>
+																													<span class="header-navigation-item__text">
+																														{{- third_level_link.title | escape -}}
+																													</span>
+																												</a>
+																											</li>
+
+																											{%- assign animation_delay_deep_nested = animation_delay_deep_nested | plus: 0.08 -%}
+																										{%- endfor -%}
+																									</ul>
+																								{%- else -%}
+																									<div class="header-navigation-block_item header-mobile__animate header-mobile__animate--deep-nested need-animate" style="--animation-delay: {{ animation_delay_deep_nested }}s">
+																										<a class="header-navigation-item header-navigation-item--medium"
+																										   href="{{- second_level_link.url -}}"
+																										   {% if second_level_link.current %}aria-current="page"{% endif %}>
+																											<span class="header-navigation-item__text">
+																												{{- second_level_link.title | escape -}}
+																											</span>
+																										</a>
+																									</div>
+
+																									{%- assign animation_delay_deep_nested = animation_delay_deep_nested | plus: 0.08 -%}
+																								{%- endif -%}
+																							</div>
+																						</li>
+																					{%- endfor -%}
+																				</ul>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															{%- else -%}
+																{% if first_level_link.type == 'collection_link' %}
+																	{%- assign product_icon = first_level_link.object.products[0].featured_image -%}
+																{%- elsif first_level_link.type == 'product_link' -%}
+																	{%- assign product_icon = first_level_link.object.featured_image -%}
+																{%- endif -%}
+
+																{%- assign item_icon = first_level_link.object.metafields.custom.menu_icon | default: product_icon -%}
+
+																<div class="header-mobile__animate header-mobile__animate--nested need-animate" style="--animation-delay: {{ animation_delay_nested }}s">
+																<a class="header-navigation-item-highlight {% if item_icon != blank %}header-navigation-item-highlight--small{% endif %}"
+																   href="{{- first_level_link.url -}}"
+																   {% if first_level_link.current %}aria-current="page"{% endif %}>
+																	{%- if item_icon != blank -%}
+																		<span class="header-navigation-item-highlight__icon-wrapper">
+																			<picture class="lazy">
+																				<img
+																					class="header-navigation-item-highlight__icon"
+																					src="{{ item_icon | image_url: width: 10 }}"
+																					srcset="{{ item_icon | image_url: width: 10 }} 1x"
+																					data-src="{{ item_icon | image_url: width: 60 }}"
+																					data-srcset="{{ item_icon | image_url: width: 60 }} 1x, {{ item_icon | image_url: width: 120 }} 2x"
+																					alt="{{- item_icon.alt -}}"
+																					fetchpriority="low"
+																				>
+																			</picture>
+																		</span>
+																	{%- endif -%}
+
+																	<span class="header-navigation-item-highlight__text">
+																		{{- first_level_link.title -}}
+																	</span>
+																</a>
+																</div>
+
+																{%- assign animation_delay_nested = animation_delay_nested | plus: 0.08 -%}
+															{%- endif -%}
+														</li>
+													{%- endfor -%}
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+
+							{%- assign animation_delay = animation_delay | plus: 0.06 -%}
+						{%- endif -%}
+
+						{%- if open_burger_menu_enclosed_items_on_mobile -%}
+							{%- assign burger_menu_index = 0 -%}
+
+							{%- for first_level_link in burger_menu.links -%}
+								{%- assign burger_menu_index = forloop.index -%}
+
+								{%- render "header-mobile-menu-item", first_level_link: first_level_link, blocks: blocks, menu: menu, index: burger_menu_index, animation_delay: animation_delay -%}
+
+								{%- assign animation_delay = animation_delay | plus: 0.06 -%}
+							{%- endfor -%}
+						{%- endif -%}
+
+						{%- for first_level_link in menu.links -%}
+							{%- assign menu_index = forloop.index | plus: burger_menu_index -%}
+
+							{%- render "header-mobile-menu-item", first_level_link: first_level_link, blocks: blocks, menu: menu, index: menu_index, animation_delay: animation_delay -%}
+
+							{%- assign animation_delay = animation_delay | plus: 0.06 -%}
+						{%- endfor -%}
+					</ul>
+				{%- endif -%}
+
+				{%- if is_show_language_selector == true and localization.available_languages.size > 1 -%}
+					{% assign language_selector = true %}
+				{%- endif -%}
+
+				{%- if is_show_country_selector == true and localization.available_countries.size > 1 -%}
+					{% assign country_selector = true %}
+				{%- endif -%}
+
+				{%- if shop.customer_accounts_enabled or language_selector or country_selector -%}
+					<ul class="header-mobile__additional-menu">
+						{%- if shop.customer_accounts_enabled -%}
+							<li class="header-mobile__additional-menu-link header-mobile__animate header-mobile__animate--main need-animate" style="--animation-delay: {{ animation_delay }}s">
+								<a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header-navigation-item header-navigation-item--medium-small">
+									{%- render 'icons', icon: 'account' -%}
+
+									<span class="header-navigation-item__text">
+										{%- if customer -%}
+											{{ 'customer.account.title' | t }}
+										{% else %}
+											{{ 'customer.login.title' | t }}
+										{%- endif -%}
+									</span>
+								</a>
+							</li>
+
+							{%- assign animation_delay = animation_delay | plus: 0.06 -%}
+						{%- endif -%}
+
+						{%- if language_selector == true or country_selector -%}
+							<li class="header-mobile__localization header-mobile__animate header-mobile__animate--main need-animate" style="--animation-delay: {{ animation_delay }}s">
+								{%- if language_selector == true -%}
+									{%- render
+										'language-localization-form',
+										id_prefix: 'header-mobile',
+										form_id: 'header-mobile-localization-form',
+										type: 'thirdly',
+										text_color: localization_form_text,
+										border_color: localization_form_border,
+										background_color: localization_form_background
+									-%}
+								{%- endif -%}
+
+								{%- if country_selector == true -%}
+									{%- render
+										'country-localization-form',
+										id_prefix: 'header-mobile',
+										form_id: 'header-mobile-county-form',
+										type: 'thirdly',
+										text_color: localization_form_text,
+										border_color: localization_form_border,
+										background_color: localization_form_background,
+										show_full_name: show_country_full_name
+									-%}
+								{%- endif -%}
+							</li>
+						{%- endif -%}
+					</ul>
+				{%- endif -%}
+			</div>
+		</div>
+	</nav>
+</div>

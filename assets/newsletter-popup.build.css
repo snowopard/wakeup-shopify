@@ -1,0 +1,100 @@
+.newsletter-popup {
+  padding-right: 0;
+  padding-left: 0;
+  padding-bottom: 0;
+  perspective: 700px;
+}
+.newsletter-popup .newsletter-popup__body {
+  padding: 0;
+}
+.newsletter-popup .newsletter-popup__image-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  padding-top: 64%;
+}
+.newsletter-popup .newsletter-popup__image {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: var(--img-object-fit, cover);
+  object-position: var(--img-mob-pos);
+}
+.newsletter-popup .newsletter-popup__content {
+  width: 100%;
+  height: 100%;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 24px;
+  text-align: center;
+}
+.newsletter-popup .newsletter-popup__heading {
+  font-size: calc(var(--heading-font-size) * 1.5);
+  line-height: 1.5;
+}
+.newsletter-popup .newsletter-popup__text {
+  margin-top: 16px;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+}
+.newsletter-popup.is-current .newsletter-popup-form__message {
+  display: flex;
+}
+@media (min-width: 768px) {
+  .newsletter-popup .newsletter-popup__heading {
+    font-size: calc(var(--heading-font-size) * 2);
+  }
+  .newsletter-popup .newsletter-popup__image-wrapper {
+    padding-top: 68.59%;
+  }
+  .newsletter-popup .newsletter-popup__content {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  .newsletter-popup .newsletter-popup__image {
+    object-position: var(--img-desktop-pos);
+  }
+}
+.newsletter-popup-form {
+  width: 100%;
+  margin-top: 24px;
+}
+.newsletter-popup-form .newsletter-popup-form__field {
+  margin-bottom: 16px;
+}
+.newsletter-popup-form .newsletter-popup-form__message {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  font-weight: normal;
+}
+.newsletter-popup-form .newsletter-popup-form__message.newsletter-popup-form__message--error {
+  color: var(--color-text-attention);
+}
+.newsletter-popup-form .newsletter-popup-form__message.newsletter-popup-form__message--success {
+  color: var(--color-text-success);
+}
+.newsletter-popup-form .newsletter-popup-form__message .icon {
+  width: 24px;
+  height: 24px;
+  margin-inline-end: 10px;
+  transform: scale(1.3);
+}
+@media (min-width: 768px) {
+  .newsletter-popup-form {
+    margin-top: 32px;
+  }
+  .newsletter-popup-form .newsletter-popup-form__field {
+    margin-bottom: 24px;
+  }
+}
+html.no-js .newsletter-popup-form__message {
+  display: flex;
+}

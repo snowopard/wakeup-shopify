@@ -1,0 +1,467 @@
+{%- if section.blocks.size > 0 -%}
+	{%- render 'adastra' with '/src/styles/pricing-table.scss' -%}
+
+	{%- style -%}
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+
+		@media screen and (min-width: 768px) {
+			#shopify-section-{{- section.id -}} {
+				padding-top: {{- section.settings.offset_top_desktop -}}px;
+				padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+			}
+		}
+	{%- endstyle -%}
+
+	{%- assign heading_first_line              = section.settings.heading_first_line -%}
+	{%- assign heading_second_line             = section.settings.heading_second_line -%}
+	{%- assign text                            = section.settings.text -%}
+	{%- assign list_icon 		               = section.settings.list_icon -%}
+	{%- assign container 		               = section.settings.container_width -%}
+	{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+	{%- assign enable_bottom_rounded_corners   = section.settings.enable_bottom_rounded_corners -%}
+	{%- assign color_scheme 				   = section.settings.color_scheme -%}
+
+	{%- if enable_color_scheme_inheritance -%}
+		{%- assign color_scheme = settings.main_color_scheme -%}
+	{%- endif -%}
+
+	{% if container == 'inherit' %}
+		{% assign container_width = settings.container_width %}
+	{% else %}
+		{% assign container_width = container %}
+	{% endif %}
+
+	{% capture section_styles %}
+		--container-width: {{ container_width }};
+		--list-icon: url({{ list_icon | img_url: '48x' }});
+		--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px;
+		--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px;
+		--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px;
+		--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px;
+	{% endcapture %}
+
+	<section
+		class="pricing-table js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} color-{{ color_scheme.id }} {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %}"
+		style="{{ section_styles }}"
+	>
+		<div class="container">
+			{%- if heading_first_line != blank or heading_second_line != blank -%}
+				<h2 class="section-title section-title--center need-animate h1">
+					{%- if heading_first_line != blank -%}
+						<span class="section-title__text-container">
+							<span
+								class="section-title__text {% if heading_second_line == blank %}text-center{% endif %}">
+								{{- heading_first_line -}}
+							</span>
+						</span>
+					{%- endif -%}
+
+					{%- if heading_second_line != blank -%}
+						<span class="section-title__text-container">
+							<span class="section-title__text text-center">
+								{{- heading_second_line -}}
+							</span>
+						</span>
+					{%- endif -%}
+				</h2>
+			{%- endif -%}
+
+			{% if text != blank %}
+				<div class="pricing-table__text rte">
+					{{ text }}
+				</div>
+			{% endif %}
+
+			{% assign delay_step = 0.175 %}
+
+			{% assign all_blocks_without_images = true %}
+
+			{% for block in section.blocks %}
+				{% if block.settings.image != blank or block.settings.product.featured_image != blank %}
+					{% assign all_blocks_without_images = false %}
+				{% endif %}
+			{% endfor %}
+
+			<div
+				class="pricing-table__items-container {% if all_blocks_without_images %}pricing-table__items-container--without-images{% endif %} pricing-table__items-container--{{ section.blocks.size }}">
+				{%- for block in section.blocks -%}
+					{%- assign product          = block.settings.product -%}
+					{%- assign label            = block.settings.label -%}
+					{%- assign heading          = block.settings.heading | default: product.title -%}
+					{%- assign subtitle         = block.settings.subtitle -%}
+					{%- assign unit_price_label = block.settings.unit_price_label -%}
+					{%- assign text             = block.settings.text -%}
+					{%- assign image            = block.settings.image | default: product.featured_image -%}
+					{%- assign button_text      = block.settings.button_text -%}
+					{%- assign delay_step       = delay_step | plus: 0.28 -%}
+
+					{%- assign label_background_color = block.settings.label_background_color -%}
+					{%- assign label_text_color       = block.settings.label_text_color -%}
+					{%- assign flashlight_color       = block.settings.flashlight_color -%}
+
+					{%- capture block_styles -%}
+						--label-background-color: {{ label_background_color }}; {{- -}}
+						--label-text-color: {{ label_text_color }}; {{- -}}
+						--flashlight-color: {{ flashlight_color }}; {{- -}}
+					{%- endcapture -%}
+
+					<div
+						class="pricing-table__item-wrapper {% if image == blank %}pricing-table__item-wrapper--without-image{% endif %} flashlight-container--hover-container need-animate tr-dur-0-8"
+						style="transition-delay: {{ delay_step }}s;">
+						<div
+							class="pricing-table__item js-flashlight-item"
+							style="{{ block_styles }}"
+						>
+							<div class="pricing-table__flashlight-clipper">
+								<div class="flashlight-container">
+									<div
+										class="flashlight-container__effect flashlight-container__effect--desktop js-flashlight-effect"></div>
+									<div class="flashlight-container__effect flashlight-container__effect--mobile"></div>
+								</div>
+							</div>
+
+							<div class="pricing-table__item-box">
+								{%- if image != blank -%}
+									{%- capture img_focal -%}
+										--img-desktop-pos: {{ image.presentation.focal_point }};
+									{%- endcapture -%}
+
+									<div
+										class="pricing-table__item-image-container {% if container_width == "100%" %}pricing-table__item-image-container--full-width{% endif %}">
+										<picture
+											class="pricing-table__item-image-wrapper lazy need-animate tr-dur-0-8">
+											<img
+												class="pricing-table__item-image"
+												data-srcset="{{ image | image_url: width: 204, height: 204, crop: 'center' }} 1x, {{ image | image_url: width: 408, height: 408, crop: 'center' }} 2x"
+												srcset="{{ image | image_url: width: 10, height: 10 }} 1x, {{ image | image_url: width: 20, height: 20 }} 2x"
+												data-src="{{ image | image_url: width: 204, height: 204, crop: 'center' }}"
+												src="{{ image | image_url: width: 10, height: 10 }}"
+												alt="{{ image.alt | escape }}"
+												width="{{- 204 -}}"
+												height="{{- 204 -}}"
+												style="{{ img_focal }}; transition-delay: {{ delay_step | plus: 0.175 }}s;"
+											/>
+										</picture>
+
+										{%- if label != blank -%}
+											<div class="pricing-table__item-label"
+												 style="transition-delay: {{ delay_step | plus: 0.175 }}s;">
+												<div class="pricing-table__item-label-text">
+													{{- label -}}
+												</div>
+											</div>
+										{%- endif -%}
+									</div>
+								{%- endif -%}
+
+								<div class="pricing-table__item-text-container need-animate tr-dur-0-8" style="transition-delay: {{ delay_step | plus: 0.28 }}s;">
+									<h3 class="pricing-table__item-heading">
+										{{- heading -}}
+									</h3>
+
+									{% if subtitle != blank %}
+										<p class="pricing-table__item-subtitle">{{ subtitle }}</p>
+									{% endif %}
+
+									<div class="pricing-table__item-price-container">
+										{% render 'price', product: product %}
+
+										{% if unit_price_label != blank %}
+											<span class="pricing-table__item-price-unit">{{ unit_price_label }}</span>
+										{% endif %}
+									</div>
+
+									{%- if text != blank -%}
+										<div class="pricing-table__item-list-wrapper rte {% if list_icon == blank %}pricing-table__item-list-wrapper--without-icon{% endif %}">
+											{{ text }}
+										</div>
+									{%- endif -%}
+								</div>
+							</div>
+
+							{%- if button_text != blank -%}
+								<div class="pricing-table__button">
+									<a href="{{ product.url }}" class="button-circle button-circle--transform button-circle--transform-show-text-mob focus-visible-outline">
+										<span class="button-circle__inner">
+											{%- render 'icons', icon: 'circle-decoration' -%}
+											{%- render 'icons', icon: 'plus', class: 'icon-inactive' -%}
+										</span>
+
+										<span class="button-circle__text">{{ button_text }}</span>
+									</a>
+								</div>
+							{%- endif -%}
+						</div>
+					</div>
+				{%- endfor -%}
+			</div>
+		</div>
+	</section>
+
+	{% include "adastra" with "/src/scripts/pricing-table.js" %}
+{%- endif -%}
+
+{%- schema -%}
+{
+	"name": "Pricing table",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"max_blocks": 3,
+	"settings": [
+		{
+			"id": "heading_first_line",
+			"type": "inline_richtext",
+			"label": "Heading (first line)",
+			"default": "Pricing table"
+		},
+		{
+			"id": "heading_second_line",
+			"type": "inline_richtext",
+			"label": "Heading (second line)"
+		},
+		{
+			"id": "text",
+			"type": "richtext",
+			"label": "Text"
+		},
+		{
+			"type": "image_picker",
+			"id": "list_icon",
+			"label": "List icon",
+			"info": "Setting sets the marker icon in the product card list. 48 x 48px recommended"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 100
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 100
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 40
+		}
+	],
+	"blocks": [
+		{
+			"name": "Product",
+			"type": "product",
+			"settings": [
+				{
+					"type": "product",
+					"id": "product",
+					"label": "Product"
+				},
+				{
+					"type": "text",
+					"id": "label",
+					"label": "Label",
+					"default": "TOP"
+				},
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading",
+					"default": "Heading"
+				},
+				{
+					"type": "textarea",
+					"id": "subtitle",
+					"label": "Subheading",
+					"default": "Add a short description about the product"
+				},
+				{
+					"type": "text",
+					"id": "unit_price_label",
+					"label": "Unit price label",
+					"default": "/mo"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text",
+					"default": "<ul><li>Option 1</li><li>Option 2</li><li>Option 3</li></ul>",
+					"info": "Use bullet or numbered list."
+				},
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image",
+					"info": "Use instead of product image. 408 x 408px recommended"
+				},
+				{
+					"type": "text",
+					"id": "button_text",
+					"label": "Button label",
+					"default": "Get Started Now"
+				},
+				{
+					"type": "header",
+					"content": "Colors"
+				},
+				{
+					"type": "color_background",
+					"id": "label_background_color",
+					"label": "Label background",
+					"default": "#FFD875"
+				},
+				{
+					"type": "color",
+					"id": "label_text_color",
+					"label": "Label text",
+					"default": "#fff"
+				},
+				{
+					"type": "color",
+					"id": "flashlight_color",
+					"label": "Flashlight",
+					"default": "#538BF6"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Pricing table",
+			"settings": {},
+			"blocks": [
+				{
+					"type": "product"
+				},
+				{
+					"type": "product"
+				},
+				{
+					"type": "product"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

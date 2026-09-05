@@ -1,0 +1,100 @@
+.age-verifier-popup {
+  z-index: 50;
+}
+.age-verifier-popup .age-verifier-popup__container {
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  padding: 0;
+  overflow: hidden;
+}
+.age-verifier-popup .age-verifier-popup__col {
+  flex-basis: 50%;
+  flex-grow: 1;
+}
+.age-verifier-popup .age-verifier-popup__image-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding-top: 73.39%;
+}
+.age-verifier-popup .age-verifier-popup__image {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--img-mob-pos);
+}
+.age-verifier-popup .age-verifier-popup__content {
+  width: 100%;
+  padding: 16px 24px;
+  text-align: center;
+  word-break: break-word;
+}
+.age-verifier-popup .age-verifier-popup__title {
+  font-size: calc(var(--heading-font-size) * 2);
+  line-height: 1.5;
+  text-align: center;
+}
+.age-verifier-popup .age-verifier-popup__text {
+  margin-top: 16px;
+  text-align: center;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+}
+.age-verifier-popup .age-verifier-popup__buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+}
+.age-verifier-popup .age-verifier-popup__close-button {
+  margin-top: 20px;
+}
+@media (min-width: 768px) {
+  .age-verifier-popup .age-verifier-popup__container {
+    max-width: 1040px;
+    flex-direction: row;
+    align-items: center;
+  }
+  .age-verifier-popup .age-verifier-popup__container.age-verifier-popup__container--no-image {
+    max-width: 520px;
+  }
+  .age-verifier-popup .age-verifier-popup__image-wrapper {
+    padding-top: 100%;
+  }
+  .age-verifier-popup .age-verifier-popup__image {
+    object-position: var(--img-desktop-pos);
+  }
+  .age-verifier-popup .age-verifier-popup__content {
+    padding: 32px 24px;
+  }
+  .age-verifier-popup .age-verifier-popup__close-icon-button.age-verifier-popup__close-icon-button--mobile {
+    display: none;
+  }
+}
+@media (max-width: 767.98px) {
+  .age-verifier-popup .age-verifier-popup__content.age-verifier-popup__content--top-offset {
+    padding-top: 32px;
+  }
+  .age-verifier-popup .age-verifier-popup__col.age-verifier-popup__col--hide-img-mob {
+    display: none;
+  }
+  .age-verifier-popup .age-verifier-popup__title {
+    font-size: calc(var(--heading-font-size) * 1.5);
+  }
+  .age-verifier-popup .age-verifier-popup__close-icon-button.age-verifier-popup__close-icon-button--desktop {
+    display: none;
+  }
+}
+@media (min-width: 1200px) {
+  .age-verifier-popup .age-verifier-popup__content {
+    padding: 32px;
+  }
+}

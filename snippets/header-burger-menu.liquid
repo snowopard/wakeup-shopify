@@ -1,0 +1,213 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header mega menu products grid
+	Render header mega menu media grid
+	- burger_menu: burger menu object (required)
+
+	Usage:
+	{%- render 'header-burger-menu', burger_menu: burger_menu -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- capture block_styles -%}
+	--menu-decoration-border-part-color: var(--header-menu-text-color); {{-  -}}
+	--menu-decoration-border-color: var(--header-menu-border-color); {{-  -}}
+{%- endcapture -%}
+
+<div class="header-burger-menu js-multi-drawer-container" id="headerBurgerMenu">
+	<div
+		class="header-burger-menu__menu header-burger-menu__menu--main js-multi-drawer js-header-burger-menu"
+		id="headerBurgerMenu"
+		role="dialog"
+		aria-modal="true"
+		data-drawer-level="1"
+		aria-labelledby="headerBurgerMenuTitle"
+	>
+		<p
+			class="visually-hidden"
+			id="headerBurgerMenuTitle"
+		>
+			{{- "layout.navigation.drawer_menu" | t | escape -}}
+		</p>
+		<div class="header-burger-menu__menu-container header-burger-menu__menu-container--main menu-decoration js-menu-decoration" style="{{- block_styles | strip_newlines -}}">
+			<svg class="menu-decoration__decoration" aria-hidden="true" focusable="false" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<rect class="menu-decoration__decoration-border-part js-menu-decoration-border-part" width="100%" height="100%" x="1" y="1" rx="8" stroke-width="2" stroke-linecap="round" stroke="currentColor"></rect>
+				<rect class="menu-decoration__decoration-border-part js-menu-decoration-border-part" width="100%" height="100%" x="1" y="1" rx="8" stroke-width="2" stroke-linecap="round" stroke="currentColor"></rect>
+				<rect class="menu-decoration__decoration-border" width="100%" height="100%" x="1" y="1" rx="8" stroke-width="1" stroke-linecap="round" stroke="currentColor"></rect>
+			</svg>
+
+			<div class="header-burger-menu__menu-inner-container js-menu-decoration-container js-multi-drawer-scroll-container">
+				<ul class="header-burger-menu__list">
+					{%- assign animation_delay = 0 -%}
+					{%- for first_level_link in burger_menu.links -%}
+						{%- assign product_icon = "" -%}
+						{%- assign item_icon = "" -%}
+
+						<li class="header-burger-menu__list-item header-burger-menu__animate need-animate" style="--animation-delay: {{ animation_delay }}s">
+							{%- if first_level_link.links.size > 0 -%}
+								<button
+									class="js-multi-drawer-toggle js-menu-decoration-item header-navigation-item-highlight header-navigation-item-highlight--with-active header-navigation-item-highlight--big {% if forloop.last %} header-navigation-item-highlight--hide-border {%- endif -%}"
+									type="button"
+									data-drawer-content="headerBurgerMenuNested:{{- burger_menu.handle -}}-{{ forloop.index }}-{{- first_level_link.handle -}}"
+									data-drawer-level="2"
+								>
+									{% if first_level_link.type == 'collection_link' %}
+										{%- assign product_icon = first_level_link.object.products[0].featured_image -%}
+									{%- elsif first_level_link.type == 'product_link' -%}
+										{%- assign product_icon = first_level_link.object.featured_image -%}
+									{%- endif -%}
+
+									{%- assign item_icon = first_level_link.object.metafields.custom.menu_icon | default: product_icon -%}
+
+									{%- if item_icon != blank -%}
+										<span class="header-navigation-item-highlight__icon-wrapper">
+												<picture class="lazy">
+													<img
+														class="header-navigation-item-highlight__icon"
+														src="{{ item_icon | image_url: width: 10 }}"
+														srcset="{{ item_icon | image_url: width: 10 }} 1x"
+														data-src="{{ item_icon | image_url: width: 60 }}"
+														data-srcset="{{ item_icon | image_url: width: 60 }} 1x, {{ item_icon | image_url: width: 120 }} 2x"
+														alt="{{- item_icon.alt -}}"
+														fetchpriority="low"
+													>
+												</picture>
+											</span>
+									{%- endif -%}
+
+									<span class="header-navigation-item-highlight__text">
+										{{ first_level_link.title | escape }}
+									</span>
+
+									<span class="header-navigation-item-highlight__toggle-icon">
+										{%- render 'icons', icon: 'arrow-right-bold' -%}
+									</span>
+								</button>
+							{%- else -%}
+								<a class="js-menu-decoration-item header-navigation-item-highlight header-navigation-item-highlight--with-active header-navigation-item-highlight--big {% if forloop.last %} header-navigation-item-highlight--hide-border {%- endif -%}"
+								   href="{{- first_level_link.url -}}"
+								   {% if first_level_link.current %}aria-current="page"{% endif %}>
+									{% if first_level_link.type == 'collection_link' %}
+										{%- assign product_icon = first_level_link.object.products[0].featured_image -%}
+									{%- elsif first_level_link.type == 'product_link' -%}
+										{%- assign product_icon = first_level_link.object.featured_image -%}
+									{%- endif -%}
+
+									{%- assign item_icon = first_level_link.object.metafields.custom.menu_icon | default: product_icon -%}
+
+									{%- if item_icon != blank -%}
+										<span class="header-navigation-item-highlight__icon-wrapper">
+												<picture class="lazy">
+													<img
+														class="header-navigation-item-highlight__icon"
+														src="{{ item_icon | image_url: width: 10 }}"
+														srcset="{{ item_icon | image_url: width: 10 }} 1x"
+														data-src="{{ item_icon | image_url: width: 60 }}"
+														data-srcset="{{ item_icon | image_url: width: 60 }} 1x, {{ item_icon | image_url: width: 120 }} 2x"
+														alt="{{- item_icon.alt -}}"
+														fetchpriority="low"
+													>
+												</picture>
+											</span>
+									{%- endif -%}
+
+									<span class="header-navigation-item-highlight__text">
+										{{- first_level_link.title -}}
+									</span>
+								</a>
+							{%- endif -%}
+						</li>
+
+						{%- assign animation_delay = animation_delay | plus: 0.08 -%}
+					{%- endfor -%}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	{%- if burger_menu.levels > 1 -%}
+		<div
+			class="header-burger-menu__menu header-burger-menu__menu--nested js-multi-drawer"
+			role="dialog"
+			aria-modal="true"
+			id="headerBurgerMenuNested"
+			data-drawer-level="2"
+		>
+			<div class="header-burger-menu__menu-container">
+				<div class="header-burger-menu__menu-inner-container js-multi-drawer-scroll-container">
+					{%- for first_level_link in burger_menu.links -%}
+						{%- if first_level_link.links.size > 0 -%}
+							<ul
+								class="header-burger-menu__list header-burger-menu__list--scroll header-burger-menu__list--nested js-multi-drawer-content is-hidden"
+								data-drawer-content="headerBurgerMenuNested:{{- burger_menu.handle -}}-{{ forloop.index }}-{{- first_level_link.handle -}}"
+								data-drawer-level="2"
+							>
+								{%- assign animation_delay = 0 -%}
+
+								{%- for second_level_link in first_level_link.links -%}
+									<li class="header-burger-menu__list-item">
+										<div class="header-navigation-block">
+											{%- if second_level_link.links.size > 0 -%}
+												<div class="header-navigation-block_item header-burger-menu__animate need-animate" style="--animation-delay: {{ animation_delay }}s">
+													{%- if second_level_link.url != '#' -%}
+														<a
+															class="header-navigation-item header-navigation-item--medium"
+															href="{{- second_level_link.url -}}"
+															{% if second_level_link.current %}aria-current="page"{% endif %}
+														>
+															<span class="header-navigation-item__text">
+																{{- second_level_link.title | escape -}}
+															</span>
+														</a>
+													{%- else -%}
+														<p class="header-navigation-item header-navigation-item--no-hover header-navigation-item--medium">
+															<span class="header-navigation-item__text">
+																{{- second_level_link.title | escape -}}
+															</span>
+														</p>
+													{%- endif -%}
+												</div>
+
+												{%- assign animation_delay = animation_delay | plus: 0.04 -%}
+
+												<ul class="header-navigation-block__list">
+													{%- for third_level_link in second_level_link.links -%}
+														<li class="header-navigation-block__list-item header-burger-menu__animate need-animate" style="--animation-delay: {{ animation_delay }}s">
+															<a class="header-navigation-item header-navigation-item--small"
+															   href="{{- third_level_link.url -}}"
+															   {% if third_level_link.current %}aria-current="page"{% endif %}>
+																<span class="header-navigation-item__text">
+																	{{- third_level_link.title | escape -}}
+																</span>
+															</a>
+														</li>
+
+														{%- assign animation_delay = animation_delay | plus: 0.04 -%}
+													{%- endfor -%}
+												</ul>
+											{%- else -%}
+												<div class="header-navigation-block_item header-burger-menu__animate need-animate" style="--animation-delay: {{ animation_delay }}s">
+													<a
+														class="header-navigation-item header-navigation-item--medium"
+														href="{{- second_level_link.url -}}"
+														{% if second_level_link.current %}aria-current="page"{% endif %}
+													>
+														<span class="header-navigation-item__text">
+															{{- second_level_link.title | escape -}}
+														</span>
+													</a>
+												</div>
+
+												{%- assign animation_delay = animation_delay | plus: 0.04 -%}
+											{%- endif -%}
+										</div>
+									</li>
+								{%- endfor -%}
+							</ul>
+						{%- endif -%}
+					{%- endfor -%}
+				</div>
+			</div>
+		</div>
+	{%- endif -%}
+</div>

@@ -1,0 +1,62 @@
+{%- if enable_glass_effect == true -%}
+	{%- assign glass_effect = 'slideshow__slide-content-inner--glass' -%}
+{%- endif -%}
+
+{%- if enable_content_offset == true -%}
+	{%- assign content_offset ='slideshow__slide-content-inner--offset' -%}
+{%- endif -%}
+
+{%- assign is_button = false -%}
+
+{%- if button_text != blank and button_link != blank -%}
+	{%- assign is_button = true -%}
+{%- endif -%}
+
+{%- if heading != blank or description != blank or is_button != blank -%}
+	<div class="slideshow__slide-content {% if index == 1 %}js-need-animate-after-load1 need-animate{% else %}need-animate{% endif %}">
+		<div class="slideshow__slide-content-inner {{ glass_effect }} {{ content_offset }}">
+			{%- if heading != blank -%}
+				<h2
+					class="h2 slideshow__slide-heading section-title need-animate {% if heading_size_desktop > 130 %} slideshow__slide-heading--big {% endif %}">
+					<span class="section-title__text-container">
+						<span class="section-title__text">
+							{{- heading -}}
+						</span>
+					</span>
+				</h2>
+			{%- endif -%}
+
+			{%- if description != blank -%}
+				<div
+					class="slideshow__slide-description tr-dur-0-5 tr-del-0-8 rte"
+					{%- if enable_parallax -%}
+						data-swiper-parallax="-300"
+					{%- endif -%}
+				>
+					{{- description -}}
+				</div>
+			{%- endif -%}
+
+			{%- if is_button -%}
+				<div class="slideshow__slide-button-wrapper">
+					{% if button_text != blank and button_link != blank %}
+						<a
+							class="button button--primary slideshow__slide-button js-button need-animate"
+							href="{{- button_link -}}"
+							{% if button_aria_label != blank %}
+								aria-label="{{- button_aria_label | escape -}}"
+							{% endif %}
+							{% if open_in_new_tab %}
+								target="_blank"
+								rel="nofollow"
+							{% endif %}
+						>
+							<span class="button__outer"></span>
+							{{- button_text -}}
+						</a>
+					{% endif %}
+				</div>
+			{%- endif -%}
+		</div>
+	</div>
+{%- endif -%}

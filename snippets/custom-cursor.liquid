@@ -1,0 +1,11 @@
+{%- render 'adastra' with '/src/styles/custom-cursor.scss' -%}
+{%- render 'adastra' with '/src/scripts/component-custom-cursor.js' -%}
+
+{%- capture styles -%}
+	--color-background: {{- settings.color_background_cursor -}};
+	--color-border: {{- settings.color_border_cursor -}};
+{%- endcapture -%}
+
+<div style="{{- styles -}}" class="custom-cursor js-custom-cursor" {% if settings.hide_cursor_on_hover %} data-hide-cursor-on-hover {% endif %}>
+	<div class="custom-cursor__dot"></div>
+</div>

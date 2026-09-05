@@ -1,0 +1,384 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Blog template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/blog.scss' -%}
+{%- render 'adastra' with '/src/styles/tabs.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign text                             = section.settings.text -%}
+{%- assign paginate_by        		        = section.settings.paginate_by -%}
+{%- assign pagination_type    		        = section.settings.pagination_type -%}
+{%- assign show_filter_by_tag 		        = section.settings.show_filter_by_tag -%}
+{%- assign container 				        = section.settings.container_width -%}
+{%- assign enable_color_scheme_inheritance  = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 				    = section.settings.color_scheme -%}
+{%- assign ellipse_background               = section.settings.ellipse_background -%}
+{%- assign enable_bottom_rounded_corners    = section.settings.enable_bottom_rounded_corners -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{%- assign show_date 		   = settings.show_date -%}
+{%- assign show_author 		   = settings.show_author -%}
+{%- assign show_tag 		   = settings.show_tag -%}
+{%- assign is_strip_title      = settings.is_strip_title -%}
+{%- assign is_strip_content    = settings.is_strip_content -%}
+{%- assign show_comments_count = settings.show_comments_count -%}
+{%- assign read_more_text 	   = settings.article_read_more_label  %}
+
+{% assign delay_step = 0.4 %}
+
+{%- if show_filter_by_tag and blog.all_tags.size > 0 -%}
+	{%- capture filter_items -%}
+		{%- for tag in blog.all_tags -%}
+			{%- assign delay_step = delay_step | plus: 0.2 -%}
+
+			<li class="blog__filters-item blog--fade-in tr-dur-0-5" style="transition-delay: {{ delay_step }}s;">
+				{%- capture blog_filters_link_classes -%}
+					tabs__item focus-visible-outline blog__filters-link js-filter-link js-tab-button {{-  -}}
+					{% if current_tags contains tag %} is-active {%- endif -%}
+				{%- endcapture -%}
+
+				<a
+					class="{{- blog_filters_link_classes | strip_newlines -}}"
+					href="{{- blog.url -}}/tagged/{{- tag | handleize -}}"
+				>
+					{{- tag -}}
+				</a>
+			</li>
+		{%- endfor -%}
+	{%- endcapture -%}
+{%- endif -%}
+
+{%- if filter_items != blank -%}
+	{%- capture blog_filters -%}
+		<div class="blog__filters js-filter">
+			<ul class="tabs" data-tabs-container>
+				{% assign delay_step = 0.2 %}
+
+				<li class="blog__filters-item blog--fade-in tr-dur-0-5" style="transition-delay: {{ delay_step }}s;">
+					{%- capture blog_filters_link_reset_classes -%}
+						tabs__item blog__filters-link blog__filters-link--reset js-filter-reset js-tab-button {{-  -}}
+						{% if current_tags == blank %} is-active {%- endif -%}
+					{%- endcapture -%}
+
+					<a class="{{- blog_filters_link_reset_classes | strip_newlines -}}"
+					   href="{{- blog.url -}}"
+					   {% unless current_tags %}
+						   tabindex="-1"
+					   {% endunless %}
+					>
+						{{- 'blogs.article.view_all' | t -}}
+					</a>
+				</li>
+
+				{{- filter_items -}}
+
+				<div class="tab__underline js-tab-underline"></div>
+			</ul>
+		</div>
+	{%- endcapture -%}
+{%- endif -%}
+
+{% capture styles %}
+	--container-width: {{ container_width }};
+	--ellipse-background: {{ ellipse_background }};
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px;
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px;
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px;
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px;
+{% endcapture %}
+
+<section
+	class="blog js-blog {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %} color-{{ color_scheme.id }} js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} need-animate"
+		 id="{{- section.id -}}"
+		 style="{{ styles }}">
+	<div class="blog__container container">
+		<h1 class="h1 blog__title blog--fade-in tr-dur-0-5">
+			{{- blog.title -}}
+		</h1>
+
+		{% if text != blank %}
+			<div class="blog__text blog--fade-in rte tr-dur-0-5">
+				{{ text }}
+			</div>
+		{% endif %}
+
+		{%- if blog.articles.size > 0 -%}
+			{%- paginate blog.articles by paginate_by, window_size: 2 -%}
+				<div class="blog__content">
+					{%- if blog_filters != blank -%}
+						{{- blog_filters -}}
+					{%- endif -%}
+
+					<div class="blog__grid js-blog-grid" aria-busy="false">
+						{% assign animate_delay = 0.2 %}
+
+						{%- for article in blog.articles -%}
+							{% assign animate_delay = animate_delay | plus: 0.2 %}
+
+							<div class="blog__col" style="animation-delay: {{ animate_delay }}s;">
+								{%- render 'article-card', article: article -%}
+							</div>
+						{%- endfor -%}
+					</div>
+
+					{%- if pagination_type == 'pagination' -%}
+						<div class="blog__pagination-wrapper js-pagination">
+							{%- if paginate.pages > 1 -%}
+								{%- render 'pagination', paginate: paginate -%}
+							{%- endif -%}
+						</div>
+					{%- elsif pagination_type == "infinite_scroll" -%}
+						{%- capture blog_infinite_scroll_classes -%}
+							blog__infinite-scroll no-js-hidden js-infinite-scroll {{- -}}
+							{% unless paginate.next.url %} is-hidden {%- endunless -%}
+						{% endcapture %}
+
+						<div class="{{- blog_infinite_scroll_classes | strip_newlines -}}"
+							{%- if paginate.next.url -%}
+								data-next-url="{{- paginate.next.url -}}"
+							{%- else -%}
+								data-next-url=""
+							{%- endif -%}
+						></div>
+					{%- else -%}
+						{% capture blog_lazy_load_classes %}
+							button button--primary blog__lazy-load-button js-lazy-load {{- -}}
+							{% unless paginate.next.url %} is-hidden {%- endunless -%}
+						{% endcapture %}
+
+						<div class="blog__lazy-load-button-wrapper no-js-hidden">
+							<button class="{{- blog_lazy_load_classes | strip_newlines -}}"
+								{%- if paginate.next.url -%}
+									data-next-url="{{- paginate.next.url -}}"
+								{%- else -%}
+									data-next-url=""
+								{%- endif -%}
+							>
+								<span class="button__outer"></span>
+								{{- 'blogs.general.lazy_load_button' | t -}}
+							</button>
+						</div>
+					{%- endif -%}
+				</div>
+
+				{%- render 'adastra' with '/src/scripts/blog-template.js' -%}
+			{%- endpaginate -%}
+		{%- else -%}
+			<h2 class="h2 blog__title blog__title--empty blog--fade-in tr-dur-0-5">
+				{{- 'blogs.general.empty_blog' | t -}}
+			</h2>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- schema -%}
+{
+	"name": "Blog",
+	"settings": [
+		{
+			"type": "richtext",
+			"id": "text",
+			"label": "Text"
+		},
+		{
+			"type": "range",
+			"id": "paginate_by",
+			"min": 6,
+			"max": 50,
+			"step": 1,
+			"label": "Paginate by",
+			"default": 9
+		},
+		{
+			"type": "select",
+			"id": "pagination_type",
+			"label": "Pagination type",
+			"options": [
+				{
+					"value": "pagination",
+					"label": "Pagination"
+				},
+				{
+					"value": "lazy_load",
+					"label": "Load more"
+				},
+				{
+					"value": "infinite_scroll",
+					"label": "Infinite scroll"
+				}
+			],
+			"default": "pagination"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_filter_by_tag",
+			"label": "Show filter by tag",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "color",
+			"id": "ellipse_background",
+			"label": "Ellipse color",
+			"default": "#C43898"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 24
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 48
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 16
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 30
+		}
+	]
+}
+{%- endschema -%}

@@ -1,0 +1,142 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Country localization form
+	Render country localization form
+	- id_prefix: Add unuqie prefix to prevent duplicate id
+	- form_id: Add unuqie form id to prevent duplicate id
+	- type: type (primary / secondary)
+	- show_full_name: show full name
+
+	Usage:
+	{%- render 'country-localization-form', id_prefix: id_prefix, form_id: form_id -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{% comment %}{{- 'localization-form.build.css' | asset_url | stylesheet_tag -}}{% endcomment %}
+{%- render 'adastra' with '/src/styles/localization-form.scss' -%}
+
+{% assign form_id = form_id | default: 'country_form' %}
+{% assign form_id_noscript = form_id | append: 'NoScript' %}
+
+{% assign text_color 					= text_color | default: '#000000' %}
+{% assign border_color 					= border_color | default: '#D5D5D5' %}
+{% assign background_color 				= background_color | default: '#FFFFFFE5' %}
+{% assign background_selected_color 	= text_color | color_modify: 'alpha', 0.12 %}
+{% assign background_hover_color 		= text_color | color_modify: 'alpha', 0.06 %}
+
+{%- capture section_styles -%}
+	--localization-form-text-color: {{- text_color -}}; {{- -}}
+	--localization-form-border-color: {{ border_color }}; {{- -}}
+	--localization-form-background-color: {{- background_color -}}; {{- -}}
+	--localization-form-background-selected-color: {{- background_selected_color -}}; {{- -}}
+	--localization-form-background-hover-color: {{ background_hover_color }}; {{- -}}
+{%- endcapture -%}
+
+{%- case type -%}
+	{%- when 'secondary' -%}
+		{% assign localization_form_class = 'localization-form localization-form--secondary no-js-hidden js-localization-form' %}
+	{%- when 'thirdly' -%}
+		{% assign localization_form_class = 'localization-form localization-form--thirdly no-js-hidden js-localization-form' %}
+	{%- else -%}
+		{% assign localization_form_class = 'localization-form no-js-hidden js-localization-form' %}
+{%- endcase -%}
+
+<div class="localization" style="{{ section_styles | strip_newlines }}">
+	<noscript>
+		{%-
+			form 'localization',
+			id: form_id_noscript,
+			class: 'localization-form-simple'
+		-%}
+			<div class="localization-form-simple__container">
+				<div class="select-wrapper localization-form-simple__select-wrapper">
+					<select
+						class="localization-form-simple__select"
+						name="country_code"
+					>
+						{%- for country in localization.available_countries -%}
+							<option
+								value="{{- country.iso_code -}}"
+								{%- if country.iso_code == localization.country.iso_code %} selected{% endif %}
+							>
+								{{ country.name }} ({{ country.currency.iso_code }}&nbsp;{{ country.currency.symbol }})
+							</option>
+						{%- endfor -%}
+					</select>
+
+					{%- render 'icons', icon: 'arrow-down' -%}
+				</div>
+
+				<button
+					class="localization-form-simple__button"
+					title="{{- 'general.localization.update_country' | t | escape -}}"
+				>
+					{% render 'icons', icon: 'check' %}
+				</button>
+			</div>
+		{%- endform -%}
+	</noscript>
+
+	<localization-form id="CountryLocalizationForm-{{- id_prefix -}}">
+		{%-
+			form 'localization',
+			id: form_id,
+			class: localization_form_class
+		-%}
+			<div class="localization-form__container">
+				<button
+					type="button"
+					class="localization-form__button js-localization-form-button"
+					aria-expanded="false"
+					aria-controls="CountryList-{{- id_prefix -}}"
+				>
+					{%- if show_full_name -%}
+						{{ localization.country.name }} ({{ localization.country.currency.iso_code }}&nbsp;{{ localization.country.currency.symbol }})
+					{%- else -%}
+						{{- localization.country.currency.iso_code }}&nbsp;{{ localization.country.currency.symbol -}}
+					{%- endif -%}
+
+
+					<span class="localization-form__button-icon">
+						{%- render 'icons', icon: 'arrow-down', class: 'icon-arrow-down' -%}
+						{%- render 'icons', icon: 'circle-decoration-border' -%}
+					</span>
+				</button>
+
+				<div
+					id="CountryList-{{- id_prefix -}}"
+					role="list"
+					class="localization-form__panel is-hidden js-localization-form-panel"
+				>
+					<ul class="localization-form__list js-localization-form-list">
+					{%- assign animation_delay = 0 -%}
+
+					{%- for country in localization.available_countries -%}
+						<li class="localization-form__item">
+							<a
+								class="localization-form__link js-localization-form-link  need-animate"
+								style="--animation-delay: {{ animation_delay }}s"
+								href="#"
+								{% if country.iso_code == localization.country.iso_code %}
+									aria-current="true"
+								{% endif %}
+								data-value="{{- country.iso_code -}}"
+								aria-label="{{- language.iso_code -}}"
+								tabindex="-1"
+							>
+								<span class="localization-form__item-text">
+									{{- country.name }} ({{ country.currency.iso_code }}&nbsp;{{ country.currency.symbol -}})
+								</span>
+							</a>
+						</li>
+
+						{%- assign animation_delay = animation_delay | plus: 0.01 -%}
+					{%- endfor -%}
+					</ul>
+				</div>
+
+				<input type="hidden" name="country_code" value="{{- localization.country.iso_code -}}">
+			</div>
+		{%- endform -%}
+	</localization-form>
+</div>

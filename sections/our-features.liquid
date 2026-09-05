@@ -1,0 +1,307 @@
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{ section.settings.offset_top_mobile }}px;
+		padding-bottom: {{ section.settings.offset_bottom_mobile }}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{ section.settings.offset_top_desktop }}px;
+			padding-bottom: {{ section.settings.offset_bottom_desktop }}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign decor_image_first 	= section.settings.decor_image_first -%}
+{%- assign decor_image_second 	= section.settings.decor_image_second -%}
+{%- assign make_not_active_text_bold = section.settings.make_not_active_text_bold -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 		= section.settings.color_scheme -%}
+{%- assign container 			= section.settings.container_width -%}
+{%- assign enable_bottom_rounded_corners   = section.settings.enable_bottom_rounded_corners -%}
+{%- assign is_images 			= false -%}
+
+{%- if decor_image_first != blank or decor_image_second != blank -%}
+	{%- assign is_images = true -%}
+{%- endif -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == "inherit" -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--container-width: {{ container_width }}; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{-  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{-  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{-  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{-  -}}
+{%- endcapture -%}
+
+{%- if section.blocks.size > 0 -%}
+	{%- include "adastra" with "/src/styles/our-features.scss" -%}
+
+	<section class="our-features color-{{ color_scheme }}{% if enable_bottom_rounded_corners %} section-bottom-rounded{% endif %} js-animate{% if request.visual_preview_mode or section.index == 1 %} animated{% endif %} js-our-features"
+			 style="{{ styles }}"
+	>
+		<div class="our-features__container container">
+			{%- if is_images -%}
+				<div class="our-features__image-wrapper">
+					{%- if decor_image_first != blank -%}
+						<picture class="our-features__image-inner our-features__image-inner--first js-our-features-image-inner">
+							<source
+								srcset="{{ decor_image_first | image_url: width: 64, height: 66 }} 1x,
+										{{ decor_image_first | image_url: width: 128, height: 132 }} 2x"
+								media="(max-width: 991px)"
+							>
+
+							<img
+								class="our-features__image"
+								src="{{ decor_image_first | image_url: width: 148, height: 152 }}"
+								srcset="{{ decor_image_first | image_url: width: 148, height: 152 }} 1x,
+										{{ decor_image_first | image_url: width: 296, height: 304 }} 2x"
+								alt="{{ decor_image_first.alt | escape }}"
+							>
+						</picture>
+					{%- endif -%}
+
+					{%- if decor_image_second != blank -%}
+						<picture class="our-features__image-inner our-features__image-inner--second js-our-features-image-inner">
+							<source
+								srcset="{{ decor_image_second | image_url: width: 64, height: 66 }} 1x,
+										{{ decor_image_second | image_url: width: 128, height: 132 }} 2x"
+								media="(max-width: 991px)"
+							>
+
+							<img
+								class="our-features__image"
+								src="{{ decor_image_second | image_url: width: 121, height: 128 }}"
+								srcset="{{ decor_image_second | image_url: width: 121, height: 128 }} 1x,
+										{{ decor_image_second | image_url: width: 241, height: 256 }} 2x"
+								alt="{{ decor_image_second.alt | escape }}"
+							>
+						</picture>
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+
+			<div class="our-features__wrapper{% if is_images %} our-features__wrapper--image{% endif %}">
+				{%- for block in section.blocks -%}
+					{%- assign text = block.settings.title -%}
+
+					<div class="our-features__item {% if make_not_active_text_bold %}our-features__item--bold{% endif %} js-our-features-item">
+						{{- text -}}
+					</div>
+				{%- endfor -%}
+			</div>
+		</div>
+	</section>
+
+	{%- include "adastra" with "/src/scripts/our-features.js" -%}
+{%- endif -%}
+
+{% schema %}
+	{
+		"name": "Our features",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+			{
+				"type": "image_picker",
+				"id": "decor_image_first",
+				"label": "Decor image first",
+				"info": "296 x 304px recommended"
+			},
+			{
+				"type": "image_picker",
+				"id": "decor_image_second",
+				"label": "Decor image second",
+				"info": "242 x 256px recommended"
+			},
+			{
+				"type": "checkbox",
+				"id": "make_not_active_text_bold",
+				"label": "Make not active text bold",
+				"default": false
+			},
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"default": true,
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"default": "scheme_1",
+				"label": "Color scheme"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "select",
+				"id": "container_width",
+				"label": "Container width",
+				"options": [
+					{
+						"value": "1560px",
+						"label": "Default - 1440px"
+					},
+					{
+						"value": "2040px",
+						"label": "Large - 1920px"
+					},
+					{
+						"value": "100%",
+						"label": "Full width"
+					},
+					{
+						"value": "inherit",
+						"label": "Inherit of general setting"
+					}
+				],
+				"default": "inherit",
+				"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_bottom_rounded_corners",
+				"label": "Enable bottom rounded corners",
+				"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+				"default": false
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset top",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset bottom",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset top",
+				"default": 32
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset bottom",
+				"default": 32
+			}
+		],
+		"blocks": [
+			{
+				"name": "Feature",
+				"type": "feature",
+				"settings": [
+					{
+						"type": "text",
+						"id": "title",
+						"label": "Text",
+						"default": "Text"
+					}
+				]
+			}
+		],
+		"presets": [
+			{
+				"name": "Our features",
+				"blocks": [
+					{
+						"type": "feature"
+					},
+					{
+						"type": "feature"
+					},
+					{
+						"type": "feature"
+					},
+					{
+						"type": "feature"
+					},
+					{
+						"type": "feature"
+					},
+					{
+						"type": "feature"
+					}
+				]
+			}
+		]
+	}
+{% endschema %}

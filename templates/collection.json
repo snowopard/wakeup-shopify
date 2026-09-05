@@ -1,0 +1,175 @@
+{
+	"sections": {
+		"plp-template": {
+			"type": "collection-template",
+			"settings": {
+				"show_img": true,
+				"show_description": true,
+				"text_position": "inside_image",
+				"show_grid_selector": true,
+				"show_color_swatch_in_filters": true,
+				"filters_type": "drawer",
+				"paginate_by": 16,
+				"pagination_type": "pagination",
+				"enable_color_scheme_inheritance": false,
+				"color_scheme": "",
+				"overlay_color": "linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5) 100%)",
+				"banner_image_text": "#ffffff",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": true,
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0,
+				"inner_offset_top": 0,
+				"inner_offset_bottom": 40,
+				"inner_offset_top_mobile": 0,
+				"inner_offset_bottom_mobile": 32
+			}
+		},
+		"swipe_cpLmPJ": {
+			"type": "swipe",
+			"blocks": {
+				"banner_XCUJqr": {
+					"type": "banner",
+					"settings": {
+						"label": "Bobabam",
+						"heading_first_line": "<em>Recipes.</em>",
+						"heading_second_line": "<strong>Pick Your Meal</strong>",
+						"text": "<p>We are on a mission to inspire and empower with positive messages. Wear your MantraBand® every day as your daily reminder, affirmation, and inspiration.</p>",
+						"button_label": "Read more",
+						"open_in_new_tab": false,
+						"image_object_fit": "contain",
+						"background_color": "#3674eb",
+						"text_color": "#ffffff",
+						"ellipse_color": "#ffffff",
+						"button_text_color_primary": "#ffffff",
+						"button_background_color_primary": "#ffffff1f",
+						"button_border_color_primary": "rgba(0,0,0,0)",
+						"button_border_outer_color_primary": "#ffffff",
+						"button_text_color_primary_hover": "#000000",
+						"button_background_color_primary_hover": "#ffffff",
+						"button_border_color_primary_hover": "rgba(0,0,0,0)",
+						"button_border_outer_color_primary_hover": "#ffffff"
+					}
+				},
+				"banner_8jVfGc": {
+					"type": "banner",
+					"settings": {
+						"label": "Bobabam",
+						"heading_first_line": "<em>Meet the</em>",
+						"heading_second_line": "<strong>Makers</strong>",
+						"text": "<p>Learn how we craft flavors and what inspires us every day.</p>",
+						"button_label": "Read more",
+						"open_in_new_tab": false,
+						"image_object_fit": "contain",
+						"background_color": "#dc9d00",
+						"text_color": "#ffffff",
+						"ellipse_color": "#ffffff",
+						"button_text_color_primary": "#ffffff",
+						"button_background_color_primary": "#ffffff1f",
+						"button_border_color_primary": "rgba(0,0,0,0)",
+						"button_border_outer_color_primary": "#ffffff",
+						"button_text_color_primary_hover": "#000000",
+						"button_background_color_primary_hover": "#ffffff",
+						"button_border_color_primary_hover": "rgba(0,0,0,0)",
+						"button_border_outer_color_primary_hover": "#ffffff"
+					}
+				},
+				"banner_XPXGqb": {
+					"type": "banner",
+					"settings": {
+						"label": "Bobabam",
+						"heading_first_line": "<em>Shop the</em>",
+						"heading_second_line": "<strong>Collection</strong>",
+						"text": "<p>Explore our latest products, crafted to refresh your day.</p>",
+						"button_label": "Shop now",
+						"open_in_new_tab": false,
+						"image_object_fit": "contain",
+						"background_color": "#2aaf00",
+						"text_color": "#ffffff",
+						"ellipse_color": "#ffffff",
+						"button_text_color_primary": "#ffffff",
+						"button_background_color_primary": "#ffffff1f",
+						"button_border_color_primary": "rgba(0,0,0,0)",
+						"button_border_outer_color_primary": "#ffffff",
+						"button_text_color_primary_hover": "#000000",
+						"button_background_color_primary_hover": "#ffffff",
+						"button_border_color_primary_hover": "rgba(0,0,0,0)",
+						"button_border_outer_color_primary_hover": "#ffffff"
+					}
+				}
+			},
+			"block_order": [
+				"banner_XCUJqr",
+				"banner_8jVfGc",
+				"banner_XPXGqb"
+			],
+			"name": "Swipe",
+			"settings": {
+				"container_width": "inherit",
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 40,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 20
+			}
+		},
+		"gallery_3DKYTE": {
+			"type": "gallery",
+			"blocks": {
+				"image_A4xNdA": {
+					"type": "image",
+					"settings": {
+						"open_in_new_tab": true
+					}
+				},
+				"image_TfeLXf": {
+					"type": "image",
+					"settings": {
+						"open_in_new_tab": true
+					}
+				},
+				"image_64FzXm": {
+					"type": "image",
+					"settings": {
+						"open_in_new_tab": true
+					}
+				},
+				"image_hYw3Pp": {
+					"type": "image",
+					"settings": {
+						"open_in_new_tab": true
+					}
+				}
+			},
+			"block_order": [
+				"image_A4xNdA",
+				"image_TfeLXf",
+				"image_64FzXm",
+				"image_hYw3Pp"
+			],
+			"name": "Image gallery",
+			"settings": {
+				"heading_first_line": "<em>FOLLOW US ON</em>",
+				"heading_second_line": "OUR INSTAGRAM",
+				"button_label": "@drinkbobabam",
+				"enable_color_scheme_inheritance": true,
+				"color_scheme": "",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 40,
+				"offset_bottom_desktop": 40,
+				"offset_top_mobile": 25,
+				"offset_bottom_mobile": 25,
+				"inner_offset_top": 64,
+				"inner_offset_bottom": 64,
+				"inner_offset_top_mobile": 32,
+				"inner_offset_bottom_mobile": 32
+			}
+		}
+	},
+	"order": [
+		"plp-template",
+		"swipe_cpLmPJ",
+		"gallery_3DKYTE"
+	]
+}

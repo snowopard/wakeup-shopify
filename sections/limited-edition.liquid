@@ -1,0 +1,704 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Limited edition
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/limited-edition.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_desktop -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+	}
+	}
+{%- endstyle -%}
+
+{%- assign enable_variant_images 			= settings.is_images_swatches_enabled -%}
+{%- assign heading_first_line 				= section.settings.heading_first_line -%}
+{%- assign heading_second_line 				= section.settings.heading_second_line -%}
+{%- assign enable_color_scheme_inheritance 	= section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 					= section.settings.color_scheme -%}
+{%- assign enable_bottom_rounded_corners 	= section.settings.enable_bottom_rounded_corners -%}
+{%- assign is_color_swatches_enabled 		= settings.is_color_swatches_enabled -%}
+{%- assign swatch_option 					= settings.color_swatches_option | default: 'Color' | downcase -%}
+{%- assign swatches 						= swatch_option | split: ',' -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- assign min = 1 -%}
+{%- assign max = 4 -%}
+{%- assign diff = max | minus: min -%}
+
+{%- assign has_swatch = false -%}
+
+{% capture styles %}
+	--container-width: 1400px; {{-  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{  -}}
+{% endcapture %}
+
+<section
+	class="limited-edition
+		js-limited-edition
+		color-{{ color_scheme.id }}
+		js-animate
+		{% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}
+		{% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %}
+	"
+	style="{{ styles }}">
+	<div class="container">
+		{%- if heading_first_line != blank or heading_second_line != blank -%}
+			<h2 class="h1 section-title section-title--center need-animate">
+				{%- if heading_first_line != blank -%}
+					<span class="section-title__text-container">
+						<span
+							class="section-title__text {% if heading_second_line == blank %}text-center{% endif %}">
+							{{- heading_first_line -}}
+						</span>
+					</span>
+				{%- endif -%}
+
+				{%- if heading_second_line != blank -%}
+					<span class="section-title__text-container">
+						<span
+							class="section-title__text {% if heading_first_line == blank %}text-center{% else %}text-right{% endif %}">
+							{{- heading_second_line -}}
+						</span>
+					</span>
+				{%- endif -%}
+			</h2>
+		{%- endif -%}
+
+		<div class="limited-edition__tabs-wrapper">
+			<ul class="limited-edition__tabs tabs need-animate" data-tabs-container>
+				{% assign animate_delay = 0 %}
+
+				{% for block in section.blocks %}
+					{% assign tab_heading 	= block.settings.tab_heading | default: block.settings.product.title %}
+					{% assign animate_delay = animate_delay | plus: 0.2 %}
+
+					{% if tab_heading != blank %}
+						<li>
+							<button class="tabs__item focus-visible-outline js-tab-button {% if forloop.first %}is-active{% endif %}"
+									style="transition-delay: {{ animate_delay }}s">
+								{{ tab_heading }}
+							</button>
+						</li>
+					{% endif %}
+				{% endfor %}
+
+				<div class="tab__underline js-tab-underline"></div>
+			</ul>
+		</div>
+
+		{% for block in section.blocks %}
+			{% assign short_product_description = block.settings.short_product_description %}
+			{% assign learn_more_label 			= block.settings.learn_more_label %}
+			{% assign ellipse_color    			= block.settings.ellipse_color %}
+			{% assign product 					= block.settings.product %}
+			{% assign product_title 			= product.title %}
+			{% assign block_index               = forloop.index %}
+
+			{% capture product_content %}
+				<div
+					data-product-handle="{{- product.handle -}}"
+					data-section-id="{{- section.id -}}"
+					data-url="{{- product.url -}}"
+					class="limited-edition__product js-limited-edition-product {% if forloop.index == 1 %}is-active{% endif %} need-animate"
+					style="--ellipse-background-color: {{- ellipse_color -}}">
+					{% if ellipse_color != blank %}
+						<span class="limited-edition__ellipse limited-edition__ellipse--left"></span>
+						<span class="limited-edition__ellipse limited-edition__ellipse--right"></span>
+					{% endif %}
+
+					<div class="limited-edition__variants-images">
+						{% for media in product.media %}
+							<div
+								class="limited-edition__image-wrapper js-limited-edition-image-wrapper {% if forloop.first %}is-active{% endif %} need-animate"
+								data-img-id="{{ media.id }}">
+								<picture class="lazy">
+									<source
+										data-srcset="{{ media | image_url: width: 346 }} 1x, {{ media | image_url: width: 692 }} 2x"
+										srcset="{{ media | image_url: width: 10 }} 1x, {{ media | image_url: width: 20 }} 2x"
+										media="(max-width: 380px)">
+
+									<source
+										data-srcset="{{ media | image_url: width: 386 }} 1x, {{ media | image_url: width: 772 }} 2x"
+										srcset="{{ media | image_url: width: 10 }} 1x, {{ media | image_url: width: 20 }} 2x"
+										media="(max-width: 420px)">
+
+									<source
+										data-srcset="{{ media | image_url: width: 733 }} 1x, {{ media | image_url: width: 1466 }} 2x"
+										srcset="{{ media | image_url: width: 10 }} 1x, {{ media | image_url: width: 20 }} 2x"
+										media="(max-width: 767px)">
+
+									<source
+										data-srcset="{{ media | image_url: width: 957 }} 1x, {{ media | image_url: width: 1914 }} 2x"
+										srcset="{{ media | image_url: width: 10 }} 1x, {{ media | image_url: width: 20 }} 2x"
+										media="(max-width: 991px)">
+
+									<img
+										class="limited-edition__image {% if forloop.first %}is-active{% endif %}"
+										src="{{- media | image_url: width: 10 -}}"
+										data-src="{{ media | image_url: width: 639 }}"
+										srcset="{{ media | image_url: width: 10 }} 1x, {{ media | image_url: width: 20 }} 2x"
+										data-srcset="{{ media | image_url: width: 639 }} 1x, {{ media | image_url: width: 1278 }} 2x"
+										alt="{{ media.alt | escape }}"
+									>
+								</picture>
+							</div>
+						{% else %}
+							<div class="limited-edition__image-wrapper is-active">
+								{% assign default_image = settings.product_default_image %}
+
+								{% if default_image != blank %}
+									<picture class="lazy">
+										<source
+											data-srcset="{{ default_image | image_url: width: 346 }} 1x, {{ default_image | image_url: width: 692 }} 2x"
+											srcset="{{ default_image | image_url: width: 10 }} 1x, {{ default_image | image_url: width: 20 }} 2x"
+											media="(max-width: 380px)">
+
+										<source
+											data-srcset="{{ default_image | image_url: width: 386 }} 1x, {{ default_image | image_url: width: 772 }} 2x"
+											srcset="{{ default_image | image_url: width: 10 }} 1x, {{ default_image | image_url: width: 20 }} 2x"
+											media="(max-width: 420px)">
+
+										<source
+											data-srcset="{{ default_image | image_url: width: 733 }} 1x, {{ default_image | image_url: width: 1466 }} 2x"
+											srcset="{{ default_image | image_url: width: 10 }} 1x, {{ default_image | image_url: width: 20 }} 2x"
+											media="(max-width: 767px)">
+
+										<source
+											data-srcset="{{ default_image | image_url: width: 957 }} 1x, {{ default_image | image_url: width: 1914 }} 2x"
+											srcset="{{ default_image | image_url: width: 10 }} 1x, {{ default_image | image_url: width: 20 }} 2x"
+											media="(max-width: 991px)">
+
+										<img
+											class="limited-edition__image is-active"
+											src="{{- default_image | image_url: width: 10 -}}"
+											data-src="{{ default_image | image_url: width: 639 }}"
+											srcset="{{ default_image | image_url: width: 10 }} 1x, {{ default_image | image_url: width: 20 }} 2x"
+											data-srcset="{{ default_image | image_url: width: 639 }} 1x, {{ default_image | image_url: width: 1278 }} 2x"
+											alt="{{ default_image.alt | escape }}"
+										>
+									</picture>
+								{% else %}
+									{%- assign random_number = "now" | date: "%N" | modulo: diff | plus: min -%}
+									{%- assign placeholder_svg_name = 'product-apparel-' | append: random_number -%}
+
+									{{ placeholder_svg_name | placeholder_svg_tag: 'limited-edition__image is-active' }}
+								{% endif %}
+							</div>
+						{% endfor %}
+					</div>
+
+					<div class="limited-edition__content-wrapper need-animate">
+						<div class="limited-edition__info">
+							<h2 class="limited-edition__product-title h4">
+								{% if product_title != blank %}
+									{{ product_title }}
+								{% else %}
+									{{- "products.product.product_label" | t -}}
+								{% endif %}
+							</h2>
+
+							{% if short_product_description %}
+								<div class="limited-edition__description rte">{{ short_product_description }}</div>
+							{% endif %}
+						</div>
+
+						{% unless product.has_only_default_variant or product == blank %}
+							<div class="limited-edition__options-container js-le-product-options">
+								{%- for option in product.options_with_values -%}
+									<fieldset class="fieldset">
+										{%- assign option_position = option.position -%}
+										{%- assign option_name_downcased = option.name | downcase -%}
+										{%- assign option_name_handle = option.name | handle -%}
+										{%- assign option_index = "option" | append: option_position -%}
+										{%- assign swatch_count = option.values | map: 'swatch' | compact | size -%}
+
+										{% assign use_color_swatch = false %}
+
+										{% if swatch_count > 0 and is_color_swatches_enabled %}
+											{% assign use_color_swatch = true %}
+										{% endif %}
+
+										{% for swatch in swatches %}
+											{% assign swatch_string = swatch | strip %}
+
+											{% if swatch_string == option_name_downcased %}
+												{% assign swatch_option = swatch_string %}
+												{%- break -%}
+											{% endif %}
+										{% endfor %}
+
+										{% if is_color_swatches_enabled and option_name_downcased == swatch_option %}
+											{% assign use_color_swatch = true %}
+										{% endif %}
+
+										<div class="limited-edition__options-wrapper">
+											<span
+												class="limited-edition__current-swatch-info product-options__swatch-wrapper">
+												<span class="product-options__swatch-label">{{- option.name -}}:</span>
+
+												<span class="product-options__swatch-value js-swatch-label-name"
+													  data-swatch-name="{{ option.name }}"
+													  data-swatch-position="{{ option.position }}"
+												>
+													{{- option.selected_value -}}
+												</span>
+											</span>
+
+											<div class="limited-edition__options {% if enable_variant_images %} limited-edition__options--images{% endif %}">
+												{% if use_color_swatch %}
+													<div
+														class="limited-edition__swatch-container product-options__swatch-container">
+														{%- for value in option.values -%}
+															{%- assign handleized_value = value | handleize -%}
+
+															{%- capture swatch_styles -%}
+																{% assign image_name = value | handle | prepend: 'swatch-' | append: '.png' %}
+																{% assign swatch_color_fallback = value | split: ' ' | last | handle %}
+
+																{% assign variant_image = blank %}
+
+																{% if enable_variant_images %}
+																	{% assign variant_image = value.variant.featured_image | default: value.variant.image %}
+																{% endif %}
+
+																{% assign swatch_image = variant_image | default: value.swatch.image | default: images[image_name] %}
+																{% assign swatch_color = value.swatch.color | default: swatch_color_fallback %}
+
+																style="
+																	{%- if swatch_image != blank -%}
+																		--swatch-image: url(
+																			{%- if enable_variant_images -%}
+																				{{- swatch_image | image_url: width: 60, height: 60 -}}
+																			{%- else -%}
+																				{{- swatch_image | image_url: width: 40, height: 40 -}}
+																			{%- endif -%}
+																		);
+																	{%- else -%}
+																		--swatch-color: {{ swatch_color }};
+																	{%- endif -%}
+																"
+															{%- endcapture -%}
+
+															<div
+																class="radio-container radio-option-swatch-square"
+																{%- if use_color_swatch -%}
+																	{{ swatch_styles }}
+																{%- endif -%}
+															>
+																{%- assign is_disabled = true -%}
+
+																{% if value.available %}
+																	{%- assign is_disabled = false -%}
+																{% endif %}
+
+																<input
+																	id="{{ section.id }}-{{- value | handle -}}-{{ option_name_handle }}-{{ block_index }}"
+																	type="radio"
+																	class="visually-hidden radio-input js-swatch"
+																	value="{{- value -}}"
+																	name="option{{- option.position -}}"
+																	{% if value.selected %}
+																		checked
+																	{% endif %}
+																	data-option="option{{- option.position -}}"
+																	data-option-value-id="{{ value.id }}"
+																/>
+
+																<label
+																	for="{{ section.id }}-{{- value | handle -}}-{{ option_name_handle }}-{{ block_index }}"
+																	class="radio-option-swatch-square__label {% if is_disabled %}is-disabled{% endif %}"
+																>
+																	<span class="visually-hidden">{{- value -}}</span>
+																</label>
+															</div>
+														{%- endfor -%}
+													</div>
+												{% else %}
+													{%- for value in option.values -%}
+														{%- assign is_disabled = true -%}
+
+														{% if value.available %}
+															{%- assign is_disabled = false -%}
+														{% endif %}
+
+														{%- if use_color_swatch and is_color_swatches_enabled -%}
+															{%- capture container_classes -%}
+																radio-container radio-option-swatch
+															{%- endcapture -%}
+
+															{%- capture swatch_styles -%}
+																{% assign image_name = value | handle | prepend: 'swatch-' | append: '.png' %}
+																{% assign swatch_color_fallback = value | split: ' ' | last | handle %}
+
+																{% assign variant_image = blank %}
+
+																{% if enable_variant_images %}
+																	{% assign variant_image = value.variant.featured_image | default: value.variant.image %}
+																{% endif %}
+
+																{% assign swatch_image = variant_image | default: value.swatch.image | default: images[image_name] %}
+																{% assign swatch_color = value.swatch.color | default: swatch_color_fallback %}
+
+																style="
+																	{%- if swatch_image != blank -%}
+																		--swatch-image: url({{- swatch_image | image_url: width: 40, height: 40 -}});
+																	{%- else -%}
+																		--swatch-color: {{ swatch_color }};
+																	{%- endif -%}
+																"
+															{%- endcapture -%}
+														{%- else -%}
+															{%- capture container_classes -%}
+																radio-container radio-option
+															{%- endcapture -%}
+														{%- endif -%}
+
+														<div class="{{- container_classes -}}">
+															<input
+																id="{{ section.id }}-{{- value | handle -}}-{{ option_name_handle }}-{{ block_index }}"
+																type="radio"
+																class="visually-hidden radio-input"
+																value="{{- value | escape -}}"
+																name="option{{- option.position -}}"
+																data-option="option{{- option.position -}}"
+																data-option-value-id="{{ value.id }}"
+																{%- if value.selected -%}checked{%- endif -%}
+															>
+
+															<label
+																for="{{ section.id }}-{{- value | handle -}}-{{ option_name_handle }}-{{ block_index }}"
+																class="radio-option__label {% if is_disabled %}is-disabled{% endif %}"
+																{%- if use_color_swatch -%}
+																	{{ swatch_styles }}
+																{%- endif -%}
+															>
+															<span class="radio-label__text">
+																{{- value -}}
+															</span>
+															</label>
+														</div>
+													{%- endfor -%}
+												{% endif %}
+											</div>
+										</div>
+									</fieldset>
+								{%- endfor -%}
+
+								<script type="application/json" data-selected-variant>
+									{{ product.selected_or_first_available_variant | json }}
+								</script>
+							</div>
+						{% endunless %}
+
+						<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+						<div class="limited-edition__form-error" role="alert">
+							<small class="limited-edition__form-error js-limited-edition-error"></small>
+						</div>
+
+						{%- assign status = 'in-stock' -%}
+
+						{%- if product.selected_or_first_available_variant.available == false -%}
+							{%- assign status = 'sold-out' -%}
+						{%- endif -%}
+
+						<div class="limited-edition__product-status js-limited-edition-status"
+							 data-status="{{ status }}">
+							<div class="limited-edition__status-icon">
+								{% render 'icons', icon: 'checkmark' %}
+								{% render 'icons', icon: 'close' %}
+							</div>
+
+							<span class="limited-edition__status-text-in-stock">
+								{{- 'products.product.in_stock' | t -}}
+							</span>
+
+							<span class="limited-edition__status-text-sold-out">
+								{{- 'products.product.sold_out' | t -}}
+							</span>
+
+							<span class="limited-edition__status-text-unavailable">
+								{{- 'products.product.unavailable' | t -}}
+							</span>
+						</div>
+
+						<div class="limited-edition__price js-limited-edition-price">
+							{% render 'price', product: product, use_variant: true %}
+						</div>
+
+						<div class="limited-edition__buttons-wrapper">
+							<button
+								class="limited-edition__button button button--primary focus-visible-outline js-limited-edition-submit-button"
+								type="submit"
+								data-product-handle="{{- product.handle -}}"
+								data-min-quantity="{{- product.selected_or_first_available_variant.quantity_rule.min -}}"
+								{% if product.template_suffix == 'pre-order' %}
+									data-preorder
+								{% endif %}
+								{% unless product.available %}
+									disabled
+								{% endunless %}
+							>
+								<span class="button__outer"></span>
+								<span class="js-limited-edition-submit-text">
+									{%- if product.available -%}
+										{% if product.template_suffix == 'pre-order' %}
+											{{- 'products.product.pre_order' | t -}}
+										{% else %}
+											{{- 'products.product.add_to_cart' | t -}}
+										{% endif %}
+									{%- else -%}
+										{{- "products.product.sold_out" | t -}}
+									{%- endif -%}
+								</span>
+							</button>
+
+							{% if learn_more_label != blank and product != blank %}
+								{% render 'button-link',
+									link_text: learn_more_label,
+									link_url: product.url,
+									class: "js-limited-edition-link"
+								%}
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			{% endcapture %}
+
+			{% if block.settings.tab_heading != blank or product != blank %}
+				{% if product != blank %}
+					{%- form 'product', block.settings.product, class: 'js-limited-edition-form', novalidate: 'novalidate' -%}
+						{% if product.template_suffix == 'pre-order' %}
+							<input type="hidden" name="properties[_Pre-order]" value="true">
+						{% endif %}
+
+						{{ product_content }}
+					{%- endform -%}
+				{% else %}
+					{{ product_content }}
+				{% endif %}
+			{% endif %}
+		{% endfor %}
+	</div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/limited-edition.js' -%}
+
+{%- schema -%}
+{
+	"name": "Limited edition",
+	"disabled_on": {
+		"groups": [
+			"header",
+			"footer",
+			"custom.popup"
+		]
+	},
+	"settings": [
+		{
+			"type": "inline_richtext",
+			"id": "heading_first_line",
+			"label": "Heading (first line)",
+			"default": "Limited"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading_second_line",
+			"label": "Heading (second line)",
+			"default": "<em>Edition</em>"
+		},
+		{
+			"type": "header",
+			"content": "Color"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"type": "product",
+			"name": "Product",
+			"settings": [
+				{
+					"type": "text",
+					"id": "tab_heading",
+					"label": "Tab heading",
+					"default": "Tab"
+				},
+				{
+					"type": "product",
+					"id": "product",
+					"label": "Product"
+				},
+				{
+					"type": "richtext",
+					"id": "short_product_description",
+					"label": "Short product description",
+					"default": "<p>Short product description</p>"
+				},
+				{
+					"type": "text",
+					"id": "learn_more_label",
+					"label": "Learn more label",
+					"default": "Learn more"
+				},
+				{
+					"type": "header",
+					"content": "Colors"
+				},
+				{
+					"type": "color",
+					"id": "ellipse_color",
+					"label": "Ellipse",
+					"info": "Two decor elements in the bottom left corner and top right corner.",
+					"default": "#3674EB"
+				}
+			]
+		}
+	],
+	"max_blocks": 8,
+	"presets": [
+		{
+			"name": "Limited edition",
+			"blocks": [
+				{
+					"type": "product",
+					"settings": {
+						"tab_heading": "Tab 1"
+					}
+				},
+				{
+					"type": "product",
+					"settings": {
+						"tab_heading": "Tab 2"
+					}
+				},
+				{
+					"type": "product",
+					"settings": {
+						"tab_heading": "Tab 3"
+					}
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

@@ -1,0 +1,895 @@
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_desktop -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+	}
+
+	@media screen and (max-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_mobile -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign heading_first_line 	= section.settings.heading_first_line -%}
+{%- assign heading_second_line 	= section.settings.heading_second_line -%}
+{%- assign grid_layout 			= section.settings.grid_layout -%}
+{%- assign color_scheme			= section.settings.color_scheme -%}
+{%- assign container 			= section.settings.container_width -%}
+{%- assign blocks 				= section.blocks -%}
+{%- assign delay_step 			= 0 -%}
+{%- assign is_lazy 				= true -%}
+
+{%- if section.settings.enable_color_scheme_inheritance -%}
+	{%- assign color_scheme	= settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if section.index == 1 -%}
+	{%- assign is_lazy = false -%}
+{%- endif -%}
+
+{%- if container == "inherit" -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{%- capture styles -%}
+	--container-width: {{ container_width }}; {{  -}}
+	--animation-card-color: {{ animation_card_color }}; {{  -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top -}}px; {{  -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom -}}px; {{  -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile -}}px; {{  -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile -}}px; {{  -}}
+{%- endcapture -%}
+
+{%- if blocks.size > 0 -%}
+	{% include "adastra" with "/src/styles/promo-banners.scss" %}
+
+	<section
+		class="promo-banners color-{{ color_scheme.id }}{% if section.settings.enable_bottom_rounded_corners %} section-bottom-rounded{% endif %} js-animate{% if request.visual_preview_mode or section.index == 1 %} animated{% endif %}"
+		style="{{- styles -}}"
+	>
+		<div class="promo-banners__container container">
+			{%- if heading_first_line != blank or heading_second_line != blank -%}
+				<h2 class="promo-banners__heading section-title section-title--center need-animate">
+					{%- if heading_first_line != blank -%}
+						<span class="section-title__text-container">
+							<span class="section-title__text{% if heading_second_line == blank %} text-center{% endif %}">
+								{{- heading_first_line -}}
+							</span>
+						</span>
+					{%- endif -%}
+
+					{%- if heading_second_line != blank -%}
+						<span class="section-title__text-container">
+							<span class="section-title__text{% if heading_first_line == blank %} text-center{% else %} text-right{% endif %}">
+								{{- heading_second_line -}}
+							</span>
+						</span>
+					{%- endif -%}
+				</h2>
+			{%- endif -%}
+
+			<div class="promo-banners__wrapper promo-banners__wrapper--{{ grid_layout }}">
+				{%- for block in blocks -%}
+					{%- assign heading 			 = block.settings.heading -%}
+					{%- assign text 			 = block.settings.text -%}
+					{%- assign button_label  	 = block.settings.button_label -%}
+					{%- assign button_link  	 = block.settings.button_link -%}
+					{%- assign background_image  = block.settings.background_image -%}
+					{%- assign main_image  		 = block.settings.main_image -%}
+					{%- assign back_image  		 = block.settings.back_image -%}
+					{%- assign main_image_object_fit = block.settings.main_image_object_fit -%}
+					{%- assign make_big_heading  = block.settings.make_big_heading -%}
+					{%- assign background 		 = block.settings.background -%}
+					{%- assign big_title 		 = false -%}
+					{%- assign no_images 		 = false -%}
+					{%- assign delay_step 		 = delay_step | plus: 0.25 -%}
+
+					{%- if make_big_heading and text == blank and grid_layout == "one-landscape-two-small-one-big" and forloop.index == blocks.size -%}
+						{%- assign big_title = true -%}
+					{%- endif -%}
+
+					{%- if back_image == blank and main_image == blank -%}
+						{%- assign no_images = true -%}
+					{%- endif -%}
+
+					{%- capture styles_image_main -%}
+						--main-image-object-fit: {{ main_image_object_fit }}; {{  -}}
+						--main-img-pos: {{ main_image.presentation.focal_point }};
+					{%- endcapture -%}
+
+					{%- capture block_styles -%}
+						--background: {{ background }}; {{  -}}
+						--delay-step: {{ delay_step }}s; {{  -}}
+					{%- endcapture -%}
+
+					{%- capture item_content -%}
+						{%- if background_image != blank -%}
+							{%- assign bg_image_width_375 = 328 -%}
+							{%- assign bg_image_width_375_2x = bg_image_width_375 | times: 2 -%}
+
+							{%- assign bg_image_width_420 = 373 -%}
+							{%- assign bg_image_width_420_2x = bg_image_width_420 | times: 2 -%}
+
+							{%- assign bg_image_width_575 = 528 -%}
+							{%- assign bg_image_width_575_2x = bg_image_width_575 | times: 2 -%}
+
+							{%- assign bg_image_width_991 = 944 -%}
+							{%- assign bg_image_width_991_2x = bg_image_width_991 | times: 2 -%}
+
+							{%- assign bg_image_width_1199 = 594 -%}
+							{%- assign bg_image_width_1199_2x = bg_image_width_1199 | times: 2 -%}
+
+							{%- assign bg_image_width = 910 -%}
+							{%- assign bg_image_width_2x = bg_image_width | times: 2 -%}
+
+							{%- capture bg_img_focal -%}
+								--bg-img-pos: {{ background_image.presentation.focal_point }};
+							{%- endcapture -%}
+
+							<picture class="promo-banners__item-image-inner promo-banners__item-image-inner--bg{% if is_lazy %} lazy{% endif %}">
+								<source
+									{% if is_lazy %}
+										srcset="{{ background_image | image_url: width: 10 }} 1x,
+												{{ background_image | image_url: width: 10 }} 2x"
+										data-srcset="{{ background_image | image_url: width: bg_image_width_375 }} 1x,
+												{{ background_image | image_url: width: bg_image_width_375_2x }} 2x"
+									{% else %}
+										srcset="{{ background_image | image_url: width: bg_image_width_375 }} 1x,
+												{{ background_image | image_url: width: bg_image_width_375_2x }} 2x"
+									{% endif %}
+									media="(max-width: 375px)"
+									width="{{ bg_image_width_375 }}"
+									height="613"
+								>
+
+								<source
+									{% if is_lazy %}
+										srcset="{{ background_image | image_url: width: 10 }} 1x,
+												{{ background_image | image_url: width: 10 }} 2x"
+										data-srcset="{{ background_image | image_url: width: bg_image_width_420 }} 1x,
+													 {{ background_image | image_url: width: bg_image_width_420_2x }} 2x"
+									{% else %}
+										srcset="{{ background_image | image_url: width: bg_image_width_420 }} 1x,
+												{{ background_image | image_url: width: bg_image_width_420_2x }} 2x"
+									{% endif %}
+									media="(max-width: 420px)"
+									width="{{ bg_image_width_420 }}"
+									height="628"
+								>
+
+								<source
+									{% if is_lazy %}
+										srcset="{{ background_image | image_url: width: 10 }} 1x,
+												{{ background_image | image_url: width: 10 }} 2x"
+										data-srcset="{{ background_image | image_url: width: bg_image_width_575 }} 1x,
+													 {{ background_image | image_url: width: bg_image_width_575_2x }} 2x"
+									{% else %}
+										srcset="{{ background_image | image_url: width: bg_image_width_575 }} 1x,
+												{{ background_image | image_url: width: bg_image_width_575_2x }} 2x"
+									{% endif %}
+									media="(max-width: 575px)"
+									width="{{ bg_image_width_575 }}"
+									height="740"
+								>
+
+								<source
+									{% if is_lazy %}
+										srcset="{{ background_image | image_url: width: 10 }} 1x,
+												{{ background_image | image_url: width: 10 }} 2x"
+										data-srcset="{{ background_image | image_url: width: bg_image_width_991 }} 1x,
+													 {{ background_image | image_url: width: bg_image_width_991_2x }} 2x"
+									{% else %}
+										srcset="{{ background_image | image_url: width: bg_image_width_991 }} 1x,
+												{{ background_image | image_url: width: bg_image_width_991_2x }} 2x"
+									{% endif %}
+									srcset="{{ background_image | image_url: width: bg_image_width_991 }} 1x,
+											{{ background_image | image_url: width: bg_image_width_991_2x }} 2x"
+									media="(max-width: 991px)"
+									width="{{ bg_image_width_991 }}"
+									height="1055"
+								>
+
+								<source
+									{% if is_lazy %}
+										srcset="{{ background_image | image_url: width: 10 }} 1x,
+												{{ background_image | image_url: width: 10 }} 2x"
+										data-srcset="{{ background_image | image_url: width: bg_image_width_1199 }} 1x,
+													 {{ background_image | image_url: width: bg_image_width_1199_2x }} 2x"
+									{% else %}
+										srcset="{{ background_image | image_url: width: bg_image_width_1199 }} 1x,
+												{{ background_image | image_url: width: bg_image_width_1199_2x }} 2x"
+									{% endif %}
+									media="(max-width: 1199px)"
+									width="{{ bg_image_width_1199 }}"
+									height="562"
+								>
+
+								<img
+									{% if is_lazy %}
+										src="{{ background_image | image_url: width: 10 }}"
+										srcset="{{ background_image | image_url: width: 10 }} 1x,
+												{{ background_image | image_url: width: 10 }} 2x"
+										data-src="{{ background_image | image_url: width: bg_image_width }}"
+										data-srcset="{{ background_image | image_url: width: bg_image_width }} 1x,
+													 {{ background_image | image_url: width: bg_image_width_2x }} 2x"
+									{% else %}
+										src="{{ background_image | image_url: width: bg_image_width }}"
+										srcset="{{ background_image | image_url: width: bg_image_width }} 1x,
+											{{ background_image | image_url: width: bg_image_width_2x }} 2x"
+									{% endif %}
+									class="promo-banners__item-image promo-banners__item-image--bg"
+									alt="{{ background_image.alt }}"
+									style="{{- bg_img_focal -}}"
+									width="{{ bg_image_width }}"
+									height="774"
+								>
+							</picture>
+						{%- endif -%}
+
+						<div class="promo-banners__item-inner">
+							{%- if heading != blank -%}
+								<div class="promo-banners__item-heading h4">
+									{{- heading -}}
+								</div>
+							{%- endif -%}
+
+							{%- if text != blank -%}
+								<div class="promo-banners__item-text">
+									{{- text -}}
+								</div>
+							{%- endif -%}
+
+							{%- if button_label != blank and button_link != blank -%}
+								<div class="promo-banners__item-button-wrapper">
+									<a href="{{- button_link -}}" class="promo-banners__item-button button-circle button-circle--transform button-circle--transform-show-text-mob">
+										<span class="button-circle__inner">
+											{%- render 'icons', icon: 'circle-decoration' -%}
+											{%- render 'icons', icon: 'plus', class: 'icon-inactive' -%}
+										</span>
+
+										<span class="button-circle__text">
+											{{- button_label -}}
+										</span>
+									</a>
+								</div>
+							{%- endif -%}
+						</div>
+
+						{%- if back_image != blank or main_image != blank -%}
+							{%- assign image_width_375 = 348 -%}
+							{%- assign image_width_375_2x = image_width_375 | times: 2 -%}
+
+							{%- assign image_width_420 = 393 -%}
+							{%- assign image_width_420_2x = image_width_420 | times: 2 -%}
+
+							{%- assign image_width_575 = 548 -%}
+							{%- assign image_width_575_2x = image_width_575 | times: 2 -%}
+
+							{%- assign image_width_991 = 964 -%}
+							{%- assign image_width_991_2x = image_width_991 | times: 2 -%}
+
+							{%- assign image_width_1199 = 584 -%}
+							{%- assign image_width_1199_2x = image_width_1199 | times: 2 -%}
+
+							{%- assign image_width = 900 -%}
+							{%- assign image_width_2x = image_width | times: 2 -%}
+
+							{%- if back_image != blank -%}
+								{%- capture back_img_focal -%}
+									--back-img-pos: {{ back_image.presentation.focal_point }};
+								{%- endcapture -%}
+
+								<picture class="promo-banners__item-image-inner promo-banners__item-image-inner--back{% if is_lazy %} lazy{% endif %}">
+									<source
+										{% if is_lazy %}
+											srcset="{{ back_image | image_url: width: 10 }} 1x,
+														{{ back_image | image_url: width: 10 }} 2x"
+											data-srcset="{{ back_image | image_url: width: image_width_375 }} 1x,
+														{{ back_image | image_url: width: image_width_375_2x }} 2x"
+										{% else %}
+											srcset="{{ back_image | image_url: width: image_width_375 }} 1x,
+														{{ back_image | image_url: width: image_width_375_2x }} 2x"
+										{% endif %}
+										media="(max-width: 375px)"
+										width="{{ image_width_375 }}"
+										height="613"
+									>
+
+									<source
+										{% if is_lazy %}
+											srcset="{{ back_image | image_url: width: 10 }} 1x,
+														{{ back_image | image_url: width: 10 }} 2x"
+											data-srcset="{{ back_image | image_url: width: image_width_420 }} 1x,
+														{{ back_image | image_url: width: image_width_420_2x }} 2x"
+										{% else %}
+											srcset="{{ back_image | image_url: width: image_width_420 }} 1x,
+														{{ back_image | image_url: width: image_width_420_2x }} 2x"
+										{% endif %}
+										media="(max-width: 420px)"
+										width="{{ image_width_420 }}"
+										height="628"
+									>
+
+									<source
+										{% if is_lazy %}
+											srcset="{{ back_image | image_url: width: 10 }} 1x,
+														{{ back_image | image_url: width: 10 }} 2x"
+											data-srcset="{{ back_image | image_url: width: image_width_575 }} 1x,
+															 {{ back_image | image_url: width: image_width_575_2x }} 2x"
+										{% else %}
+											srcset="{{ back_image | image_url: width: image_width_575 }} 1x,
+														{{ back_image | image_url: width: image_width_575_2x }} 2x"
+										{% endif %}
+										media="(max-width: 575px)"
+										width="{{ image_width_575 }}"
+										height="740"
+									>
+
+									<source
+										{% if is_lazy %}
+											srcset="{{ back_image | image_url: width: 10 }} 1x,
+														{{ back_image | image_url: width: 10 }} 2x"
+											data-srcset="{{ back_image | image_url: width: image_width_991 }} 1x,
+															 {{ back_image | image_url: width: image_width_991_2x }} 2x"
+										{% else %}
+											srcset="{{ back_image | image_url: width: image_width_991 }} 1x,
+														{{ back_image | image_url: width: image_width_991_2x }} 2x"
+										{% endif %}
+										media="(max-width: 991px)"
+										width="{{ image_width_991 }}"
+										height="808"
+									>
+
+									<source
+										{% if is_lazy %}
+											srcset="{{ back_image | image_url: width: 10 }} 1x,
+														{{ back_image | image_url: width: 10 }} 2x"
+											data-srcset="{{ back_image | image_url: width: image_width_1199 }} 1x,
+														{{ back_image | image_url: width: image_width_1199_2x }} 2x"
+										{% else %}
+											srcset="{{ back_image | image_url: width: image_width_1199 }} 1x,
+														{{ back_image | image_url: width: image_width_1199_2x }} 2x"
+										{% endif %}
+										media="(max-width: 1199px)"
+										width="{{ image_width_1199 }}"
+										height="481"
+									>
+
+									<img
+										class="promo-banners__item-image promo-banners__item-image--back"
+										{% if is_lazy %}
+											src="{{ back_image | image_url: width: 10 }}"
+											srcset="{{ back_image | image_url: width: 10 }} 1x,
+														{{ back_image | image_url: width: 10 }} 2x"
+											data-src="{{ back_image | image_url: width: image_width }}"
+											data-srcset="{{ back_image | image_url: width: image_width }} 1x,
+														{{ back_image | image_url: width: image_width_2x }} 2x"
+										{% else %}
+											src="{{ back_image | image_url: width: image_width }}"
+											srcset="{{ back_image | image_url: width: image_width }} 1x,
+														{{ back_image | image_url: width: image_width_2x }} 2x"
+										{% endif %}
+										alt="{{ back_image.alt }}"
+										style="{{- back_img_focal -}}"
+										width="{{ image_width }}"
+										height="748"
+									>
+								</picture>
+							{%- endif -%}
+
+							{%- if main_image != blank -%}
+								<picture class="promo-banners__item-image-inner promo-banners__item-image-inner--main{% if is_lazy %} lazy{% endif %}">
+									<source
+										{% if is_lazy %}
+											srcset="{{ main_image | image_url: width: 10 }} 1x,
+														{{ main_image | image_url: width: 10 }} 2x"
+											data-srcset="{{ main_image | image_url: width: image_width_375 }} 1x,
+															 {{ main_image | image_url: width: image_width_375_2x }} 2x"
+										{% else %}
+											srcset="{{ main_image | image_url: width: image_width_375 }} 1x,
+														{{ main_image | image_url: width: image_width_375_2x }} 2x"
+										{% endif %}
+										media="(max-width: 375px)"
+										width="{{ main_image_width_375 }}"
+										height="613"
+									>
+
+									<source
+										{% if is_lazy %}
+											srcset="{{ main_image | image_url: width: 10 }} 1x,
+														{{ main_image | image_url: width: 10 }} 2x"
+											data-srcset="{{ main_image | image_url: width: image_width_420 }} 1x,
+															 {{ main_image | image_url: width: image_width_420_2x }} 2x"
+										{% else %}
+											srcset="{{ main_image | image_url: width: image_width_420 }} 1x,
+														{{ main_image | image_url: width: image_width_420_2x }} 2x"
+										{% endif %}
+										media="(max-width: 420px)"
+										width="{{ image_width_420 }}"
+										height="628"
+									>
+
+									<source
+										{% if is_lazy %}
+											srcset="{{ main_image | image_url: width: 10 }} 1x,
+														{{ main_image | image_url: width: 10 }} 2x"
+											data-srcset="{{ main_image | image_url: width: image_width_575 }} 1x,
+															 {{ main_image | image_url: width: image_width_575_2x }} 2x"
+										{% else %}
+											srcset="{{ main_image | image_url: width: image_width_575 }} 1x,
+														{{ main_image | image_url: width: image_width_575_2x }} 2x"
+										{% endif %}
+										media="(max-width: 575px)"
+										width="{{ image_width_575 }}"
+										height="740"
+									>
+
+									<source
+										{% if is_lazy %}
+											srcset="{{ main_image | image_url: width: 10 }} 1x,
+														{{ main_image | image_url: width: 10 }} 2x"
+											data-srcset="{{ main_image | image_url: width: image_width_991 }} 1x,
+															 {{ main_image | image_url: width: image_width_991_2x }} 2x"
+										{% else %}
+											srcset="{{ main_image | image_url: width: image_width_991 }} 1x,
+														{{ main_image | image_url: width: image_width_991_2x }} 2x"
+										{% endif %}
+										media="(max-width: 991px)"
+										width="{{ image_width_991 }}"
+										height="808"
+									>
+
+									<source
+										{% if is_lazy %}
+											srcset="{{ main_image | image_url: width: 10 }} 1x,
+														{{ main_image | image_url: width: 10 }} 2x"
+											data-srcset="{{ main_image | image_url: width: image_width_1199 }} 1x,
+															 {{ main_image | image_url: width: image_width_1199_2x }} 2x"
+										{% else %}
+											srcset="{{ main_image | image_url: width: image_width_1199 }} 1x,
+														{{ main_image | image_url: width: image_width_1199_2x }} 2x"
+										{% endif %}
+										media="(max-width: 1199px)"
+										width="{{ image_width_1199 }}"
+										height="481"
+									>
+
+									<img
+										{% if is_lazy %}
+											src="{{ main_image | image_url: width: 10 }}"
+											srcset="{{ main_image | image_url: width: 10 }} 1x,
+														{{ main_image | image_url: width: 10 }} 2x"
+											data-src="{{ main_image | image_url: width: image_width }}"
+											data-srcset="{{ main_image | image_url: width: image_width }} 1x,
+															 {{ main_image | image_url: width: image_width_2x }} 2x"
+										{% else %}
+											src="{{ main_image | image_url: width: image_width }}"
+											srcset="{{ main_image | image_url: width: image_width }} 1x,
+														{{ main_image | image_url: width: image_width_2x }} 2x"
+										{% endif %}
+										class="promo-banners__item-image promo-banners__item-image--main"
+										alt="{{ main_image.alt }}"
+										style="{{- styles_image_main -}}"
+										width="{{ image_width }}"
+										height="748"
+									>
+								</picture>
+							{%- endif -%}
+						{%- endif -%}
+					{%- endcapture -%}
+
+					{%- capture is_one_big_and_two_landscape -%}
+						{%- if forloop.index == 1 or forloop.index == 4 -%}
+							<div class="promo-banners__item promo-banners__item--big-card{% if no_images %} promo-banners__item--no-image{% endif %} need-animate"
+								 style="{{- block_styles -}}"
+							>
+								{{- item_content -}}
+							</div>
+						{%- elsif forloop.index == 2 -%}
+							{% if blocks.size > 2 %}
+								<div class="promo-banners__item-right-column">
+							{% endif %}
+									<div class="promo-banners__item-right-column-row">
+										<div class="promo-banners__item promo-banners__item--landscape-card need-animate"
+											 style="{{- block_styles -}}"
+										>
+											{{- item_content -}}
+										</div>
+									</div>
+						{%- elsif forloop.index == 3 -%}
+									<div class="promo-banners__item-right-column-row">
+										<div class="promo-banners__item promo-banners__item--landscape-card need-animate"
+											 style="{{- block_styles -}}"
+										>
+											{{- item_content -}}
+										</div>
+									</div>
+								</div>
+						{%- endif -%}
+					{%- endcapture -%}
+
+					{%- capture is_one_landscape_two_small_one_big -%}
+						{%- assign is_four_blocks 	= false -%}
+						{%- assign is_three_blocks 	= false -%}
+
+						{%- if blocks.size == 4 and forloop.index == 3 -%}
+							{%- assign is_four_blocks = true -%}
+						{%- elsif blocks.size == 3 and forloop.index == 2 -%}
+							{%- assign is_three_blocks = true -%}
+						{%- endif -%}
+
+						{%- if forloop.index == blocks.size -%}
+							<div class="promo-banners__item promo-banners__item--big-card{% if big_title %} promo-banners__item--big-title{% endif %}{% if no_images %} promo-banners__item--no-image{% endif %} need-animate"
+								 style="{{- block_styles -}}"
+							>
+								{{- item_content -}}
+							</div>
+						{%- elsif forloop.index == 1 -%}
+							{%- if blocks.size > 2 -%}
+								<div class="promo-banners__item-right-column">
+							{%- endif -%}
+									<div class="promo-banners__item-right-column-row">
+										<div class="promo-banners__item promo-banners__item--landscape-card need-animate"
+											 style="{{- block_styles -}}"
+										>
+											{{- item_content -}}
+										</div>
+									</div>
+						{%- elsif forloop.index == 2 and blocks.size == 4 -%}
+								{%- if blocks.size == 4 -%}
+									<div class="promo-banners__item-right-column-row">
+								{%- endif -%}
+										<div class="promo-banners__item promo-banners__item--small-card{% if no_images %} promo-banners__item--no-image{% endif %} need-animate"
+											 style="{{- block_styles -}}"
+										>
+											{{- item_content -}}
+										</div>
+						{%- elsif is_four_blocks or is_three_blocks -%}
+										<div class="promo-banners__item promo-banners__item--small-card{% if no_images %} promo-banners__item--no-image{% endif %} need-animate"
+											 style="{{- block_styles -}}"
+										>
+											{{- item_content -}}
+										</div>
+								{%- if blocks.size == 4 -%}
+									</div>
+								{%- endif -%}
+							{%- if blocks.size > 2 -%}
+								</div>
+							{%- endif -%}
+						{%- endif -%}
+					{%- endcapture -%}
+
+					{%- if grid_layout == "two-landscape" or grid_layout == "two-big" -%}
+						{%- capture classes_item -%}
+							{% if grid_layout == "two-landscape" %}
+								promo-banners__item--landscape-card
+							{% elsif grid_layout == "two-big" %}
+								promo-banners__item--big-card
+								{% if no_images %}
+									promo-banners__item--no-image
+								{% endif %}
+							{% endif %}
+
+							need-animate
+						{%- endcapture -%}
+
+						<div class="promo-banners__item {{ classes_item }}"
+							 style="{{- block_styles -}}"
+						>
+							{{- item_content -}}
+						</div>
+
+					{%- elsif grid_layout == "one-landscape-and-two-small" -%}
+						{%- if forloop.index == 1 or forloop.index == 4 -%}
+							<div class="promo-banners__item promo-banners__item--landscape-card need-animate"
+								 style="{{- block_styles -}}"
+							>
+								{{- item_content -}}
+							</div>
+						{%- else -%}
+							<div class="promo-banners__item promo-banners__item--small-card{% if no_images %} promo-banners__item--no-image{% endif %} need-animate"
+								 style="{{- block_styles -}}"
+							>
+								{{- item_content -}}
+							</div>
+						{%- endif -%}
+					{%- elsif grid_layout == "one-big-and-two-landscape" -%}
+						{{- is_one_big_and_two_landscape -}}
+					{%- elsif grid_layout == "one-landscape-two-small-one-big" -%}
+						{{- is_one_landscape_two_small_one_big -}}
+					{%- endif -%}
+				{%- endfor -%}
+			</div>
+		</div>
+	</section>
+{%- endif -%}
+
+{% schema %}
+	{
+		"name": "Promo banners",
+		"disabled_on": {
+			"groups": ["header", "footer", "custom.popup"]
+		},
+		"settings": [
+			{
+				"id": "heading_first_line",
+				"type": "inline_richtext",
+				"label": "Heading (first line)"
+			},
+			{
+				"id": "heading_second_line",
+				"type": "inline_richtext",
+				"label": "Heading (second line)"
+			},
+			{
+				"type": "select",
+				"id": "grid_layout",
+				"label": "Grid layout",
+				"options": [
+					{
+						"value": "two-landscape",
+						"label": "Two landscape"
+					},
+					{
+						"value": "two-big",
+						"label": "Two big"
+					},
+					{
+						"value": "one-landscape-and-two-small",
+						"label": "One landscape and two small"
+					},
+					{
+						"value": "one-big-and-two-landscape",
+						"label": "One big and two landscape"
+					},
+					{
+						"value": "one-landscape-two-small-one-big",
+						"label": "One landscape, Two small, One big"
+					}
+				],
+				"default": "one-big-and-two-landscape"
+			},
+			{
+				"type": "header",
+				"content": "Colors"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_color_scheme_inheritance",
+				"label": "Enable color scheme inheritance",
+				"default": true,
+				"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+			},
+			{
+				"type": "color_scheme",
+				"id": "color_scheme",
+				"default": "scheme_1",
+				"label": "Color scheme"
+			},
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "select",
+				"id": "container_width",
+				"label": "Container width",
+				"options": [
+					{
+						"value": "1560px",
+						"label": "Default - 1440px"
+					},
+					{
+						"value": "2040px",
+						"label": "Large - 1920px"
+					},
+					{
+						"value": "100%",
+						"label": "Full width"
+					},
+					{
+						"value": "inherit",
+						"label": "Inherit of general setting"
+					}
+				],
+				"default": "inherit",
+				"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+			},
+			{
+				"type": "checkbox",
+				"id": "enable_bottom_rounded_corners",
+				"label": "Enable bottom rounded corners",
+				"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+				"default": false
+			},
+			{
+				"type": "range",
+				"id": "offset_top_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset top",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_desktop",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Desktop offset bottom",
+				"default": 40
+			},
+			{
+				"type": "range",
+				"id": "offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset top",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Mobile offset bottom",
+				"default": 25
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset top",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner desktop offset bottom",
+				"default": 64
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_top_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset top",
+				"default": 32
+			},
+			{
+				"type": "range",
+				"id": "inner_offset_bottom_mobile",
+				"min": 0,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Inner mobile offset bottom",
+				"default": 32
+			}
+		],
+		"blocks": [
+			{
+				"name": "Promo banner",
+				"type": "promo_banner",
+				"limit": 4,
+				"settings": [
+					{
+						"type": "text",
+						"id": "heading",
+						"label": "Heading",
+						"default": "Heading"
+					},
+					{
+						"type": "textarea",
+						"id": "text",
+						"label": "Text",
+						"default": "Text"
+					},
+					{
+						"type": "text",
+						"id": "button_label",
+						"label": "Button label",
+						"default": "Button label"
+					},
+					{
+						"type": "url",
+						"id": "button_link",
+						"label": "Button link"
+					},
+					{
+						"type": "image_picker",
+						"id": "background_image",
+						"label": "Background image",
+						"info": "1102 x 918px recommended"
+					},
+					{
+						"type": "image_picker",
+						"id": "main_image",
+						"label": "Main image",
+						"info": "1102 x 918px recommended"
+					},
+					{
+						"type": "image_picker",
+						"id": "back_image",
+						"label": "Back image",
+						"info": "1102 x 918px recommended"
+					},
+					{
+						"type": "select",
+						"id": "main_image_object_fit",
+						"label": "Main image object-fit",
+						"options": [
+							{
+								"value": "cover",
+								"label": "Cover"
+							},
+							{
+								"value": "contain",
+								"label": "Contain"
+							}
+						],
+						"default": "contain",
+						"info": "Cover - fill the entire area inside wrapper. Contain - scales proportionately"
+					},
+					{
+						"type": "checkbox",
+						"id": "make_big_heading",
+						"label": "Make big heading",
+						"default": false,
+						"info": "This option only works with the last block, using a grid layout with the following options: One landscape, Two small, One big, and the text box left empty."
+					},
+					{
+						"type": "header",
+						"content": "Colors"
+					},
+					{
+						"type": "color_background",
+						"id": "background",
+						"label": "Background",
+						"default": "linear-gradient(84deg, rgba(23, 21, 19, 1), rgb(70 53 15) 100%)"
+					}
+				]
+			}
+		],
+		"presets": [
+			{
+				"name": "Promo banners",
+				"settings": {
+					"heading_first_line": "<em>Heading primary</em>",
+					"heading_second_line": "Heading secondary"
+				},
+				"blocks": [
+					{
+						"type": "promo_banner"
+					},
+					{
+						"type": "promo_banner"
+					},
+					{
+						"type": "promo_banner"
+					}
+				]
+			}
+		]
+	}
+{% endschema %}

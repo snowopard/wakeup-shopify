@@ -1,0 +1,372 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: FAQ page template
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/faq-page-template.scss' -%}
+{%- render 'adastra' with '/src/styles/faq-simple.scss' -%}
+{%- render 'adastra' with '/src/styles/tabs-ui.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign heading_first_line              = section.settings.heading_first_line -%}
+{%- assign heading_second_line             = section.settings.heading_second_line -%}
+{%- assign blocks 			               = section.blocks -%}
+{%- assign banner_background               = section.settings.banner_background -%}
+{%- assign banner_color        			   = section.settings.banner_color -%}
+{%- assign ellipse_background  			   = section.settings.ellipse_background -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 				   = section.settings.color_scheme -%}
+{%- assign enable_bottom_rounded_corners   = section.settings.enable_bottom_rounded_corners -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% capture banner_styles %}
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px;
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px;
+	--banner-background: {{ banner_background }};
+	--banner-color: {{ banner_color }};
+	--ellipse-background: {{ ellipse_background }};
+{% endcapture %}
+
+{% capture section_styles %}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{- -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{- -}}
+{% endcapture %}
+
+{%- assign sidenav_items = '' -%}
+{%- assign content       = '' -%}
+{%- assign delay_step = 0 -%}
+
+{%- for block in blocks -%}
+	{%- case block.type -%}
+		{%- when "category" -%}
+			{% assign delay_step = delay_step | plus: 0.3 %}
+			{%- assign category_heading = block.settings.heading -%}
+
+			{%- if category_heading != blank -%}
+				{%- assign handle = category_heading | handleize -%}
+
+				{%- capture sidenav_items -%}
+					{{- sidenav_items -}}
+
+					<li class="faq-page__sidenav-item js-faq-anchor-wrapper"
+						style="animation-delay: {{ delay_step }}s;">
+						<a
+							href="{{- handle | prepend: '#' -}}"
+							class="faq-page__sidenav-item-link tag-button js-faq-anchor-link{% if sidenav_items == '' %} is-active{%- endif -%}"
+							aria-current="page"
+						>
+							{{- category_heading -}}
+						</a>
+					</li>
+				{%- endcapture -%}
+
+				{%- capture content -%}
+					{{- content -}}
+
+					{%- if content != '' -%}
+						</div>
+					{%- endif -%}
+
+					<div id="{{- handle -}}" class="faq-simple__category need-animate tr-dur-0-5 js-faq-block"
+						 style="transition-delay: {{ delay_step }}s; animation-delay: {{ delay_step }}s">
+
+					<h2 class="faq-simple__category-heading h3">
+						{{- category_heading -}}
+					</h2>
+				{%- endcapture -%}
+			{%- endif -%}
+
+		{%- when "faq_item" -%}
+	        {%- assign item_heading = block.settings.heading -%}
+	        {%- assign text         = block.settings.text -%}
+
+	        {% assign delay_step = delay_step | plus: 0.1 %}
+
+			{%- if item_heading == blank or text == blank -%}
+				{%- continue -%}
+			{%- endif -%}
+
+			{%- capture content -%}
+				{{- content -}}
+
+				{%- if content == '' -%}
+					<div class="faq-simple__category js-faq-block">
+				{%- endif -%}
+
+				<div class="accordion__item faq-simple__item button-circle-trigger js-accordion-item" style="animation-delay: {{ delay_step }}s">
+					<h4 class="accordion__title faq-simple__item-title">
+						<button
+							id="control-{{- block.id -}}"
+							class="accordion__control faq-simple__item-control js-accordion-control"
+							aria-controls="content-{{- block.id -}}"
+							aria-expanded="false"
+						>
+							<div class="button-circle" aria-label="Aria label">
+								<span class="button-circle__inner">
+									{%- render 'icons', icon: 'circle-decoration' -%}
+									{%- render 'icons', icon: 'plus', class: 'icon-inactive' -%}
+									{%- render 'icons', icon: 'minus', class: 'icon-active' -%}
+								</span>
+							</div>
+
+							<div class="faq-page__title-text faq-simple__item-title-text">
+								{{- item_heading -}}
+							</div>
+						</button>
+					</h4>
+
+					<div
+						id="content-{{- block.id -}}"
+						class="accordion__content accordion__content--animate faq-simple__item-content js-accordion-content"
+						style="height: 0;"
+						role="region"
+						aria-labelledby="control-{{- block.id -}}"
+					>
+						<div class="faq-simple__item-inner js-accordion-inner rte">
+							{{- text -}}
+						</div>
+					</div>
+				</div>
+			{%- endcapture -%}
+	{%- endcase -%}
+{%- endfor -%}
+
+{%- capture sidenav -%}
+	{%- if sidenav_items != '' -%}
+		<ul class="faq-page__sidenav need-animate tr-dur-0-8">
+			{{- sidenav_items -}}
+		</ul>
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- if content != '' and sidenav == '' -%}
+	{%- capture content -%}
+		{{- content -}}
+
+		</div>
+	{%- endcapture -%}
+{%- endif -%}
+
+<section
+	class="faq-page js-animate color-{{ color_scheme.id }} {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %}"
+	data-section-id="{{- section.id -}}"
+	data-section-type="faq-template"
+	style="{{ section_styles }}"
+>
+	{% render 'page-banner',
+		styles: banner_styles,
+		heading_first_line: heading_first_line,
+		heading_second_line: heading_second_line
+	%}
+
+	<div class="faq-page__container">
+		{%- if sidenav != '' -%}
+			<div class="faq-page__navigation-wrapper js-side-navigation-container">
+				<div class="faq-page__navigation js-side-navigation">
+					{{- sidenav -}}
+				</div>
+			</div>
+		{%- endif -%}
+
+		{%- if content != '' -%}
+			<div
+				class="accordion faq-simple faq-page__content js-accordion-container js-animate {% if request.visual_preview_mode %}animated{% endif %}">
+				{{- content -}}
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- render 'adastra' with '/src/scripts/section-faq.js' -%}
+
+{%- schema -%}
+{
+	"name": "FAQ",
+	"settings": [
+		{
+			"type": "inline_richtext",
+			"id": "heading_first_line",
+			"label": "Heading (first line)",
+			"default": "Frequently Asked"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading_second_line",
+			"label": "Heading (second line)",
+			"default": "Questions"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "color",
+			"id": "banner_background",
+			"label": "Banner background",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "banner_color",
+			"label": "Banner color",
+			"default": "#ffffff"
+		},
+		{
+			"type": "color",
+			"id": "ellipse_background",
+			"label": "Ellipse background",
+			"default": "#C43898"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"name": "Category",
+			"type": "category",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading"
+				}
+			]
+		},
+		{
+			"name": "Question and answer",
+			"type": "faq_item",
+			"settings": [
+				{
+					"type": "textarea",
+					"id": "heading",
+					"label": "Heading"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text"
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

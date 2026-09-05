@@ -1,0 +1,62 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Quantity widget
+	Colors comes from theme settings
+	- product: Product object (required)
+	- variant: Variant object (required)
+	- index: Item index (optional)
+	- key: Item key (optional)
+	- quantity: Item quantity (optional)
+
+	{%- render 'quantity-widget', product: product, variant: item.variant, index: item.index, key: item.key, quantity: item.quantity -%}
+	------------------------------------------------------------------------------0
+{%- endcomment -%}
+
+{%- assign index 	= index | default: 0 -%}
+{%- assign key 		= key | default: variant.id -%}
+{%- assign quantity = quantity | default: 1 -%}
+
+<div class="quantity-wrapper">
+	<label class="visually-hidden" for="Quantity-{{- index | plus: 1 -}}-{{- key -}}">
+		{{- 'products.quantity.label' | t -}}
+	</label>
+
+	<div class="quantity js-quantity">
+		<button
+			class="focus-visible-outline quantity__button"
+			name="minus"
+			type="button"
+			data-quantity-decrease
+			aria-label="{{ 'products.quantity.decrease' | t: product: title | escape }}"
+		>
+			{% render 'icons', icon: 'arrow-left-round' %}
+		</button>
+
+		<input
+			class="focus-visible-outline quantity__input"
+			id="Quantity-{{- index | plus: 1 -}}-{{- key -}}"
+			type="number"
+			name="updates[]"
+			pattern="[0-9]*"
+			value="{{- quantity -}}"
+			min="{{ variant.quantity_rule.min }}"
+			max="{{ variant.quantity_rule.max }}"
+			step="{{ variant.quantity_rule.increment }}"
+			data-index="{{- index | plus: 1 -}}"
+			data-item-key="{{- key -}}"
+			data-quantity-input
+			aria-label="{{ 'products.quantity.input_label' | t: product: title | escape }}"
+		/>
+
+		<button
+			class="focus-visible-outline quantity__button"
+			name="plus"
+			type="button"
+			data-quantity-increase
+			aria-label="{{ 'products.quantity.increase' | t: product: title | escape }}"
+		>
+			{% render 'icons', icon: 'arrow-right-round' %}
+		</button>
+	</div>
+</div>
+

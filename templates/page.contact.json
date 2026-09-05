@@ -1,0 +1,129 @@
+{
+	"sections": {
+		"contact-page-template": {
+			"type": "contact-page-template",
+			"blocks": {
+				"contact_information_dR8NUk": {
+					"type": "contact_information",
+					"settings": {
+						"heading": "Address:",
+						"text": "<p><a href=\"/collections/bobabam-flavors\" title=\"Bobabam Flavors\">2205 Rosewood Lane</a></p>"
+					}
+				},
+				"contact_information_4EEWLT": {
+					"type": "contact_information",
+					"settings": {
+						"heading": "Phone:",
+						"text": "<p><a href=\"tel:213 443 6364\" title=\"tel:213 443 6364\">213 443 6364</a></p>"
+					}
+				},
+				"contact_information_eegJaT": {
+					"type": "contact_information",
+					"settings": {
+						"heading": "Email:",
+						"text": "<p><a href=\"/pages/contact\" title=\"Contact\">support@bobabam.com</a></p>"
+					}
+				},
+				"contact_information_4Y4EG6": {
+					"type": "contact_information",
+					"settings": {
+						"heading": "Schedule:",
+						"text": "<p>Mn - Fr. 8:00-17:00</p>"
+					}
+				}
+			},
+			"block_order": [
+				"contact_information_dR8NUk",
+				"contact_information_4EEWLT",
+				"contact_information_eegJaT",
+				"contact_information_4Y4EG6"
+			],
+			"settings": {
+				"heading_first_line": "<em>Need help?</em>",
+				"heading_second_line": "<strong>Reach out</strong>",
+				"form_heading": "HAVE A QUESTION?",
+				"name_label": "Name",
+				"is_name_required": true,
+				"email_label": "Email",
+				"phone_label": "Phone",
+				"is_phone_required": true,
+				"message_label": "Message",
+				"is_message_required": true,
+				"submit_label": "Send",
+				"map_api_key": "",
+				"map_query": "Eiffel+Tower,Paris+France",
+				"map_url": "",
+				"enable_color_scheme_inheritance": true,
+				"color_scheme": "schema-2",
+				"container_width": "inherit",
+				"enable_bottom_rounded_corners": false,
+				"offset_top_desktop": 30,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 30,
+				"offset_bottom_mobile": 30,
+				"inner_offset_top_desktop": 0,
+				"inner_offset_bottom_desktop": 64,
+				"inner_offset_top_mobile": 32,
+				"inner_offset_bottom_mobile": 32
+			}
+		},
+		"banner_yKWbhx": {
+			"type": "banner",
+			"blocks": {
+				"full_width_Ey69ge": {
+					"type": "full_width",
+					"settings": {
+						"desktop_image_height": "500px",
+						"mobile_image_height": "200px",
+						"media_type": "image",
+						"heading_first_line": "",
+						"heading_second_line": "",
+						"text": "",
+						"button_text": "",
+						"button_url": "/",
+						"button_aria": "",
+						"enable_countdown_timer": false,
+						"timer_month": "0",
+						"timer_day": "1",
+						"timer_hour": "0",
+						"timer_timezone": "+0",
+						"external_video_url_desktop": "",
+						"external_video_url_mobile": "",
+						"content_alignment": "center",
+						"content_alignment_mobile": "center",
+						"block_alignment": "center"
+					}
+				}
+			},
+			"block_order": [
+				"full_width_Ey69ge"
+			],
+			"name": "Banner",
+			"settings": {
+				"section_background": "#fea1e7",
+				"content_background": "rgba(0,0,0, 0.0)",
+				"enable_glass_effect": false,
+				"text_color": "#ffffff",
+				"link_color": "#ffffff",
+				"button_background": "#ffffff1f",
+				"button_color": "#ffffff",
+				"button_border": "rgba(0,0,0,0)",
+				"button_border_outer": "#ffffff",
+				"button_background_hover": "#fff",
+				"button_color_hover": "#000000",
+				"button_border_hover": "rgba(0,0,0,0)",
+				"button_border_outer_hover": "#ffffff",
+				"overlay": "rgba(0,0,0, 0.0)",
+				"container_width": "100%",
+				"offset_top_desktop": 0,
+				"offset_bottom_desktop": 0,
+				"offset_top_mobile": 0,
+				"offset_bottom_mobile": 0
+			}
+		}
+	},
+	"order": [
+		"contact-page-template",
+		"banner_yKWbhx"
+	]
+}

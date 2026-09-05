@@ -1,0 +1,183 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header banner small
+	Render header banner small
+	- image: image
+	- link_label: link label
+	- link: link
+    - heading: heading
+	- text: text
+	- enable_lazy_load: enable lazy load
+	- background_color: background color
+	- background_ellipse_color: background ellipse color
+	- border_color: border color
+	- text_color: text color,
+	- overlay_color: overlay color
+
+	Usage:
+	{%- render 'header-banner-small' -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign overlay_color = overlay_color | color_modify: 'alpha', 0.5 -%}
+
+{%- capture element_styles -%}
+	--header-banner-small-text-color: {{- text_color -}}; {{-  -}}
+	--header-banner-small-overlay-color: {{- overlay_color -}}; {{-  -}}
+{%- endcapture -%}
+
+<article class="header-banner-small" style="{{- element_styles | strip_newlines -}}">
+	{%- if image != blank -%}
+		{%- assign image_width = image_width | default: 298 -%}
+		{%- assign image_width_2x = image_width | times: 2 -%}
+
+		{%- assign image_width_1500 = image_width_1500 | default: 298 -%}
+		{%- assign image_width_1500_2x = image_width_1500 | times: 2 -%}
+
+		{%- assign image_width_1199 = image_width_1199 | default: 448 -%}
+		{%- assign image_width_1199_2x = image_width_1199 | times: 2 -%}
+
+		{%- assign image_width_991 = image_width_991 | default: 388 -%}
+		{%- assign image_width_991_2x = image_width_991 | times: 2 -%}
+
+		{%- assign image_width_767 = image_width_767 | default: 388 -%}
+		{%- assign image_width_767_2x = image_width_767 | times: 2 -%}
+
+		{%- assign image_width_575 = image_width_575 | default: 388 -%}
+		{%- assign image_width_575_2x = image_width_575 | times: 2 -%}
+
+		{%- assign image_width_380 = image_width_380 | default: 348 -%}
+		{%- assign image_width_380_2x = image_width_380 | times: 2 -%}
+
+		{%- capture img_focal -%}
+			--img-desktop-pos: {{ image.presentation.focal_point }};
+		{%- endcapture -%}
+
+		<picture {% if enable_lazy_load %}class="lazy"{% endif %}>
+			<source
+				{% if enable_lazy_load %}
+					srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+					data-srcset="{{ image | image_url: width: image_width_380 }} 1x, {{ image | image_url: width: image_width_380_2x }} 2x"
+				{% else %}
+					srcset="{{ image | image_url: width: image_width_380 }} 1x, {{ image | image_url: width: image_width_380_2x }} 2x"
+				{% endif %}
+				media="(max-width: 380px)"
+			>
+			<source
+				{% if enable_lazy_load %}
+					srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+					data-srcset="{{ image | image_url: width: image_width_575 }} 1x, {{ image | image_url: width: image_width_575_2x }} 2x"
+				{% else %}
+					srcset="{{ image | image_url: width: image_width_575 }} 1x, {{ image | image_url: width: image_width_575_2x }} 2x"
+				{% endif %}
+				media="(max-width: 575px)"
+			>
+			<source
+				{% if enable_lazy_load %}
+					srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+					data-srcset="{{ image | image_url: width: image_width_767 }} 1x, {{ image | image_url: width: image_width_767_2x }} 2x"
+				{% else %}
+					srcset="{{ image | image_url: width: image_width_767 }} 1x, {{ image | image_url: width: image_width_767_2x }} 2x"
+				{% endif %}
+				media="(max-width: 767px)"
+			>
+			<source
+				{% if enable_lazy_load %}
+					srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+					data-srcset="{{ image | image_url: width: image_width_991 }} 1x, {{ image | image_url: width: image_width_991_2x }} 2x"
+				{% else %}
+					srcset="{{ image | image_url: width: image_width_991 }} 1x, {{ image | image_url: width: image_width_991_2x }} 2x"
+				{% endif %}
+				media="(max-width: 991px)"
+			>
+			<source
+				{% if enable_lazy_load %}
+					srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+					data-srcset="{{ image | image_url: width: image_width_1199 }} 1x, {{ image | image_url: width: image_width_1199_2x }} 2x"
+				{% else %}
+					srcset="{{ image | image_url: width: image_width_1199 }} 1x, {{ image | image_url: width: image_width_1199_2x }} 2x"
+				{% endif %}
+				media="(max-width: 1199px)"
+			>
+			<source
+				{% if enable_lazy_load %}
+					srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+					data-srcset="{{ image | image_url: width: image_width_1500 }} 1x, {{ image | image_url: width: image_width_1500_2x }} 2x"
+				{% else %}
+					srcset="{{ image | image_url: width: image_width_1500 }} 1x, {{ image | image_url: width: image_width_1500_2x }} 2x"
+				{% endif %}
+				media="(min-width: 1500px)"
+			>
+
+			<img
+				class="header-banner-small__image"
+				{% if enable_lazy_load %}
+					data-src="{{ image | image_url: width: image_width }}"
+					data-srcset="{{ image | image_url: width: image_width }} 1x, {{ image | image_url: width: image_width_2x }} 2x"
+					src="{{ image | image_url: width: 10 }}"
+					srcset="{{ image | image_url: width: 10 }} 1x, {{ image | image_url: width: 10 }} 2x"
+				{% else %}
+					src="{{ image | image_url: width: image_width }}"
+					srcset="{{ image | image_url: width: image_width }} 1x, {{ image | image_url: width: image_width_2x }} 2x"
+				{% endif %}
+				alt="{{- image.alt | escape -}}"
+				style="{{- img_focal -}}"
+			/>
+		</picture>
+	{%- else -%}
+		{%- assign min	= 1 -%}
+		{%- assign max	= 4 -%}
+		{%- assign diff	= max | minus: min -%}
+
+		{%- assign random_number = "now" | date: "%N" | modulo: diff | plus: min -%}
+		{%- assign placeholder_svg_name = 'hero-apparel-' | append: random_number -%}
+
+		{{- placeholder_svg_name | placeholder_svg_tag: 'header-banner-small__image' -}}
+	{%- endif -%}
+
+	{%- if heading != blank or text != blank -%}
+		{%- assign show_content = true -%}
+	{%- endif -%}
+
+	{%- if link != blank and link_label != blank -%}
+		{%- assign show_button = true -%}
+	{%- endif -%}
+
+	{%- if show_content or show_button -%}
+		<div class="header-banner-small__content">
+			{%- if show_content -%}
+				<div class="header-banner-small__content-container">
+					{%- if heading != blank -%}
+						<p class="header-banner-small__title">
+							{{- heading -}}
+						</p>
+					{%- endif -%}
+
+					{%- if text != blank -%}
+						<p class="header-banner-small__text">
+							{{- text -}}
+						</p>
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+
+			{%- if show_button -%}
+				<div class="header-banner-small__button-container">
+					<a
+						class="button-circle button-circle--transform button-circle--transform-show-text-mob"
+						href="{{- link -}}"
+					>
+						<span class="button-circle__inner">
+							{%- render 'icons', icon: 'circle-decoration' -%}
+							{%- render 'icons', icon: 'plus', class: 'icon-inactive' -%}
+						</span>
+
+						<span class="button-circle__text">
+							{{- link_label -}}
+						</span>
+					</a>
+				</div>
+			{%- endif -%}
+		</div>
+	{%- endif -%}
+</article>

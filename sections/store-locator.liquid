@@ -1,0 +1,582 @@
+{%- render 'adastra' with '/src/styles/store-locator.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign google_map_api_key 			   = section.settings.google_map_api_key -%}
+{%- assign map_query 					   = section.settings.map_query -%}
+{%- assign map_image_desktop               = section.settings.map_image_desktop -%}
+{%- assign map_image_mobile                = section.settings.map_image_mobile | default: map_image_desktop -%}
+{%- assign map_link                        = section.settings.map_link -%}
+{%- assign container 					   = section.settings.container_width -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign enable_bottom_rounded_corners   = section.settings.enable_bottom_rounded_corners -%}
+{%- assign color_scheme					   = section.settings.color_scheme -%}
+{%- assign heading_first_line 			   = section.settings.heading_first_line -%}
+{%- assign heading_second_line 			   = section.settings.heading_second_line -%}
+{%- assign decor_image_first 			   = section.settings.decor_image_first -%}
+{%- assign decor_image_second 			   = section.settings.decor_image_second -%}
+{%- assign address_heading 				   = section.settings.address_heading -%}
+{%- assign address_text    				   = section.settings.address_text -%}
+{%- assign phone_heading   				   = section.settings.phone_heading -%}
+{%- assign phone_text      				   = section.settings.phone_text -%}
+{%- assign email_heading   				   = section.settings.email_heading -%}
+{%- assign email_text                      = section.settings.email_text -%}
+{%- assign schedule_heading                = section.settings.schedule_heading -%}
+{%- assign schedule_text                   = section.settings.schedule_text -%}
+{%- assign info_button_label               = section.settings.info_button_label -%}
+{%- assign info_button_url                 = section.settings.info_button_url -%}
+{%- assign info_link_label                 = section.settings.info_link_label -%}
+{%- assign info_link_url                   = section.settings.info_link_url -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{%- if container == 'inherit' -%}
+	{%- assign container_width = settings.container_width -%}
+{%- else -%}
+	{%- assign container_width = container -%}
+{%- endif -%}
+
+{% capture section_styles %}
+	--container-width: {{- container_width -}}; {{- -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px; {{- -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{- -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{- -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px;
+{% endcapture %}
+
+<section
+	class="store-locator js-animate {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %} {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} js-image-mouse-move-wrapper color-{{ color_scheme.id }}"
+	style="{{ section_styles }}"
+>
+	{%- if decor_image_first != blank -%}
+		<picture class="store-locator__decor-image-wrapper store-locator__decor-image-wrapper--first need-animate">
+			<img
+				class="store-locator__decor-image js-image-mouse-move"
+				src="{{ decor_image_first | image_url: width: 140, height: 140 }}"
+				srcset="{{ decor_image_first | image_url: width: 140, height: 140 }} 1x,
+						{{ decor_image_first | image_url: width: 280, height: 280 }} 2x"
+				data-move-distance="2"
+				alt="{{ decor_image_first.alt | escape }}"
+			>
+		</picture>
+	{%- endif -%}
+
+	{%- if decor_image_second != blank -%}
+		<picture class="store-locator__decor-image-wrapper store-locator__decor-image-wrapper--second need-animate">
+			<img
+				class="store-locator__decor-image js-image-mouse-move"
+				src="{{ decor_image_second | image_url: width: 181, height: 181 }}"
+				srcset="{{ decor_image_second | image_url: width: 181, height: 181 }} 1x,
+						{{ decor_image_second | image_url: width: 362, height: 362 }} 2x"
+				data-move-distance="2"
+				alt="{{ decor_image_second.alt | escape }}"
+			>
+		</picture>
+	{%- endif -%}
+
+	<div class="store-locator__container container">
+		<div class="store-locator__content need-animate tr-dur-0-8">
+			{% if heading_first_line != blank or heading_second_line != blank %}
+				<h2 class="store-locator__title section-title h1 need-animate">
+					{%- if heading_first_line != blank -%}
+						<span class="section-title__text-container">
+							<span class="section-title__text">
+								{{- heading_first_line -}}
+							</span>
+						</span>
+					{%- endif -%}
+
+					{%- if heading_second_line != blank -%}
+						<span class="section-title__text-container">
+							<span class="section-title__text">
+								{{- heading_second_line -}}
+							</span>
+						</span>
+					{%- endif -%}
+				</h2>
+			{% endif %}
+
+			{% if address_heading != blank and address_text != blank %}
+				<div class="store-locator__item need-animate tr-dur-0-8 tr-del-0-4">
+					<h3 class="store-locator__content-title">
+						{{ address_heading }}
+					</h3>
+					<div class="rte store-locator__content-text">
+						{{ address_text }}
+					</div>
+				</div>
+			{% endif %}
+
+			{% if phone_heading != blank and phone_text != blank %}
+				<div class="store-locator__item need-animate tr-dur-0-8 tr-del-0-4">
+					<h3 class="store-locator__content-title">
+						{{ phone_heading }}
+					</h3>
+					<div class="rte store-locator__content-text">
+						{{ phone_text }}
+					</div>
+				</div>
+			{% endif %}
+
+			{% if email_heading != blank and email_text != blank %}
+				<div class="store-locator__item need-animate tr-dur-0-8 tr-del-0-4">
+					<h3 class="store-locator__content-title">
+						{{ email_heading }}
+					</h3>
+					<div class="rte store-locator__content-text">
+						{{ email_text }}
+					</div>
+				</div>
+			{% endif %}
+
+			{% if schedule_heading != blank and schedule_text != blank %}
+				<div class="store-locator__item need-animate tr-dur-0-8 tr-del-0-4">
+					<h3 class="store-locator__content-title">
+						{{ schedule_heading }}
+					</h3>
+					<div class="rte store-locator__content-text">
+						{{ schedule_text }}
+					</div>
+				</div>
+			{% endif %}
+
+			{% assign is_button = false %}
+			{% assign is_link = false %}
+
+			{% if info_button_label != blank and info_button_url != blank %}
+				{% assign is_button = true %}
+			{% endif %}
+
+			{% if info_link_label != blank and info_link_url != blank %}
+				{% assign is_link = true %}
+			{% endif %}
+
+			{% if is_button or is_link %}
+				<div class="store-locator__buttons-wrapper">
+					{% if is_button %}
+						<a href="{{ info_button_url }}" class="button button--primary">
+							<span class="button__outer"></span>
+							{{ info_button_label }}
+						</a>
+					{% endif %}
+
+					{% if is_link %}
+						<a href="{{ info_link_url }}" class="button-link">
+							<span data-text="{{ info_link_label }}">
+								<span class="button-link__text">
+									{{ info_link_label }}
+								</span>
+							</span>
+
+							<span class="button-link__icons">
+								{% render 'icons', icon: 'arrow-right', class: 'icon-base' %}
+								{% render 'icons', icon: 'arrow-right', class: 'icon-hover' %}
+							</span>
+						</a>
+					{% endif %}
+				</div>
+			{% endif %}
+		</div>
+
+		<div class="store-locator__media need-animate tr-dur-0-8">
+			{%- capture img_focal -%}
+				--img-desktop-pos: {{- map_image_desktop.presentation.focal_point -}};
+				--img-mobile-pos: {{- map_image_mobile.presentation.focal_point -}};
+			{%- endcapture -%}
+
+		{% if map_link != blank %}
+			<a href="{{ map_link }}" target="_blank"
+			   class="store-locator__media-wrapper need-animate">
+				{% else %}
+				<div class="store-locator__media-wrapper need-animate">
+					{% endif %}
+
+					{%- if google_map_api_key != blank and map_query != blank -%}
+						<iframe
+							class="store-locator__map"
+							width="100%"
+							height="100%"
+							frameborder="0"
+							style="border:0"
+							referrerpolicy="no-referrer-when-downgrade"
+							src="https://www.google.com/maps/embed/v1/place?key={{- google_map_api_key -}}&q={{- map_query -}}"
+							allowfullscreen>
+						</iframe>
+					{%- elsif map_image_desktop != blank -%}
+						{%- assign enable_lazy_load = true -%}
+
+						{% if section.index == 1 %}
+							{%- assign enable_lazy_load = false -%}
+						{% endif %}
+
+						{% if enable_lazy_load %}
+							<picture class="lazy">
+								<source data-srcset="{{ map_image_mobile | image_url: width: 368, height: 343 }} 1x,
+											{{ map_image_mobile | image_url: width: 736, height: 686 }} 2x"
+										srcset="{{ map_image_mobile | image_url: width: 10, height: 10 }}"
+										media="(max-width: 400px)">
+
+								<source data-srcset="{{ map_image_mobile | image_url: width: 388, height: 362 }} 1x,
+											{{ map_image_mobile | image_url: width: 776, height: 724 }} 2x"
+										srcset="{{ map_image_mobile | image_url: width: 10, height: 10 }}"
+										media="(max-width: 420px)">
+
+								<source data-srcset="{{ map_image_mobile | image_url: width: 735, height: 686 }} 1x,
+											{{ map_image_mobile | image_url: width: 1470, height: 1372 }} 2x"
+										srcset="{{ map_image_mobile | image_url: width: 10, height: 10 }}"
+										media="(max-width: 767px)">
+
+								<source data-srcset="{{ map_image_desktop | image_url: width: 959, height: 895 }} 1x,
+											{{ map_image_desktop | image_url: width: 1918, height: 1790 }} 2x"
+										srcset="{{ map_image_desktop | image_url: width: 10, height: 10 }}"
+										media="(max-width: 991px)">
+
+								<source data-srcset="{{ map_image_desktop | image_url: width: 658, height: 658 }} 1x,
+											{{ map_image_desktop | image_url: width: 1316, height: 1316 }} 2x"
+										srcset="{{ map_image_desktop | image_url: width: 10, height: 10 }}"
+										media="(max-width: 1500px)">
+
+								<img class="store-locator__image need-animate"
+									 src="{{- map_image_desktop | image_url: width: 10, height: 10 -}}"
+									 data-src="{{- map_image_desktop | image_url: width: 928, height: 928 -}}"
+									 data-srcset="{{ map_image_desktop | image_url: width: 928, height: 928 }} 1x, {{ map_image_desktop | image_url: width: 1856, height: 1856 }} 2x"
+									 alt="{{- map_image_desktop.alt | escape -}}"
+									 style="{{- img_focal -}}"
+								>
+							</picture>
+						{% else %}
+							<picture>
+								<source srcset="{{ map_image_mobile | image_url: width: 368, height: 343 }} 1x,
+											{{ map_image_mobile | image_url: width: 736, height: 686 }} 2x"
+										media="(max-width: 400px)">
+
+								<source srcset="{{ map_image_mobile | image_url: width: 388, height: 362 }} 1x,
+											{{ map_image_mobile | image_url: width: 776, height: 724 }} 2x"
+										media="(max-width: 420px)">
+
+								<source srcset="{{ map_image_mobile | image_url: width: 735, height: 686 }} 1x,
+											{{ map_image_mobile | image_url: width: 1470, height: 1372 }} 2x"
+										media="(max-width: 767px)">
+
+								<source srcset="{{ map_image_desktop | image_url: width: 959, height: 895 }} 1x,
+											{{ map_image_desktop | image_url: width: 1918, height: 1790 }} 2x"
+										media="(max-width: 991px)">
+
+								<source srcset="{{ map_image_desktop | image_url: width: 658, height: 658 }} 1x,
+											{{ map_image_desktop | image_url: width: 1316, height: 1316 }} 2x"
+										media="(max-width: 1500px)">
+
+								<img class="store-locator__image need-animate"
+									 src="{{- map_image_desktop | image_url: width: 928, height: 928 -}}"
+									 srcset="{{ map_image_desktop | image_url: width: 928, height: 928 }} 1x, {{ map_image_desktop | image_url: width: 1856, height: 1856 }} 2x"
+									 alt="{{- map_image_desktop.alt | escape -}}"
+									 style="{{- img_focal -}}"
+								>
+							</picture>
+						{% endif %}
+					{%- else -%}
+						{{- 'hero-apparel-1' | placeholder_svg_tag: 'store-locator__image store-locator__image--placeholder need-animate' -}}
+					{%- endif -%}
+
+					{% if map_link != blank %}
+			</a>
+			{% else %}
+		</div>
+		{% endif %}
+		</div>
+	</div>
+</section>
+
+{% schema %}
+{
+	"name": "Store locator",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "inline_richtext",
+			"id": "heading_first_line",
+			"label": "Heading (first line)",
+			"default": "<em>Store</em>"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading_second_line",
+			"label": "Heading (second line)",
+			"default": "Name"
+		},
+		{
+			"type": "image_picker",
+			"id": "decor_image_first",
+			"label": "Decor image first",
+			"info": "280 x 280px recommended"
+		},
+		{
+			"type": "image_picker",
+			"id": "decor_image_second",
+			"label": "Decor image second",
+			"info": "362 x 362px recommended"
+		},
+		{
+			"type": "header",
+			"content": "Map"
+		},
+		{
+			"type": "text",
+			"id": "google_map_api_key",
+			"label": "Google maps API key (text)",
+			"info": "You'll need to [register a Google Maps API Key](https://utdweb.team/shopify-themes/victory/manual#section-contact-template) to display the map."
+		},
+		{
+			"type": "text",
+			"id": "map_query",
+			"label": "Map query",
+			"info": "Specify the query parameter [learn more](https://utdweb.team/shopify-themes/victory/manual#section-contact-template)",
+			"default": "Eiffel+Tower,Paris+France"
+		},
+		{
+			"type": "url",
+			"id": "map_link",
+			"label": "Map link",
+			"info": "The link will be opened in the new window"
+		},
+		{
+			"type": "image_picker",
+			"id": "map_image_desktop",
+			"label": "Map image desktop",
+			"info": "1376 x 1376px recommended"
+		},
+		{
+			"type": "image_picker",
+			"id": "map_image_mobile",
+			"label": "Map image mobile",
+			"info": "1470 x 1372px recommended"
+		},
+		{
+			"type": "header",
+			"content": "Contact info"
+		},
+		{
+			"type": "text",
+			"id": "address_heading",
+			"label": "Address heading",
+			"default": "Address:"
+		},
+		{
+			"type": "richtext",
+			"id": "address_text",
+			"label": "Address text",
+			"default": "<p>Address text</p>"
+		},
+		{
+			"type": "text",
+			"id": "phone_heading",
+			"label": "Phone heading",
+			"default": "Phone:"
+		},
+		{
+			"type": "richtext",
+			"id": "phone_text",
+			"label": "Phone text",
+			"default": "<p>0123456789</p>"
+		},
+		{
+			"type": "text",
+			"id": "email_heading",
+			"label": "Email heading",
+			"default": "Email:"
+		},
+		{
+			"type": "richtext",
+			"id": "email_text",
+			"label": "Email text",
+			"default": "<p>example@example.com</p>"
+		},
+		{
+			"type": "text",
+			"id": "schedule_heading",
+			"label": "Schedule heading",
+			"default": "Schedule:"
+		},
+		{
+			"type": "richtext",
+			"id": "schedule_text",
+			"label": "Schedule text",
+			"default": "<p>Mn - Fr. 8:00-17:00</p>"
+		},
+		{
+			"type": "text",
+			"id": "info_button_label",
+			"label": "Button label"
+		},
+		{
+			"type": "url",
+			"id": "info_button_url",
+			"label": "Button url"
+		},
+		{
+			"type": "text",
+			"id": "info_link_label",
+			"label": "Link label"
+		},
+		{
+			"type": "url",
+			"id": "info_link_url",
+			"label": "Link url"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit",
+			"info": "if you select 'Inherit of general setting', then container width will be used from the Theme settings/Layout"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 25
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 40
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 40
+		}
+	],
+	"presets": [
+		{
+			"name": "Store locator"
+		}
+	]
+}
+{% endschema %}

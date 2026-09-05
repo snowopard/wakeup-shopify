@@ -1,0 +1,30 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Render 'button-link' component
+
+	Params:
+	- link_text: text (required)
+	- link_url: URL (optional). Link can be a button without URL.
+	- class: text (optional)
+
+	Usage:
+	{% render 'button-link', link_text: 'Learn More', link_url: 'YOUR_URL' %}
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+{% if link_text != blank %}
+	<a href="{{ link_url }}" class="button-link focus-visible-outline {{ class }}"
+	   {% if open_link_in_new_tab %}
+		   target="_blank"
+	   {% endif %}
+	>
+		<span data-text="{{- link_text -}}">
+			<span class="button-link__text">{{- link_text -}}</span>
+		</span>
+
+		<span class="button-link__icons">
+			{% render 'icons', icon: 'arrow-right', class: 'icon-base' %}
+			{% render 'icons', icon: 'arrow-right', class: 'icon-hover' %}
+		</span>
+	</a>
+{% endif %}

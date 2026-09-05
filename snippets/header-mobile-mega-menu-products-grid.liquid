@@ -1,0 +1,35 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: Header mobile mega menu products grid
+	Render header moblie mega menu media grid
+	- megamenu_object: blocks object using for output media content.
+
+	Usage:
+	{%- render 'header-mobile-mega-menu-products-grid', megamenu_object: megamenu_object -%}
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign products = megamenu_object.settings.products -%}
+{%- assign animation_delay_nested = 0 -%}
+
+<div class="header-mobile__menu-container-inner header-mobile__menu-container-inner--small-offset">
+	<ul class="header-mobile__menu-list">
+		{%- if products != blank -%}
+			{%- for product in products limit: 8 -%}
+				<li class="header-mobile__menu-list-item header-mobile__menu-list-item--small-offset header-mobile__animate header-mobile__animate--nested need-animate" style="--animation-delay: {{ animation_delay_nested }}s">
+					{%- render 'product-card-mini', product: product, enable_lazy_load: true -%}
+				</li>
+
+				{%- assign animation_delay_nested = animation_delay_nested | plus: 0.08 -%}
+			{%- endfor -%}
+		{%- else -%}
+			{%- for i in (1..8) -%}
+				<li class="header-mobile__menu-list-item header-mobile__menu-list-item--small-offset header-mobile__animate header-mobile__animate--nested need-animate" style="--animation-delay: {{ animation_delay_nested }}s">
+					{%- render 'product-card-mini', product: nil, enable_lazy_load: true -%}
+				</li>
+
+				{%- assign animation_delay_nested = animation_delay_nested | plus: 0.08 -%}
+			{%- endfor -%}
+		{%- endif -%}
+	</ul>
+</div>

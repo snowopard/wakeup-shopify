@@ -1,0 +1,35 @@
+.tabs-ui__tab {
+  position: relative;
+  padding: 12px;
+  color: var(--color-text-thirdly);
+  font-weight: 500;
+  line-height: 1.5;
+  opacity: 0.5;
+}
+.tabs-ui__tab.is-active {
+  opacity: 1;
+}
+.tabs-ui__tab.is-active::before {
+  width: 24px;
+}
+.tabs-ui__tab::before {
+  content: "";
+  position: absolute;
+  bottom: -1.5px;
+  left: 50%;
+  height: 2px;
+  width: 0;
+  background-color: var(--color-text-primary);
+  transform: translateX(-50%);
+  transition-property: width;
+  transition-duration: var(--timing-base);
+}
+@media (-moz-touch-enabled: 0), (hover: hover), (pointer: fine) {
+  .tabs-ui__tab:hover {
+    transition-property: color;
+    transition-duration: var(--timing-base);
+  }
+  .tabs-ui__tab:hover:not(.is-active) {
+    color: var(--color-text-primary);
+  }
+}

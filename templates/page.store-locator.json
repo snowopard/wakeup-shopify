@@ -1,0 +1,19 @@
+{
+	"sections": {
+		"default-page": {
+			"type": "page-template",
+			"settings": {
+				"offset_bottom_desktop": 25,
+				"offset_bottom_mobile": 25
+			}
+		},
+		"store-locator": {
+			"type": "store-locator",
+			"settings": {}
+		}
+	},
+	"order": [
+		"default-page",
+		"store-locator"
+	]
+}

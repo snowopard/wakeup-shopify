@@ -1,0 +1,96 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Snippet: countdown-timer
+	- timer_type: timer mode (required, string)
+		- duration — set a start time and timer length
+		- end_date — set a specific end date
+	- timer_duration: timer duration in hours (optional, number)
+		Used only with timer_type "duration". The entered value will be converted into days and hours.
+	- enable_timer_loop: restart timer automatically after expiration (optional, boolean)
+		Works only with timer_type "duration". If enabled, the timer will automatically restart from the same end date once it expires.
+	- timer_year: number (required). Example: 2025
+	- timer_month: number of the month as a string (required). Example: "5"
+	- timer_day: day of the month as a string (required). Example: "21"
+	- timer_hour: hour as a string (required). Example: "5"
+	- timer_timezone: timezone as a string (required). Example: "+2"
+	- main_extra_class: string (optional)
+	- without_animation: boolean (optional)
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/timer.scss' -%}
+
+<div
+	class="{{ main_extra_class }} {% if timer_type == 'duration' %}is-hidden{% endif %} timer js-timer {% unless without_animation or request.visual_preview_mode or section.index == 1 %}js-animate{% endunless %}"
+	role="timer" aria-live="off">
+	<script class="js-timer-settings" type="application/json">
+		{
+			"year": {{- timer_year | json -}},
+			"month": {{- timer_month | json -}},
+			"day": {{- timer_day | json -}},
+			"hour": {{- timer_hour | json -}},
+			"timezone": {{- timer_timezone | json -}},
+			"type": {{- timer_type | json -}},
+			"duration": {{- timer_duration | json -}},
+			"loop": {{- enable_timer_loop | json -}}
+		}
+	</script>
+
+	<div class="timer__clock">
+		<svg class="timer__clock-circle" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+			<circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="4" stroke-opacity="0.2"></circle>
+			<circle class="timer__clock-circle-animate js-timer-progress" stroke-dasharray="301.59289474462014" stroke-dashoffset="301.59289474462014" cx="50" cy="50" r="48" stroke="currentColor" stroke-width="4"></circle>
+		</svg>
+
+		{% render 'icons', icon: 'clock' %}
+	</div>
+
+	<div class="timer__col">
+		<div class="timer__values">
+			<p class="is-hidden timer__value js-timer-days-hundreds">0</p>
+
+			<p class="timer__value js-timer-days-dozens">0</p>
+
+			<p class="timer__value js-timer-days-units">0</p>
+		</div>
+
+		<p class="timer__label">
+			{{- 'sections.banner.timer_days_label' | t -}}
+		</p>
+	</div>
+
+	<div class="timer__col">
+		<div class="timer__values">
+			<p class="timer__value js-timer-hours-dozens">0</p>
+
+			<p class="timer__value js-timer-hours-units">0</p>
+		</div>
+
+		<p class="timer__label">
+			{{- 'sections.banner.timer_hours_label' | t -}}
+		</p>
+	</div>
+
+	<div class="timer__col">
+		<div class="timer__values">
+			<p class="timer__value js-timer-minutes-dozens">0</p>
+
+			<p class="timer__value js-timer-minutes-units">0</p>
+		</div>
+
+		<p class="timer__label">
+			{{- 'sections.banner.timer_minutes_label' | t -}}
+		</p>
+	</div>
+
+	<div class="timer__col">
+		<div class="timer__values">
+			<p class="timer__value js-timer-seconds-dozens">0</p>
+
+			<p class="timer__value js-timer-seconds-units">0</p>
+		</div>
+
+		<p class="timer__label">
+			{{- 'sections.banner.timer_seconds_label' | t -}}
+		</p>
+	</div>
+</div>

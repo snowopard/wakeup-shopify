@@ -1,0 +1,453 @@
+{%- comment -%}
+	------------------------------------------------------------------------------
+	Section: FAQ simple
+	------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/faq-simple.scss' -%}
+
+{%- style -%}
+	#shopify-section-{{- section.id -}} {
+		padding-top: {{- section.settings.offset_top_mobile -}}px;
+		padding-bottom: {{- section.settings.offset_bottom_mobile -}}px;
+	}
+
+	@media screen and (min-width: 768px) {
+		#shopify-section-{{- section.id -}} {
+			padding-top: {{- section.settings.offset_top_desktop -}}px;
+			padding-bottom: {{- section.settings.offset_bottom_desktop -}}px;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign heading_first_line              = section.settings.heading_first_line -%}
+{%- assign heading_second_line             = section.settings.heading_second_line -%}
+{%- assign text                            = section.settings.text -%}
+{%- assign button_label                    = section.settings.button_label -%}
+{%- assign button_aria                     = section.settings.button_aria_label -%}
+{%- assign button_link                     = section.settings.button_link -%}
+{%- assign image                           = section.settings.image -%}
+{%- assign image_mobile                    = section.settings.image_mobile | default: image -%}
+{%- assign blocks 			               = section.blocks -%}
+{%- assign container 		   			   = section.settings.container_width -%}
+{%- assign enable_bottom_rounded_corners   = section.settings.enable_bottom_rounded_corners -%}
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme 				   = section.settings.color_scheme -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{% if container == 'inherit' %}
+	{% assign container_width = settings.container_width %}
+{% else %}
+	{% assign container_width = container %}
+{% endif %}
+
+{% capture styles %}
+	--container-width: {{ container_width }}; {{- -}}
+	--inner-offset-top: {{ section.settings.inner_offset_top_desktop }}px; {{- -}}
+	--inner-offset-bottom: {{ section.settings.inner_offset_bottom_desktop }}px; {{- -}}
+	--inner-offset-top-mobile: {{ section.settings.inner_offset_top_mobile }}px; {{- -}}
+	--inner-offset-bottom-mobile: {{ section.settings.inner_offset_bottom_mobile }}px; {{- -}}
+{% endcapture %}
+
+{%- assign content = '' -%}
+
+{% assign delay_step = 0.2 %}
+
+{%- for block in blocks -%}
+	{% assign delay_step = delay_step | plus: 0.2 %}
+
+	{%- assign item_heading = block.settings.heading -%}
+	{%- assign item_text = block.settings.text -%}
+
+	{%- if item_heading == blank or item_text == blank -%}
+		{%- continue -%}
+	{%- endif -%}
+
+	{%- capture content -%}
+		{{- content -}}
+
+		{%- if content == '' -%}
+			<div class="faq-simple__category js-faq-block">
+		{%- endif -%}
+
+		<div class="accordion__item faq-simple__item button-circle-trigger js-accordion-item" style="animation-delay: {{ delay_step }}s">
+			<h4 class="accordion__title faq-simple__item-title">
+				<button
+					id="control-{{- block.id -}}"
+					class="accordion__control faq-simple__item-control js-accordion-control"
+					aria-controls="content-{{- block.id -}}"
+					aria-expanded="false"
+				>
+					<div class="button-circle">
+						<span class="button-circle__inner">
+							{%- render 'icons', icon: 'circle-decoration' -%}
+							{%- render 'icons', icon: 'plus', class: 'icon-inactive' -%}
+							{%- render 'icons', icon: 'minus', class: 'icon-active' -%}
+						</span>
+					</div>
+
+					<div class="faq-simple__item-title-text">
+						{{- item_heading -}}
+					</div>
+				</button>
+			</h4>
+
+			<div
+				id="content-{{- block.id -}}"
+				class="accordion__content accordion__content--animate faq-simple__item-content js-accordion-content"
+				style="height: 0;"
+				role="region"
+				aria-labelledby="control-{{- block.id -}}"
+			>
+				<div class="faq-simple__item-inner js-accordion-inner rte">
+					{{- item_text -}}
+				</div>
+			</div>
+		</div>
+	{%- endcapture -%}
+{%- endfor -%}
+
+{%- if content != '' -%}
+	{%- capture content -%}
+		{{- content -}}
+
+		</div>
+	{%- endcapture -%}
+{%- endif -%}
+
+<section
+	class="faq-simple js-animate color-{{ color_scheme.id }} {% if enable_bottom_rounded_corners %}section-bottom-rounded{% endif %} {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %}"
+	style="{{ styles }}">
+	<div class="faq-simple__container need-animate container">
+		{% if heading_first_line != blank or heading_second_line != blank or text != blank %}
+			<div class="faq-simple__text-content">
+				{% if heading_first_line != blank or heading_second_line != blank %}
+					<h2 class="faq-simple__heading section-title need-animate">
+						{%- if heading_first_line != blank -%}
+							<span class="section-title__text-container">
+								<span class="section-title__text">
+									{{- heading_first_line -}}
+								</span>
+							</span>
+						{%- endif -%}
+
+						{%- if heading_second_line != blank -%}
+							<span class="section-title__text-container">
+								<span class="section-title__text">
+									{{- heading_second_line -}}
+								</span>
+							</span>
+						{%- endif -%}
+					</h2>
+				{% endif %}
+
+				{% if text != blank %}
+					<div class="faq-simple__text rte">
+						{{ text }}
+					</div>
+				{% endif %}
+
+				{% if button_label != blank and button_link %}
+					<div class="faq-simple__button-wrapper">
+						<a
+							class="button button--primary"
+							href="{{- button_link -}}"
+							{% if button_aria != blank %}
+								aria-label="{{- button_aria | escape -}}"
+							{% endif %}
+						>
+							<span class="button__outer"></span>
+							{{ button_label }}
+						</a>
+					</div>
+				{% endif %}
+
+				{% if image != blank %}
+					<picture class="faq-simple__image-wrapper">
+						<source
+							srcset="{{ image_mobile | image_url: width: 380, crop: 'center' }} 1x, {{ image_mobile | image_url: width: 760, crop: 'center' }} 2x"
+							media="(max-width: 380px)">
+
+						<source
+							srcset="{{ image_mobile | image_url: width: 420, crop: 'center' }} 1x, {{ image_mobile | image_url: width: 840, crop: 'center' }} 2x"
+							media="(max-width: 420px)">
+
+						<source
+							srcset="{{ image_mobile | image_url: width: 767, crop: 'center' }} 1x, {{ image_mobile | image_url: width: 1534, crop: 'center' }} 2x"
+							media="(max-width: 767px)">
+
+						<source
+							srcset="{{ image | image_url: width: 489, crop: 'center' }} 1x, {{ image | image_url: width: 978, crop: 'center' }} 2x"
+							media="(max-width: 991px)">
+
+						<source
+							srcset="{{ image | image_url: width: 739, crop: 'center' }} 1x, {{ image | image_url: width: 1478, crop: 'center' }} 2x"
+							media="(max-width: 1600px)">
+
+						<img
+							src="{{ image | image_url: width: 894, crop: 'center' }}"
+							srcset="{{ image | image_url: width: 894, crop: 'center' }} 1x, {{ image | image_url: width: 1788, crop: 'center' }} 2x"
+							alt="{{ image.alt }}"
+							class="faq-simple__image"
+							width="894"
+							height="652"
+						/>
+					</picture>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		<div class="accordion faq-simple__content js-accordion-container">
+			{{- content -}}
+		</div>
+	</div>
+</section>
+
+{% comment %}{%- render 'adastra' with '/src/scripts/section-faq.js' -%}{% endcomment %}
+
+{%- schema -%}
+{
+	"name": "FAQ",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "inline_richtext",
+			"id": "heading_first_line",
+			"label": "First line heading",
+			"default": "Frequently Asked"
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading_second_line",
+			"label": "Second line heading",
+			"default": "Questions"
+		},
+		{
+			"type": "richtext",
+			"id": "text",
+			"label": "Text",
+			"default": "<p>Savor the taste. Discover the artistry. Espresso made simple.</p>"
+		},
+		{
+			"type": "text",
+			"id": "button_label",
+			"label": "Button label",
+			"default": "View All Faq"
+		},
+		{
+			"type": "text",
+			"id": "button_aria_label",
+			"label": "Button aria-label",
+			"info": "Needed for good accessibility, e.g. 'All news about sports'."
+		},
+		{
+			"type": "url",
+			"id": "button_link",
+			"label": "Button link",
+			"default": "/"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "Image",
+			"info": "1440 x 960px recommended"
+		},
+		{
+			"type": "image_picker",
+			"id": "image_mobile",
+			"label": "Image mobile",
+			"info": "1534px width recommended"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": true,
+			"info": "When this setting is enabled, the color scheme is inherited from the theme settings."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "container_width",
+			"label": "Container width",
+			"options": [
+				{
+					"value": "1560px",
+					"label": "Default - 1440px"
+				},
+				{
+					"value": "2040px",
+					"label": "Large - 1920px"
+				},
+				{
+					"value": "100%",
+					"label": "Full width"
+				},
+				{
+					"value": "inherit",
+					"label": "Inherit of general setting"
+				}
+			],
+			"default": "inherit"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_bottom_rounded_corners",
+			"label": "Enable bottom rounded corners",
+			"info": "This setting rounds the inner bottom corners. If the section background is the same as the page background, the effect will not be visible. To see the rounded corners clearly, choose a section background color different from the page background.",
+			"default": false
+		},
+		{
+			"type": "range",
+			"id": "offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset top",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Desktop offset bottom",
+			"default": 60
+		},
+		{
+			"type": "range",
+			"id": "offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset top",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Mobile offset bottom",
+			"default": 30
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset top",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_desktop",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner desktop offset bottom",
+			"default": 64
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_top_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset top",
+			"default": 32
+		},
+		{
+			"type": "range",
+			"id": "inner_offset_bottom_mobile",
+			"min": 0,
+			"max": 100,
+			"step": 1,
+			"unit": "px",
+			"label": "Inner mobile offset bottom",
+			"default": 32
+		}
+	],
+	"blocks": [
+		{
+			"name": "Question and answer",
+			"type": "faq_item",
+			"settings": [
+				{
+					"type": "text",
+					"id": "heading",
+					"label": "Heading"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "FAQ",
+			"blocks": [
+				{
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				},
+				{
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				},
+				{
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				},
+				{
+					"type": "faq_item",
+					"settings": {
+						"heading": "Accordion heading",
+						"text": "<p>Accordion content.</p>"
+					}
+				}
+			]
+		}
+	]
+}
+{%- endschema -%}

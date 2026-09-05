@@ -1,0 +1,305 @@
+{% comment %}
+	------------------------------------------------------------------------------
+	Snippet: Cart footer
+	Render shopping cart footer
+	- section: Section object (required)
+
+	Usage:
+	{%- render 'cart-footer' -%}
+	------------------------------------------------------------------------------
+{% endcomment %}
+
+{% liquid
+	assign discount_codes = cart.cart_level_discount_applications | where: 'type', 'discount_code' | map: 'title'
+	for item in cart.items
+		for allocation in item.line_level_discount_allocations
+			if allocation.discount_application.type == 'discount_code'
+				assign discount_codes = item.line_level_discount_allocations | slice: forloop.index0 | map: 'discount_application' | map: 'title' | concat: discount_codes
+			endif
+		endfor
+	endfor
+
+	assign discount_codes = discount_codes | uniq
+%}
+
+{% if cart_drawer == false %}
+	{% assign shipping_block = section.blocks | where: "type", "shipping" | first %}
+
+	<div class="cart-footer">
+		{% if section.settings.order_summary_heading != blank %}
+			<h3 class="cart-footer__summary-title">{{ section.settings.order_summary_heading }}</h3>
+		{% endif %}
+
+		{%- capture shipping_content -%}
+			{%- render 'cart-shipping',
+				amount: shipping_block.settings.amount,
+				message: shipping_block.settings.message,
+				congratulatory_message: shipping_block.settings.congratulatory_message,
+				block_background: shipping_block.settings.block_background,
+				text_color: shipping_block.settings.text_color,
+				amount_color: shipping_block.settings.amount_color,
+				amount_bg: shipping_block.settings.amount_bg,
+				bar_color: shipping_block.settings.bar_color,
+				fill_color: shipping_block.settings.fill_color
+			-%}
+		{%- endcapture -%}
+
+		{%- if shipping_content != '' -%}
+			<div class="cart-footer__shipping">
+				{{- shipping_content -}}
+			</div>
+		{%- endif -%}
+
+		<div class="cart-footer__subtotal-block js-cart-subtotal">
+			{%- if settings.show_cart_discounts -%}
+				<div class="cart-footer__discount accordion js-cart-discount-accordion-container js-accordion-container">
+					<div class="cart-footer__accordion-item accordion__item js-accordion-item">
+						<button
+							class="focus-visible-outline cart-footer__discount-form-label cart-footer__accordion-control accordion__control js-accordion-control"
+							aria-controls="cart-footer-discounts"
+							aria-expanded="false"
+						>
+							{{- "cart.general.discount_accordion_button" | t -}}
+
+							<span class="cart-footer__discount-form-label-icon">
+								{%- render 'icons', icon: 'arrow-down', class: 'icon-arrow-down' -%}
+								{%- render 'icons', icon: 'circle-decoration-border' -%}
+							</span>
+						</button>
+
+						<div
+							class="cart-footer__accordion-content accordion__content accordion__content--animate js-accordion-content"
+							id="cart-footer-discounts"
+						>
+							<div class="js-accordion-inner">
+								<form class="cart-footer__discount-form js-cart-discount-form">
+									<div class="input-wrapper cart-footer__discount-form-input-wrapper">
+										<label class="visually-hidden" for="cart-discount">
+											{{- "cart.general.discount" | t -}}
+										</label>
+
+										<input
+											class="input cart-footer__discount-form-input"
+											type="text"
+											id="cart-discount"
+											name="discount"
+											placeholder="{{- 'cart.general.discount_placeholder' | t -}}"
+											required
+										/>
+									</div>
+
+									<button
+										class="button button-simple button-simple--primary cart-footer__discount-form-button js-cart-discount-apply-button"
+										type="submit"
+									>
+										{{- "cart.general.apply_discount" | t -}}
+									</button>
+								</form>
+
+								<div
+									class="cart-footer__discount-form-error js-cart-discount-error is-hidden"
+									role="alert"
+								>
+									<span class="cart-footer__discount-form-error-icon-wrapper">
+										{% render 'icons', icon: 'error' %}
+									</span>
+
+									<span class="cart-footer__discount-form-error-text js-cart-discount-error-code is-hidden">
+											{{ 'cart.general.discount_code_error' | t }}
+									</span>
+
+									<small class="cart-footer__discount-form-error-text js-cart-discount-error-shipping is-hidden">
+										{{ 'cart.general.shipping_discount_error' | t }}
+									</small>
+								</div>
+
+								{%- if discount_codes.size > 0 -%}
+									<ul class="cart-footer__discount-codes">
+										{% for discount_code in discount_codes %}
+											<li
+												class="cart-footer__discount-pill js-cart-discount-pill"
+												data-discount-code="{{ discount_code }}"
+												aria-label="{{ 'cart.general.discount_applied' | t: code: discount_code }}"
+											>
+												<p class="cart-footer__discount-pill-code">
+													{{ discount_code }}
+												</p>
+
+												<button
+													class="cart-footer__discount-pill-remove js-cart-discount-pill-remove"
+													type="button"
+													aria-label="{{ 'cart.general.remove_discount' | t: code: discount_code }}"
+												>
+													{% render 'icons', icon: 'close' %}
+												</button>
+											</li>
+										{% endfor %}
+									</ul>
+								{%- endif -%}
+							</div>
+						</div>
+					</div>
+				</div>
+			{%- endif -%}
+
+			{%- if cart.cart_level_discount_applications.size > 0 -%}
+				<ul class="cart-footer__discounts discounts discounts--right" role="list" aria-label="{{- 'customer.order.discount' | t | escape -}}">
+					{%- for discount in cart.cart_level_discount_applications -%}
+						<li class="discounts__item">
+							{% render 'icons', icon: 'discount' %}
+
+							{{ discount.title }}
+							(-{{ discount.total_allocated_amount | money }})
+						</li>
+					{%- endfor -%}
+				</ul>
+			{%- endif -%}
+
+			<p class="cart-footer__subtotal">
+				<span class="cart-footer__subtotal-label">
+					{{- 'cart.general.subtotal' | t | append: ':' -}}
+				</span>
+
+				<span class="cart-footer__subtotal-value">
+					{{- cart.total_price | money -}}
+				</span>
+			</p>
+		</div>
+
+		{%- if settings.show_tax_and_shipping -%}
+			<div class="rte cart-footer__tax">
+				{%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+					{{ 'cart.general.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+				{%- elsif cart.taxes_included -%}
+					{{ 'cart.general.taxes_included_but_shipping_at_checkout' | t }}
+				{%- elsif shop.shipping_policy.body != blank -%}
+					{{ 'cart.general.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+				{%- else -%}
+					{{ 'cart.general.taxes_and_shipping_at_checkout' | t }}
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+
+		{% if settings.show_cart_note %}
+			<div class="textarea-wrapper">
+				<label for="note-cart" class="visually-hidden">{{- 'cart.general.note' | t -}}</label>
+
+				<textarea
+					id="note-cart"
+					name="note"
+					form="cart-{{- section.id -}}"
+					class="textarea cart-footer__textarea js-cart-notes-field"
+					aria-label="{{- 'cart.general.note' | t | escape -}}"
+					placeholder="{{- 'cart.general.note_placeholder' | t | escape -}}"
+				>
+					{{- cart.note -}}
+				</textarea>
+			</div>
+		{% endif %}
+
+		<div class="cart-footer__ctas">
+			{%- capture default_checkout_button -%}
+				{{- 'cart.general.checkout' | t -}}
+			{%- endcapture -%}
+
+			{%- assign checkout_button = settings.cart_checkout_button | default: default_checkout_button -%}
+
+			<div class="js-cart-footer-button">
+				<button
+					type="submit"
+					class="cart-footer__button button-simple button-simple--primary button-simple--full-width"
+					name="checkout"
+					form="cart-{{- section.id -}}"
+				>
+
+					{{- checkout_button -}}
+				</button>
+			</div>
+		</div>
+
+		{%- if settings.show_additional_checkout_buttons and additional_checkout_buttons -%}
+			<div class="additional-checkout-buttons cart-footer__ctas cart-footer__ctas--additional js-cart-footer-additional-buttons">
+				{{ content_for_additional_checkout_buttons }}
+			</div>
+		{%- endif -%}
+	</div>
+
+	{% if section.settings.show_payments and shop.enabled_payment_types.size > 0 %}
+		<div class="cart-template__payments">
+			{% if section.settings.payments_title != blank %}
+				<p class="cart-template__payments-title">{{ section.settings.payments_title }}</p>
+			{% endif %}
+
+			{%- render 'payments' -%}
+		</div>
+	{% endif %}
+{% else %}
+	<div class="cart-drawer__footer">
+		{%- render 'cart-shipping-calculator' -%}
+		{%- render 'cart-notes', id: section.id -%}
+
+		{%- if summary_content != nil and summary_content != ''  -%}
+			{{- summary_content -}}
+		{%- endif -%}
+
+		<div class="cart-drawer__footer-main js-cart-subtotal {% if cart.cart_level_discount_applications.size <= 0 and settings.show_tax_and_shipping == false %}is-hidden{% endif %}">
+			{%- if cart.cart_level_discount_applications.size > 0 -%}
+				<ul class="discounts" role="list" aria-label="{{- 'customer.order.discount' | t | escape -}}">
+					{%- for discount in cart.cart_level_discount_applications -%}
+						<li class="discounts__item">
+							{% render 'icons', icon: 'discount' %}
+
+							{{ discount.title }}
+							(-{{ discount.total_allocated_amount | money }})
+						</li>
+					{%- endfor -%}
+				</ul>
+			{%- endif -%}
+
+			{%- if settings.show_tax_and_shipping -%}
+				<div class="cart-drawer__footer-tax rte">
+					<p>
+						{%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+							{{ 'cart.general.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+						{%- elsif cart.taxes_included -%}
+							{{ 'cart.general.taxes_included_but_shipping_at_checkout' | t }}
+						{%- elsif shop.shipping_policy.body != blank -%}
+							{{ 'cart.general.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+						{%- else -%}
+							{{ 'cart.general.taxes_and_shipping_at_checkout' | t }}
+						{%- endif -%}
+					</p>
+				</div>
+			{%- endif -%}
+		</div>
+	</div>
+
+	<div class="cart-drawer__footer-ctas">
+		{%- capture default_checkout_button -%}
+			{{- 'cart.general.checkout' | t -}}
+		{%- endcapture -%}
+
+		{%- assign checkout_button = settings.cart_checkout_button | default: default_checkout_button -%}
+
+		<div class="js-cart-footer-button">
+			<button
+				type="submit"
+				class="cart-drawer__button button-simple button-simple--primary button-simple--full-width"
+				name="checkout"
+				form="cart-{{- section.id -}}"
+			>
+				{{- checkout_button -}}
+
+				<span class="cart-drawer__button-value">
+					{{- cart.total_price | money -}}
+				</span>
+			</button>
+		</div>
+
+		{%- if settings.show_additional_checkout_buttons and additional_checkout_buttons -%}
+			<div class="additional-checkout-buttons cart-drawer__ctas-additional js-cart-footer-additional-buttons">
+				{{ content_for_additional_checkout_buttons }}
+			</div>
+		{%- endif -%}
+	</div>
+{% endif %}

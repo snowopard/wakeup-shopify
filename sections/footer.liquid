@@ -1,0 +1,636 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Footer
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- render 'adastra' with '/src/styles/footer.scss' -%}
+
+{% assign container_width 					= settings.container_width %}
+
+{%- assign copyright_text					= section.settings.copyright_text -%}
+{%- assign show_back_to_top_button			= section.settings.show_back_to_top_button -%}
+{%- assign show_social_links        		= section.settings.show_social_links -%}
+{%- assign current_year						= 'now' | date: '%Y'  -%}
+
+{%- assign is_show_country_selector 		= section.settings.is_show_country_selector -%}
+{%- assign is_show_language_selector 		= section.settings.is_show_language_selector -%}
+{%- assign is_show_payment_methods   		= section.settings.is_show_payment_methods -%}
+
+{%- assign enable_follow_on_shop 	 		= section.settings.enable_follow_on_shop -%}
+
+{%- assign section_background 				= section.settings.section_background -%}
+{%- assign section_gradient 				= section.settings.section_gradient -%}
+{%- assign menu_headings_color 				= section.settings.menu_headings_color -%}
+{%- assign link_color           			= section.settings.link_color -%}
+{%- assign link_hover_color     			= section.settings.link_hover_color -%}
+{%- assign big_text_color     				= section.settings.big_text_color -%}
+{%- assign copyright_text_color 			= section.settings.copyright_text_color -%}
+{%- assign button_icon_color_social 		= section.settings.button_icon_color_social -%}
+{%- assign button_icon_color_social_hover   = section.settings.button_icon_color_social_hover -%}
+{%- assign localization_form_background 	= section.settings.localization_form_background -%}
+{%- assign localization_form_text 			= section.settings.localization_form_text -%}
+{%- assign localization_form_border 		= section.settings.localization_form_border -%}
+{%- assign menu_blocks 						= section.blocks | where: 'type', 'menu' -%}
+{%- assign additional_menu_block 			= section.blocks | where: 'type', 'additional-menu' | first -%}
+{%- assign big_text_block 					= section.blocks | where: 'type', 'big-text' | first -%}
+
+{%- assign delay_step 						= 0 -%}
+
+{%- assign color_back_to_top_button_background 			= section.settings.color_back_to_top_button_background -%}
+{%- assign color_back_to_top_button            			= section.settings.color_back_to_top_button -%}
+{%- assign color_back_to_top_button_background_hover 	= section.settings.color_back_to_top_button_background_hover -%}
+{%- assign color_back_to_top_button_hover            	= section.settings.color_back_to_top_button_hover -%}
+{%- assign color_back_to_top_button_opacity    			= color_back_to_top_button | color_modify: 'alpha', 0.64 -%}
+{%- assign color_back_to_top_button_opacity_hover 		= color_back_to_top_button_hover | color_modify: 'alpha', 0.2 -%}
+
+{%- capture section_styles -%}
+	--container-width: {{- container_width -}}; {{- -}}
+	--section-background: {{- section_background -}}; {{- -}}
+	--section-gradient: {{- section_gradient -}}; {{- -}}
+	--menu-headings-color: {{- menu_headings_color -}}; {{- -}}
+	--link-color: {{- link_color -}}; {{- -}}
+	--link-hover-color: {{- link_hover_color -}}; {{- -}}
+	--big-text-color: {{- big_text_color -}}; {{- -}}
+	--copyright-text-color: {{- copyright_text_color -}}; {{- -}}
+	--button-icon-color-social: {{- button_icon_color_social -}}; {{- -}}
+	--button-icon-color-social-hover: {{- button_icon_color_social_hover -}}; {{- -}}
+	--color-back-to-top-button-background: {{- color_back_to_top_button_background -}}; {{- -}}
+	--color-back-to-top-button: {{- color_back_to_top_button -}}; {{- -}}
+	--color-back-to-top-button-hover: {{- color_back_to_top_button_hover -}}; {{- -}}
+	--color-back-to-top-button-background-hover: {{- color_back_to_top_button_background_hover -}}; {{- -}}
+	--color-back-to-top-button-opacity: {{- color_back_to_top_button_opacity -}}; {{- -}}
+	--color-back-to-top-button-opacity-hover: {{- color_back_to_top_button_opacity_hover -}}; {{- -}}
+{%- endcapture -%}
+
+{%- capture menu_content -%}
+	{%- for menu_block in menu_blocks -%}
+		{%- assign menu = menu_block.settings.menu -%}
+		{%- assign menu_links = menu.links -%}
+		{%- assign menu_heading = menu_block.settings.menu_heading | default: menu.title -%}
+
+		{%- if menu_links != blank and menu_links.size > 0 -%}
+			<div class="footer__main-content-column">
+				<div class="footer-navigation-item">
+					<div class="footer-navigation-item__column footer-navigation-item__column--small need-animate" style="--delay-step: {{ delay_step }}s;">
+						<h2 class="footer-navigation-item__heading">
+							{{ menu_heading }}
+						</h2>
+					</div>
+
+					{%- assign delay_step = delay_step | plus: 0.125 -%}
+
+					<div class="footer-navigation-item__column need-animate" style="--delay-step: {{ delay_step }}s;">
+						<ul class="footer-navigation-item__list">
+							{%- for link in menu_links -%}
+								<li>
+									<a href="{{ link.url }}" class="footer-navigation-item__link">
+										{{ link.title }}
+									</a>
+								</li>
+							{%- endfor -%}
+						</ul>
+					</div>
+
+					{%- assign delay_step = delay_step | plus: 0.125 -%}
+				</div>
+			</div>
+		{%- endif -%}
+	{%- endfor -%}
+{%- endcapture -%}
+
+{%- capture menu_additional_content -%}
+	{%- assign menu = additional_menu_block.settings.menu -%}
+	{%- assign menu_links = menu.links -%}
+
+	{%- if menu_links != blank and menu_links.size > 0 -%}
+		<div class="footer__main-content-column footer__main-content-column--additional">
+			<div class="footer-navigation-item footer-navigation-item--additional">
+				{%- if menu_content != blank -%}
+					<div class="footer-navigation-item__column footer-navigation-item__column--small"></div>
+				{%- endif -%}
+
+				<div class="footer-navigation-item__column need-animate" style="--delay-step: {{ delay_step }}s;">
+					<ul class="footer-navigation-item__list footer-navigation-item__list--big-gap">
+						{%- for link in menu_links -%}
+							<li>
+								<a href="{{ link.url }}"
+								   class="footer-navigation-item__link footer-navigation-item__link--small">
+									{{ link.title }}
+								</a>
+							</li>
+						{%- endfor -%}
+
+						{%- assign delay_step = delay_step | plus: 0.125 -%}
+					</ul>
+				</div>
+			</div>
+		</div>
+	{%- endif -%}
+{%- endcapture -%}
+
+{%- capture footer_additonal_contnet -%}
+	{%- if big_text_block != blank -%}
+		{%- assign big_text_first			= big_text_block.settings.big_text_first -%}
+		{%- assign big_text_second			= big_text_block.settings.big_text_second -%}
+		{%- assign big_text_logo			= big_text_block.settings.big_text_logo -%}
+		{%- assign big_text_logo_second     = big_text_block.settings.big_text_logo_second -%}
+		{%- assign desktop_movement_speed	= big_text_block.settings.desktop_movement_speed -%}
+		{%- assign mobile_movement_speed	= big_text_block.settings.mobile_movement_speed -%}
+
+		{%- if big_text_first != blank or big_text_second != blank or big_text_logo != blank or big_text_logo_second != blank -%}
+
+			{%- capture ticker_styles -%}
+				--desktop-movement-speed: {{- desktop_movement_speed -}}s; {{- -}}
+				--mobile-movement-speed: {{- mobile_movement_speed -}}s; {{- -}}
+				--delay-step: {{ delay_step }}s;
+			{% endcapture %}
+
+			<div class="footer-ticker js-ticker-container-footer is-loading need-animate" style="{{ ticker_styles | strip_newlines }}">
+				<div class="footer-ticker__items js-ticker-content-container">
+					{%- if big_text_first != blank -%}
+						<div class="footer-ticker__item">
+							{{- big_text_first -}}
+						</div>
+					{%- endif -%}
+
+					{%- if big_text_logo != blank -%}
+						<div class="footer-ticker__item">
+							<picture class="footer-ticker__item-icon-container">
+								<source
+									srcset="{{ big_text_logo | image_url: width: 48 }} 1x, {{ big_text_logo | image_url: width: 96 }} 2x"
+									media="(max-width: 767px)"
+									width="48"
+									height="48"
+								/>
+
+								<source
+									srcset="{{ big_text_logo | image_url: width: 60 }} 1x, {{ big_text_logo | image_url: width: 60 }} 2x"
+									media="(max-width: 991px)"
+									width="60"
+									height="60"
+								/>
+
+								<source
+									srcset="{{ big_text_logo | image_url: width: 80 }} 1x, {{ big_text_logo | image_url: width: 80 }} 2x"
+									media="(max-width: 1199px)"
+									width="80"
+									height="80"
+								/>
+
+								<img
+									class="footer-ticker__item-icon"
+									srcset="{{ big_text_logo | image_url: width: 120 }} 1x, {{ big_text_logo | image_url: width: 240 }} 2x"
+									src="{{ big_text_logo | image_url: width: 120 }}"
+									alt="{{- image.alt | escape -}}"
+									width="120"
+									height="120"
+									loading="lazy"
+								>
+							</picture>
+						</div>
+					{%- endif -%}
+
+					{%- if big_text_second != blank -%}
+						<div class="footer-ticker__item">
+							{{- big_text_second -}}
+						</div>
+					{%- endif -%}
+
+					{%- if big_text_logo_second != blank -%}
+						<div class="footer-ticker__item">
+							<picture class="footer-ticker__item-icon-container">
+								<source
+									srcset="{{ big_text_logo_second | image_url: width: 48 }} 1x, {{ big_text_logo_second | image_url: width: 96 }} 2x"
+									media="(max-width: 767px)"
+									width="48"
+									height="48"
+								/>
+
+								<source
+									srcset="{{ big_text_logo_second | image_url: width: 60 }} 1x, {{ big_text_logo_second | image_url: width: 60 }} 2x"
+									media="(max-width: 991px)"
+									width="60"
+									height="60"
+								/>
+
+								<source
+									srcset="{{ big_text_logo_second | image_url: width: 80 }} 1x, {{ big_text_logo_second | image_url: width: 80 }} 2x"
+									media="(max-width: 1199px)"
+									width="80"
+									height="80"
+								/>
+
+								<img
+									class="footer-ticker__item-icon"
+									srcset="{{ big_text_logo_second | image_url: width: 120 }} 1x, {{ big_text_logo_second | image_url: width: 240 }} 2x"
+									src="{{ big_text_logo_second | image_url: width: 120 }}"
+									alt="{{- image.alt | escape -}}"
+									width="120"
+									height="120"
+									loading="lazy"
+								>
+							</picture>
+						</div>
+					{%- endif -%}
+				</div>
+			</div>
+
+			{%- assign delay_step = delay_step | plus: 0.125 -%}
+		{%- endif -%}
+	{%- endif -%}
+{%- endcapture -%}
+
+<footer class="footer js-footer js-animate {% if request.visual_preview_mode %}animated{% endif %}" style="{{ section_styles }}">
+	<div class="footer__container">
+		{%- if menu_content != blank or menu_additional_content != blank -%}
+			<div class="footer__main-content container">
+				{{- menu_content -}}
+				{{- menu_additional_content -}}
+			</div>
+		{%- endif -%}
+
+		{%- if footer_additonal_contnet != blank -%}
+			<div class="footer__additional-content">
+				{{- footer_additonal_contnet -}}
+			</div>
+		{%- endif -%}
+
+		<div class="footer__bottom-content container">
+			{%- assign bottom_content_column_count = 1 -%}
+
+			{%- capture footer_selectors_contnet -%}
+				{%- if is_show_language_selector == true and localization.available_languages.size > 1 -%}
+					{% assign language_selector = true %}
+				{%- endif -%}
+
+				{%- if is_show_country_selector == true and localization.available_countries.size > 1 -%}
+					{% assign country_selector = true %}
+				{%- endif -%}
+
+				{%- if country_selector or language_selector -%}
+					<div class="footer__selectors">
+						{%- if language_selector -%}
+							{%- render
+								'language-localization-form',
+								class: 'footer',
+								id_prefix: 'footer',
+								form_id: "FooterLocalizationForm",
+								text_color: localization_form_text,
+								border_color: localization_form_border,
+								background_color: localization_form_background
+							-%}
+						{%- endif -%}
+
+						{%- if country_selector -%}
+							{%- render
+								'country-localization-form',
+								class: 'footer',
+								id_prefix: "footer",
+								form_id: "FooterCountryForm",
+								text_color: localization_form_text,
+								border_color: localization_form_border,
+								background_color: localization_form_background,
+								show_full_name: true
+							-%}
+						{%- endif -%}
+					</div>
+				{%- endif -%}
+			{%- endcapture -%}
+
+			{%- capture footer_social_links_contnet -%}
+				{%- if show_social_links -%}
+					<div class="footer__social-links">
+						{% render "social-links" %}
+					</div>
+				{%- endif -%}
+			{%- endcapture -%}
+
+			{%- capture footer_copyright_contnet -%}
+				<p class="footer__copyright">
+					{{ copyright_text | replace: "%date%", current_year }} {{ powered_by_link }}
+				</p>
+			{%- endcapture -%}
+
+			{%- if footer_selectors_contnet != blank -%}
+				{%- assign bottom_content_column_count = bottom_content_column_count | plus: 1 -%}
+			{%- endif -%}
+
+			{%- if footer_social_links_contnet != blank -%}
+				{%- assign bottom_content_column_count = bottom_content_column_count | plus: 1 -%}
+			{%- endif -%}
+
+			<div class="footer__bottom-content-row footer__bottom-content-row--{{- bottom_content_column_count -}}" style="--bottom-content-column-count: {{- bottom_content_column_count -}};">
+				{%- if footer_selectors_contnet != blank -%}
+					<div class="footer__bottom-column need-animate" style="--delay-step: {{ delay_step }}s;">
+						{{- footer_selectors_contnet -}}
+					</div>
+					{%- assign delay_step = delay_step | plus: 0.125 -%}
+				{%- endif -%}
+
+				<div class="footer__bottom-column footer__bottom-column--desktop need-animate" style="--delay-step: {{ delay_step }}s;">
+					<div class="footer__copyright-container">
+						{{- footer_copyright_contnet -}}
+
+						{%- if show_back_to_top_button == true -%}
+							<button class="button-circle footer__back-to-top js-back-to-top-button" type="button" aria-label="{{ 'general.accessibility.scroll_to_top' | t | escape }}">
+							<span class="button-circle__inner">
+								{%- render 'icons', icon: 'circle-decoration' -%}
+								{%- render 'icons', icon: 'arrow-up' -%}
+							</span>
+							</button>
+						{%- endif -%}
+					</div>
+				</div>
+
+				{%- assign delay_step = delay_step | plus: 0.125 -%}
+
+				{%- if footer_social_links_contnet != blank -%}
+					<div class="footer__bottom-column need-animate" style="--delay-step: {{ delay_step }}s;">
+						{{- footer_social_links_contnet -}}
+					</div>
+
+					{%- assign delay_step = delay_step | plus: 0.125 -%}
+				{%- endif -%}
+
+				<div class="footer__bottom-column footer__bottom-column--mobile need-animate" style="--delay-step: {{ delay_step }}s;">
+					<div class="footer__copyright-container">
+						{{- footer_copyright_contnet -}}
+
+						{%- if show_back_to_top_button == true -%}
+							<button class="button-circle footer__back-to-top js-back-to-top-button" type="button" aria-label="{{ 'general.accessibility.scroll_to_top' | t | escape }}">
+							<span class="button-circle__inner">
+								{%- render 'icons', icon: 'circle-decoration' -%}
+								{%- render 'icons', icon: 'arrow-up' -%}
+							</span>
+							</button>
+						{%- endif -%}
+
+						{%- assign delay_step = delay_step | plus: 0.125 -%}
+					</div>
+				</div>
+			</div>
+
+			{%- if shop.features.follow_on_shop? and enable_follow_on_shop -%}
+				<div class="footer__bottom-content-row">
+					<div class="footer__bottom-column need-animate" style="--delay-step: {{ delay_step }}s;">
+						<div class="footer__follow-on-shop-button">
+							{{ shop | login_button: action: 'follow' }}
+						</div>
+					</div>
+				</div>
+			{%- endif -%}
+		</div>
+	</div>
+</footer>
+
+{%- render 'adastra' with '/src/scripts/section-footer.js' -%}
+
+{% schema %}
+{
+	"name": "Footer",
+	"settings": [
+		{
+			"type": "header",
+			"content": "COUNTRY/REGION SELECTOR",
+			"info": "To add a country/region, go to your [market settings.](/admin/settings/markets)"
+		},
+		{
+			"id": "is_show_country_selector",
+			"type": "checkbox",
+			"label": "Show country/region selector",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "LANGUAGE SELECTOR",
+			"info": "To add a language, go to your [language settings.](/admin/settings/languages)"
+		},
+		{
+			"id": "is_show_language_selector",
+			"type": "checkbox",
+			"label": "Show language selector",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "COPYRIGHT"
+		},
+		{
+			"type": "textarea",
+			"id": "copyright_text",
+			"label": "Copyright text",
+			"default": "Copyright © %date%.",
+			"info": "%date% - will be replaced with the current year"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_back_to_top_button",
+			"label": "Show back to top button",
+			"default": false
+		},
+		{
+			"type": "header",
+			"content": "SOCIAL LINKS"
+		},
+		{
+			"id": "show_social_links",
+			"type": "checkbox",
+			"label": "Show social links",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "FOLLOW ON SHOP",
+			"info": "To allow customers to follow your store on the Shop app from your storefront, Shop Pay must be enabled. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/follow-on-shop)"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_follow_on_shop",
+			"label": "Enable Follow on Shop",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"id": "section_background",
+			"type": "color",
+			"label": "Section background",
+			"default": "#FFFFFF"
+		},
+		{
+			"id": "section_gradient",
+			"type": "color_background",
+			"label": "Section gradient",
+			"default": "linear-gradient(to bottom,  rgba(248, 57, 155, 0) 60%,  rgba(248, 57, 155, 0.4) 100%)"
+		},
+		{
+			"id": "menu_headings_color",
+			"type": "color",
+			"label": "Heading",
+			"default": "#9D9D9D"
+		},
+		{
+			"id": "link_color",
+			"type": "color",
+			"label": "Link",
+			"default": "#000000"
+		},
+		{
+			"id": "link_hover_color",
+			"type": "color",
+			"label": "Link (hover)",
+			"default": "#7B7B7B"
+		},
+		{
+			"id": "big_text_color",
+			"type": "color",
+			"label": "Big text",
+			"default": "#000000"
+		},
+		{
+			"id": "copyright_text_color",
+			"type": "color",
+			"label": "Copyright text",
+			"default": "#7B7B7B"
+		},
+		{
+			"type": "color",
+			"id": "button_icon_color_social",
+			"label": "Social icon color",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "button_icon_color_social_hover",
+			"label": "Social icon color (hover)",
+			"default": "#000000"
+		},
+		{
+			"type": "color_background",
+			"id": "localization_form_background",
+			"label": "Localization form background",
+			"default": "#FFFFFFE5"
+		},
+		{
+			"type": "color",
+			"id": "localization_form_text",
+			"label": "Localization form text",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "localization_form_border",
+			"label": "Localization form border",
+			"default": "#D5D5D5"
+		},
+		{
+			"type": "color",
+			"id": "color_back_to_top_button_background",
+			"label": "Back to top button background",
+			"default": "#FFFFFF"
+		},
+		{
+			"type": "color",
+			"id": "color_back_to_top_button",
+			"label": "Back to top button color",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "color_back_to_top_button_background_hover",
+			"label": "Back to top button background (hover)",
+			"default": "#000000"
+		},
+		{
+			"type": "color",
+			"id": "color_back_to_top_button_hover",
+			"label": "Back to top button color (hover)",
+			"default": "#FFFFFF"
+		}
+	],
+	"blocks": [
+		{
+			"type": "menu",
+			"name": "Menu",
+			"limit": 2,
+			"settings": [
+				{
+					"id": "menu_heading",
+					"type": "text",
+					"label": "Heading"
+				},
+				{
+					"id": "menu",
+					"type": "link_list",
+					"label": "Menu",
+					"info": "Displays only top-level menu items.",
+					"default": "footer"
+				}
+			]
+		},
+		{
+			"type": "additional-menu",
+			"name": "Additional menu",
+			"limit": 1,
+			"settings": [
+				{
+					"id": "menu",
+					"type": "link_list",
+					"label": "Menu",
+					"info": "Displays only top-level menu items."
+				}
+			]
+		},
+		{
+			"type": "big-text",
+			"name": "Big text",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "text",
+					"id": "big_text_first",
+					"label": "Big text first part"
+				},
+				{
+					"id": "big_text_logo",
+					"type": "image_picker",
+					"label": "Big text logo first part",
+					"info": "1600 x 1600px recommended"
+				},
+				{
+					"type": "text",
+					"id": "big_text_second",
+					"label": "Big text second part"
+				},
+				{
+					"id": "big_text_logo_second",
+					"type": "image_picker",
+					"label": "Big text logo second part",
+					"info": "1600 x 1600px recommended"
+				},
+				{
+					"type": "range",
+					"id": "desktop_movement_speed",
+					"label": "Movement speed (desktop)",
+					"min": 10,
+					"max": 100,
+					"unit": "s",
+					"default": 30
+				},
+				{
+					"type": "range",
+					"id": "mobile_movement_speed",
+					"label": "Movement speed (mobile)",
+					"min": 10,
+					"max": 100,
+					"unit": "s",
+					"default": 30
+				}
+			]
+		}
+	]
+}
+{% endschema %}
