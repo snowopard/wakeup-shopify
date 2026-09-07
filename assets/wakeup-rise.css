@@ -18,13 +18,6 @@
 	   crossfade -- the rest of the section is a stable, static tone. */
 	--wu-rise-seam-color: #fff1d6;
 
-	/* Fixes a latent contrast bug in the shared morning theme tokens:
-	   --wu-sunrise-coral (wakeup-base.css) measures 2.47:1 against
-	   --wu-morning-050, well under WCAG AA's 4.5:1 for small text like
-	   .wu-eyebrow. Scoped to this section only -- not editing the
-	   shared token file without sign-off. Measured ~5:1 here. */
-	--wu-accent: #b8492f;
-
 	/* Motion reuses Victory's own reveal tokens, same as every other
 	   Wake Up section. */
 	--wu-rise-duration: var(--animate-time, 0.8s);

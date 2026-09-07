@@ -5,6 +5,10 @@
 	overflow: clip;
 	display: flex;
 	flex-direction: column;
+	/* Same reasoning as .wakeup-rip: centers content when min-height
+	   forces more room than current placeholder-length content needs;
+	   a no-op once real content exceeds the minimum. */
+	justify-content: center;
 	min-height: var(--wakeup-sip-min-height, auto);
 	color: var(--wu-ink);
 	background-color: var(--wu-bg);
@@ -49,13 +53,22 @@
    background IS the temperature journey rather than a separate hint.
    RGB triplets are the decomposed --wu-sip-top/-mid/-bottom values
    above — same hardcoded-RGB + variable-alpha technique already used
-   in wakeup-hero.css / wakeup-rip.css, not a new one. */
+   in wakeup-hero.css / wakeup-rip.css, not a new one.
+
+   The 0%/60px stops are a fully-opaque seam band matching RIP's
+   --wu-rip-transition-end exactly (rgb(12,34,51) = #0c2233) -- found
+   during Step 8 continuity review that the previous single
+   variable-opacity stop only approximated RIP's fully-opaque end
+   color, leaving a faint mismatch at the default overlay strength.
+   Same fixed-opacity seam technique RIP/Transition/RISE already use
+   at their own boundaries. */
 .wakeup-sip__overlay {
 	position: absolute;
 	inset: 0;
 	background: linear-gradient(
 		to bottom,
-		rgba(12, 34, 51, var(--wu-sip-overlay-opacity, 0.55)) 0%,
+		rgb(12, 34, 51) 0%,
+		rgba(12, 34, 51, var(--wu-sip-overlay-opacity, 0.55)) 60px,
 		rgba(18, 63, 87, calc(var(--wu-sip-overlay-opacity, 0.55) * 0.85)) 50%,
 		rgba(28, 107, 134, calc(var(--wu-sip-overlay-opacity, 0.55) * 0.7)) 100%
 	);

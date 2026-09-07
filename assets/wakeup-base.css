@@ -19,7 +19,10 @@
 	--wu-morning-200: #ffe1b3;
 	--wu-morning-ink: #241d3d;
 	--wu-sunrise-gold: #ffb347;
-	--wu-sunrise-coral: #ff7a59;
+	/* Darkened from #ff7a59 (measured 2.47:1 against --wu-morning-050,
+	   fails WCAG AA for the small text that consumes it via --wu-accent
+	   e.g. .wu-eyebrow). This value measures ~5:1, same hue family. */
+	--wu-sunrise-coral: #b8492f;
 	--wu-sky-blue: #7fd8e8;
 
 	/* Neutrals */

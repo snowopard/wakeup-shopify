@@ -5,6 +5,14 @@
 	overflow: clip;
 	display: flex;
 	flex-direction: column;
+	/* Centers content when min-height forces more room than the
+	   content needs (e.g. the homepage's 90svh instance setting with
+	   current placeholder-length copy/images) -- a no-op once real,
+	   longer content naturally exceeds the minimum. Found during Step
+	   8 integration review: without this, short content stayed
+	   top-anchored, leaving a dead gap before the bottom transition
+	   band. */
+	justify-content: center;
 	min-height: var(--wakeup-rip-min-height, auto);
 	color: var(--wu-ink);
 	background-color: var(--wu-bg);
