@@ -1,0 +1,398 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Wake Up — RISE
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign eyebrow                        = section.settings.eyebrow -%}
+{%- assign heading                        = section.settings.heading -%}
+{%- assign supporting_text                = section.settings.supporting_text -%}
+{%- assign cta_label                      = section.settings.cta_label -%}
+{%- assign cta_link                       = section.settings.cta_link -%}
+{%- assign cta_aria_label                 = section.settings.cta_aria_label -%}
+
+{%- assign background_image               = section.settings.background_image | default: section.settings.background_image_mobile -%}
+{%- assign background_image_mobile        = section.settings.background_image_mobile -%}
+{%- assign foreground_image               = section.settings.foreground_image -%}
+{%- assign product_image                  = section.settings.product_image | default: section.settings.product_image_mobile -%}
+{%- assign product_image_mobile           = section.settings.product_image_mobile -%}
+{%- assign atmosphere_image                = section.settings.atmosphere_image -%}
+
+{%- assign overlay_strength               = section.settings.overlay_strength -%}
+{%- assign background_focal_point         = section.settings.background_focal_point -%}
+{%- assign section_height                 = section.settings.section_height -%}
+{%- assign product_position               = section.settings.product_position -%}
+{%- assign content_alignment              = section.settings.content_alignment -%}
+{%- assign show_atmosphere_overlay        = section.settings.show_atmosphere_overlay -%}
+
+{%- case background_focal_point -%}
+	{%- when 'top' -%}
+		{%- assign focal_position = 'center top' -%}
+	{%- when 'bottom' -%}
+		{%- assign focal_position = 'center bottom' -%}
+	{%- when 'left' -%}
+		{%- assign focal_position = 'left center' -%}
+	{%- when 'right' -%}
+		{%- assign focal_position = 'right center' -%}
+	{%- else -%}
+		{%- assign focal_position = 'center center' -%}
+{%- endcase -%}
+
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme                    = section.settings.color_scheme -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{{ 'wakeup-rise.css' | asset_url | stylesheet_tag }}
+
+{%- capture rise_styles -%}
+	--wakeup-rise-min-height: {{ section_height }};
+	--wu-rise-overlay-opacity: {{ overlay_strength | divided_by: 100.0 }};
+	--wu-rise-focal-position: {{ focal_position }};
+{%- endcapture -%}
+
+<section
+	class="wakeup-rise js-animate {% if request.visual_preview_mode or section.index == 1 %}animated{% endif %} {% if color_scheme != blank %}color-{{ color_scheme.id }}{% endif %}"
+	data-wu-theme="morning"
+	data-product-position="{{ product_position }}"
+	data-content-alignment="{{ content_alignment }}"
+	style="{{ rise_styles | strip_newlines }}"
+>
+	<div class="wakeup-rise__media" aria-hidden="true">
+		{%- render 'theme-image',
+			image: background_image,
+			mobile_image: background_image_mobile,
+			mobile_breakpoint: '767',
+			img_class: 'wakeup-rise__bg-img',
+			picture_class: 'wakeup-rise__bg-picture',
+			alt: '',
+			lazy: true,
+			src_width: 1600,
+			src_crop: 'center',
+			breakpoints: '480, 767, 1024, 1440, 1920',
+			widths: '480, 767, 1024, 1440, 1920',
+			svg_placeholder_name: 'lifestyle-1'
+		-%}
+
+		{%- if show_atmosphere_overlay -%}
+			<div class="wakeup-rise__glow" aria-hidden="true">
+				{%- if atmosphere_image != blank -%}
+					{%- render 'theme-image',
+						image: atmosphere_image,
+						img_class: 'wakeup-rise__glow-img',
+						picture_class: 'wakeup-rise__glow-picture',
+						alt: '',
+						lazy: true,
+						src_width: 1600,
+						svg_placeholder_name: 'lifestyle-2'
+					-%}
+				{%- endif -%}
+			</div>
+		{%- endif -%}
+
+		<div class="wakeup-rise__overlay"></div>
+	</div>
+
+	<div class="wakeup-rise__content">
+		<div class="wu-container wakeup-rise__inner">
+			{%- if eyebrow != blank -%}
+				<p class="wu-eyebrow wakeup-rise__eyebrow need-animate">{{- eyebrow -}}</p>
+			{%- endif -%}
+
+			{%- if heading != blank -%}
+				<h2 class="wu-heading wu-heading--display wakeup-rise__heading need-animate">{{- heading -}}</h2>
+			{%- endif -%}
+
+			{%- if supporting_text != blank -%}
+				<div class="wu-body wakeup-rise__text need-animate">{{- supporting_text -}}</div>
+			{%- endif -%}
+
+			{%- if cta_label != blank and cta_link != blank -%}
+				<div class="wakeup-rise__cta need-animate">
+					<a
+						href="{{ cta_link }}"
+						class="button button--primary"
+						{% if cta_aria_label != blank %}
+							aria-label="{{ cta_aria_label | escape }}"
+						{% endif %}
+					>
+						<span class="button__outer"></span>
+						{{- cta_label -}}
+					</a>
+				</div>
+			{%- endif -%}
+		</div>
+
+		{%- if foreground_image != blank -%}
+			<div class="wakeup-rise__scene">
+				<div class="wakeup-rise__lifestyle need-animate">
+					{%- render 'theme-image',
+						image: foreground_image,
+						img_class: 'wakeup-rise__lifestyle-img',
+						picture_class: 'wakeup-rise__lifestyle-picture',
+						alt: foreground_image.alt,
+						lazy: true,
+						src_width: 1000,
+						svg_placeholder_name: 'lifestyle-2'
+					-%}
+				</div>
+
+				{%- if product_image != blank or product_image_mobile != blank -%}
+					<div class="wakeup-rise__product need-animate">
+						{%- render 'theme-image',
+							image: product_image,
+							mobile_image: product_image_mobile,
+							mobile_breakpoint: '767',
+							img_class: 'wakeup-rise__product-img',
+							picture_class: 'wakeup-rise__product-picture',
+							alt: product_image.alt,
+							lazy: true,
+							src_width: 500,
+							svg_placeholder_name: 'product-1'
+						-%}
+					</div>
+				{%- endif -%}
+			</div>
+		{%- elsif product_image != blank or product_image_mobile != blank -%}
+			<div class="wakeup-rise__scene wakeup-rise__scene--product-only">
+				<div class="wakeup-rise__product need-animate">
+					{%- render 'theme-image',
+						image: product_image,
+						mobile_image: product_image_mobile,
+						mobile_breakpoint: '767',
+						img_class: 'wakeup-rise__product-img',
+						picture_class: 'wakeup-rise__product-picture',
+						alt: product_image.alt,
+						lazy: true,
+						src_width: 700,
+						svg_placeholder_name: 'product-1'
+					-%}
+				</div>
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- schema -%}
+{
+	"name": "Wake Up: RISE",
+	"class": "shopify-section--wakeup-rise",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Content"
+		},
+		{
+			"type": "text",
+			"id": "eyebrow",
+			"label": "Step label / eyebrow",
+			"info": "Optional. Keep it short."
+		},
+		{
+			"type": "inline_richtext",
+			"id": "heading",
+			"label": "Heading",
+			"default": "RISE."
+		},
+		{
+			"type": "richtext",
+			"id": "supporting_text",
+			"label": "Supporting text",
+			"default": "<p>Light in. Night out. The day is yours.</p>"
+		},
+		{
+			"type": "text",
+			"id": "cta_label",
+			"label": "CTA label",
+			"info": "Optional. Leave blank to hide the button — no default wording is set until final copy is approved."
+		},
+		{
+			"type": "url",
+			"id": "cta_link",
+			"label": "CTA link"
+		},
+		{
+			"type": "text",
+			"id": "cta_aria_label",
+			"label": "CTA aria-label",
+			"info": "Optional. Use for extra context needed by screen reader users."
+		},
+		{
+			"type": "header",
+			"content": "Media"
+		},
+		{
+			"type": "image_picker",
+			"id": "background_image",
+			"label": "Background image (desktop)",
+			"info": "Soft morning/daylight atmosphere. 2400px width recommended."
+		},
+		{
+			"type": "image_picker",
+			"id": "background_image_mobile",
+			"label": "Background image (mobile)",
+			"info": "Optional. Falls back to the desktop image if not set."
+		},
+		{
+			"type": "image_picker",
+			"id": "foreground_image",
+			"label": "Lifestyle / foreground image",
+			"info": "The featured morning scene — bedroom, balcony, outdoors, active morning. 1400px width recommended."
+		},
+		{
+			"type": "image_picker",
+			"id": "product_image",
+			"label": "Product / sachet image",
+			"info": "1200px width recommended."
+		},
+		{
+			"type": "image_picker",
+			"id": "product_image_mobile",
+			"label": "Product / sachet image (mobile)",
+			"info": "Optional. Falls back to the desktop image if not set."
+		},
+		{
+			"type": "checkbox",
+			"id": "show_atmosphere_overlay",
+			"label": "Show light / atmosphere glow",
+			"default": true
+		},
+		{
+			"type": "image_picker",
+			"id": "atmosphere_image",
+			"label": "Atmosphere / light overlay image",
+			"info": "Optional. A soft golden light/flare image. A CSS glow is used automatically if this is left blank.",
+			"visible_if": "{{ section.settings.show_atmosphere_overlay }}"
+		},
+		{
+			"type": "range",
+			"id": "overlay_strength",
+			"label": "Overlay strength",
+			"min": 0,
+			"max": 70,
+			"step": 5,
+			"unit": "%",
+			"default": 30,
+			"info": "A soft light wash over the background image for text legibility."
+		},
+		{
+			"type": "select",
+			"id": "background_focal_point",
+			"label": "Background focal point",
+			"options": [
+				{
+					"value": "center",
+					"label": "Center"
+				},
+				{
+					"value": "top",
+					"label": "Top"
+				},
+				{
+					"value": "bottom",
+					"label": "Bottom"
+				},
+				{
+					"value": "left",
+					"label": "Left"
+				},
+				{
+					"value": "right",
+					"label": "Right"
+				}
+			],
+			"default": "center"
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "section_height",
+			"label": "Section height",
+			"options": [
+				{
+					"value": "auto",
+					"label": "Auto (content height, recommended)"
+				},
+				{
+					"value": "90svh",
+					"label": "Tall"
+				},
+				{
+					"value": "100svh",
+					"label": "Full screen"
+				}
+			],
+			"default": "auto"
+		},
+		{
+			"type": "select",
+			"id": "product_position",
+			"label": "Product position (desktop)",
+			"info": "Desktop only — mobile always stays centered.",
+			"options": [
+				{
+					"value": "right",
+					"label": "Right"
+				},
+				{
+					"value": "left",
+					"label": "Left"
+				},
+				{
+					"value": "center",
+					"label": "Center"
+				}
+			],
+			"default": "right"
+		},
+		{
+			"type": "select",
+			"id": "content_alignment",
+			"label": "Content alignment (desktop)",
+			"info": "Desktop only — mobile always stays centered for a calmer, resolved arrival feeling.",
+			"options": [
+				{
+					"value": "left",
+					"label": "Left"
+				},
+				{
+					"value": "center",
+					"label": "Center"
+				}
+			],
+			"default": "left"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": false,
+			"info": "RISE uses its own morning palette by default. Enable this to force it to follow the theme's main color scheme instead."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1",
+			"info": "Only affects elements that don't already use the Wake Up palette."
+		}
+	],
+	"presets": [
+		{
+			"name": "Wake Up: RISE"
+		}
+	]
+}
+{%- endschema -%}

@@ -1,0 +1,324 @@
+.wakeup-rise {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+	overflow: clip;
+	display: flex;
+	flex-direction: column;
+	min-height: var(--wakeup-rise-min-height, auto);
+	color: var(--wu-ink);
+	background-color: var(--wu-bg);
+
+	/* Continuity anchor: matches the transition's exposed end-color
+	   exactly, same cross-file technique used throughout (RIP -> SIP
+	   -> Transition): assets/wakeup-transition.css
+	   --wu-transition-morning-end: #fff1d6. A short local blend from
+	   that value into the theme's own --wu-morning-050 (#fffaf0, from
+	   wakeup-base.css) avoids a jarring seam without another long
+	   crossfade -- the rest of the section is a stable, static tone. */
+	--wu-rise-seam-color: #fff1d6;
+
+	/* Fixes a latent contrast bug in the shared morning theme tokens:
+	   --wu-sunrise-coral (wakeup-base.css) measures 2.47:1 against
+	   --wu-morning-050, well under WCAG AA's 4.5:1 for small text like
+	   .wu-eyebrow. Scoped to this section only -- not editing the
+	   shared token file without sign-off. Measured ~5:1 here. */
+	--wu-accent: #b8492f;
+
+	/* Motion reuses Victory's own reveal tokens, same as every other
+	   Wake Up section. */
+	--wu-rise-duration: var(--animate-time, 0.8s);
+	--wu-rise-ease: var(--easing-slov-in-fast-out, cubic-bezier(0.6, 0.14, 0, 1));
+}
+
+.wakeup-rise__media {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+}
+
+.wakeup-rise__bg-picture,
+.wakeup-rise__bg-picture img,
+.wakeup-rise__bg-picture svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.wakeup-rise__bg-picture img {
+	object-fit: cover;
+	object-position: var(--wu-rise-focal-position, center);
+}
+
+.wakeup-rise__glow {
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(circle at 30% 15%, rgba(255, 179, 71, 0.35), transparent 60%);
+}
+
+.wakeup-rise__glow-picture,
+.wakeup-rise__glow-picture img,
+.wakeup-rise__glow-picture svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.wakeup-rise__glow-picture img {
+	object-fit: cover;
+}
+
+/* This layer sits on top of the background image (not underneath it),
+   so it does two jobs at once: the opaque seam-color stop at 0% gives
+   a genuine continuity match with the transition's end color
+   regardless of what image is uploaded beneath it, blending down into
+   the lighter legibility wash for the rest of the upper section. */
+.wakeup-rise__overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		to bottom,
+		var(--wu-rise-seam-color) 0%,
+		rgba(255, 250, 240, var(--wu-rise-overlay-opacity, 0.3)) 180px,
+		transparent 60%
+	);
+}
+
+.wakeup-rise__content {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--wu-space-5);
+	padding-block: var(--wu-space-7) var(--wu-space-6);
+}
+
+.wakeup-rise__inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--wu-space-3);
+	text-align: center;
+}
+
+.wakeup-rise__text {
+	max-width: 36ch;
+}
+
+.wakeup-rise__cta {
+	margin-top: var(--wu-space-2);
+}
+
+.wakeup-rise .button.button--primary {
+	margin: 0;
+	min-width: 0;
+	padding: 1rem 2.25rem;
+	border-radius: var(--wu-radius);
+	--button-background-color-primary: var(--wu-accent);
+	--button-text-color-primary: #fffaf0;
+	--button-border-color-primary: transparent;
+	--button-border-outer-color-primary: var(--wu-accent);
+	--button-background-color-primary-hover: var(--wu-morning-ink, #241d3d);
+	--button-text-color-primary-hover: #fffaf0;
+	--button-border-color-primary-hover: transparent;
+	--button-border-outer-color-primary-hover: var(--wu-morning-ink, #241d3d);
+}
+
+.wakeup-rise__scene {
+	position: relative;
+	display: flex;
+	margin-top: var(--wu-space-4);
+}
+
+.wakeup-rise__lifestyle {
+	width: clamp(260px, 82vw, 480px);
+	border-radius: var(--wu-radius-soft, 20px);
+	overflow: hidden;
+	box-shadow: 0 24px 48px rgba(36, 29, 61, 0.18);
+}
+
+.wakeup-rise__lifestyle-picture,
+.wakeup-rise__lifestyle-picture img,
+.wakeup-rise__lifestyle-picture svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.wakeup-rise__product {
+	position: absolute;
+	z-index: 1;
+	bottom: -10%;
+	right: -6%;
+	width: 36%;
+	filter: drop-shadow(0 16px 28px rgba(36, 29, 61, 0.28));
+}
+
+.wakeup-rise__product-picture,
+.wakeup-rise__product-picture img,
+.wakeup-rise__product-picture svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.wakeup-rise__scene--product-only .wakeup-rise__product {
+	position: static;
+	width: clamp(200px, 60vw, 340px);
+}
+
+/* Reveal-on-load: same js-animate / .animated convention as every
+   other Wake Up section. Deliberately no rotation and no aggressive
+   scale here -- RISE is the calm destination, not another dramatic
+   beat, per the brief's explicit "no bouncing, no spinning" direction. */
+.wakeup-rise__eyebrow.need-animate,
+.wakeup-rise__heading.need-animate,
+.wakeup-rise__text.need-animate,
+.wakeup-rise__cta.need-animate {
+	opacity: 0;
+	transform: translateY(16px);
+}
+
+.wakeup-rise__lifestyle.need-animate {
+	opacity: 0;
+	transform: translateY(20px) scale(0.97);
+}
+
+.wakeup-rise__product.need-animate {
+	opacity: 0;
+	transform: translateY(16px) scale(0.95);
+}
+
+.wakeup-rise__scene--product-only .wakeup-rise__product.need-animate {
+	transform: translateY(20px) scale(0.96);
+}
+
+html.no-js .wakeup-rise__eyebrow.need-animate,
+html.no-js .wakeup-rise__heading.need-animate,
+html.no-js .wakeup-rise__text.need-animate,
+html.no-js .wakeup-rise__cta.need-animate,
+html.no-js .wakeup-rise__lifestyle.need-animate,
+html.no-js .wakeup-rise__product.need-animate {
+	opacity: 1;
+	transform: none;
+}
+
+.animated .wakeup-rise__eyebrow.need-animate,
+.animated .wakeup-rise__heading.need-animate,
+.animated .wakeup-rise__text.need-animate,
+.animated .wakeup-rise__cta.need-animate,
+.animated .wakeup-rise__lifestyle.need-animate,
+.animated .wakeup-rise__product.need-animate {
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	transition-property: opacity, transform;
+	transition-duration: var(--wu-rise-duration);
+	transition-timing-function: var(--wu-rise-ease);
+}
+
+.animated .wakeup-rise__eyebrow.need-animate {
+	transition-delay: 0.05s;
+}
+
+.animated .wakeup-rise__heading.need-animate {
+	transition-delay: 0.15s;
+}
+
+.animated .wakeup-rise__text.need-animate {
+	transition-delay: 0.3s;
+}
+
+.animated .wakeup-rise__lifestyle.need-animate {
+	transition-delay: 0.42s;
+	transition-duration: calc(var(--wu-rise-duration) * 1.2);
+}
+
+.animated .wakeup-rise__product.need-animate {
+	transition-delay: 0.6s;
+}
+
+.animated .wakeup-rise__cta.need-animate {
+	transition-delay: 0.72s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wakeup-rise__eyebrow.need-animate,
+	.wakeup-rise__heading.need-animate,
+	.wakeup-rise__text.need-animate,
+	.wakeup-rise__cta.need-animate,
+	.wakeup-rise__lifestyle.need-animate,
+	.wakeup-rise__product.need-animate {
+		transition: none !important;
+		opacity: 1 !important;
+		transform: none !important;
+	}
+}
+
+@media (min-width: 768px) {
+	.wakeup-rise__lifestyle {
+		width: clamp(360px, 56vw, 520px);
+	}
+
+	.wakeup-rise__scene--product-only .wakeup-rise__product {
+		width: clamp(240px, 40vw, 340px);
+	}
+
+	.wakeup-rise__inner {
+		max-width: 640px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.wakeup-rise__content {
+		flex-direction: row;
+		align-items: center;
+		gap: var(--wu-space-7);
+		padding-block: var(--wu-space-8);
+	}
+
+	/* Asymmetric on purpose -- an even flex: 1 / flex: 1 split is
+	   exactly the generic TEXT | IMAGE 50/50 layout the brief asks to
+	   avoid. The text column stays compact; the scene takes the
+	   larger remaining share, reading as negative space, not a grid. */
+	.wakeup-rise__inner {
+		align-items: flex-start;
+		text-align: left;
+		flex: 0 1 420px;
+	}
+
+	.wakeup-rise[data-content-alignment="center"] .wakeup-rise__inner {
+		align-items: center;
+		text-align: center;
+	}
+
+	.wakeup-rise__scene {
+		flex: 1 1 auto;
+		justify-content: center;
+		margin-top: 0;
+	}
+
+	.wakeup-rise__lifestyle {
+		width: clamp(340px, 32vw, 460px);
+	}
+
+	.wakeup-rise[data-product-position="left"] .wakeup-rise__content {
+		flex-direction: row-reverse;
+	}
+
+	.wakeup-rise[data-product-position="center"] .wakeup-rise__content {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.wakeup-rise[data-product-position="center"] .wakeup-rise__inner {
+		align-items: center;
+		text-align: center;
+		/* flex-basis is a main-axis measurement -- once the container
+		   above switches to flex-direction: column, the 420px row basis
+		   would otherwise apply to height instead of width. */
+		flex: 0 0 auto;
+	}
+}
