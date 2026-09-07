@@ -1,0 +1,309 @@
+.wakeup-sip {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+	overflow: clip;
+	display: flex;
+	flex-direction: column;
+	min-height: var(--wakeup-sip-min-height, auto);
+	color: var(--wu-ink);
+	background-color: var(--wu-bg);
+
+	/* Opening tone matches RIP's exposed end-color exactly, so the two
+	   sections blend without either file depending on the other:
+	   assets/wakeup-rip.css --wu-rip-transition-end: #0c2233. */
+	--wu-sip-top: #0c2233;
+	--wu-sip-mid: #123f57;
+	--wu-sip-bottom: #1c6b86;
+	--wu-sip-transition-end: #2a8aa3;
+
+	/* Motion reuses Victory's own reveal tokens, same as Hero/RIP. */
+	--wu-sip-duration: var(--animate-time, 0.8s);
+	--wu-sip-ease: var(--easing-slov-in-fast-out, cubic-bezier(0.6, 0.14, 0, 1));
+}
+
+.wakeup-sip__media {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+}
+
+.wakeup-sip__bg-picture,
+.wakeup-sip__bg-picture img,
+.wakeup-sip__bg-picture svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.wakeup-sip__bg-picture img {
+	object-fit: cover;
+	object-position: var(--wu-sip-focal-position, center);
+}
+
+/* One gradient carries both jobs: legibility (opacity eases off toward
+   the bottom) and the RIP -> SIP -> transition color journey (hue
+   shifts from RIP's own end tone through cool blue to a brighter
+   blue). Kept as a single layer since, unlike RIP, SIP's whole
+   background IS the temperature journey rather than a separate hint.
+   RGB triplets are the decomposed --wu-sip-top/-mid/-bottom values
+   above — same hardcoded-RGB + variable-alpha technique already used
+   in wakeup-hero.css / wakeup-rip.css, not a new one. */
+.wakeup-sip__overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		to bottom,
+		rgba(12, 34, 51, var(--wu-sip-overlay-opacity, 0.55)) 0%,
+		rgba(18, 63, 87, calc(var(--wu-sip-overlay-opacity, 0.55) * 0.85)) 50%,
+		rgba(28, 107, 134, calc(var(--wu-sip-overlay-opacity, 0.55) * 0.7)) 100%
+	);
+}
+
+.wakeup-sip__transition {
+	position: absolute;
+	inset-inline: 0;
+	bottom: 0;
+	height: 30%;
+	background: linear-gradient(to bottom, transparent 0%, var(--wu-sip-transition-end) 100%);
+	pointer-events: none;
+}
+
+.wakeup-sip__content {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--wu-space-4);
+	padding-block: var(--wu-space-6);
+}
+
+.wakeup-sip__inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--wu-space-3);
+	text-align: center;
+}
+
+.wakeup-sip__text {
+	max-width: 36ch;
+}
+
+.wakeup-sip[data-content-alignment="left"] .wakeup-sip__inner {
+	align-items: flex-start;
+	text-align: left;
+}
+
+.wakeup-sip__scene {
+	position: relative;
+	display: flex;
+	margin-top: var(--wu-space-5);
+}
+
+.wakeup-sip__glass {
+	width: clamp(240px, 74vw, 420px);
+	filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.45));
+}
+
+.wakeup-sip__glass-picture,
+.wakeup-sip__glass-picture img,
+.wakeup-sip__glass-picture svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.wakeup-sip__product {
+	position: absolute;
+	z-index: 1;
+	top: -22%;
+	left: 50%;
+	width: 34%;
+	transform: translateX(-50%);
+	filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.4));
+}
+
+.wakeup-sip__product-picture,
+.wakeup-sip__product-picture img,
+.wakeup-sip__product-picture svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.wakeup-sip__splash {
+	position: absolute;
+	z-index: 2;
+	top: 2%;
+	left: 50%;
+	width: 55%;
+	transform: translateX(-50%);
+	pointer-events: none;
+}
+
+.wakeup-sip__splash-picture,
+.wakeup-sip__splash-picture img,
+.wakeup-sip__splash-picture svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+/* Product-only fallback: no glass image supplied yet, so the product
+   becomes a normal-flow standalone visual instead of a layer pinned
+   to a glass image that doesn't exist. */
+.wakeup-sip__scene--product-only .wakeup-sip__product {
+	position: static;
+	width: clamp(200px, 60vw, 360px);
+	transform: none;
+}
+
+/* Reveal-on-load: same js-animate / .animated convention as Hero/RIP. */
+.wakeup-sip__eyebrow.need-animate,
+.wakeup-sip__heading.need-animate,
+.wakeup-sip__text.need-animate {
+	opacity: 0;
+	transform: translateY(16px);
+}
+
+.wakeup-sip__glass.need-animate {
+	opacity: 0;
+	transform: translateY(20px) scale(0.95);
+}
+
+.wakeup-sip__product.need-animate {
+	opacity: 0;
+	transform: translateX(-50%) translateY(-16px) scale(0.9) rotate(4deg);
+}
+
+.wakeup-sip__scene--product-only .wakeup-sip__product.need-animate {
+	transform: translateY(24px) scale(0.94) rotate(-3deg);
+}
+
+.wakeup-sip__splash.need-animate {
+	opacity: 0;
+	transform: translateX(-50%) scale(0.85);
+}
+
+html.no-js .wakeup-sip__eyebrow.need-animate,
+html.no-js .wakeup-sip__heading.need-animate,
+html.no-js .wakeup-sip__text.need-animate,
+html.no-js .wakeup-sip__glass.need-animate,
+html.no-js .wakeup-sip__product.need-animate,
+html.no-js .wakeup-sip__splash.need-animate {
+	opacity: 1;
+	transform: none;
+}
+
+html.no-js .wakeup-sip__product.need-animate {
+	transform: translateX(-50%);
+}
+
+html.no-js .wakeup-sip__scene--product-only .wakeup-sip__product.need-animate {
+	transform: none;
+}
+
+.animated .wakeup-sip__eyebrow.need-animate,
+.animated .wakeup-sip__heading.need-animate,
+.animated .wakeup-sip__text.need-animate,
+.animated .wakeup-sip__glass.need-animate,
+.animated .wakeup-sip__product.need-animate,
+.animated .wakeup-sip__splash.need-animate {
+	opacity: 1;
+	transition-property: opacity, transform;
+	transition-duration: var(--wu-sip-duration);
+	transition-timing-function: var(--wu-sip-ease);
+}
+
+.animated .wakeup-sip__eyebrow.need-animate {
+	transform: translateY(0);
+	transition-delay: 0.05s;
+}
+
+.animated .wakeup-sip__heading.need-animate {
+	transform: translateY(0);
+	transition-delay: 0.15s;
+}
+
+.animated .wakeup-sip__text.need-animate {
+	transform: translateY(0);
+	transition-delay: 0.28s;
+}
+
+.animated .wakeup-sip__product.need-animate {
+	transform: translateX(-50%) translateY(0) scale(1) rotate(0deg);
+	transition-delay: 0.4s;
+}
+
+.animated .wakeup-sip__scene--product-only .wakeup-sip__product.need-animate {
+	transform: translateY(0) scale(1) rotate(0deg);
+	transition-duration: calc(var(--wu-sip-duration) * 1.3);
+}
+
+.animated .wakeup-sip__glass.need-animate {
+	transform: translateY(0) scale(1);
+	transition-delay: 0.55s;
+	transition-duration: calc(var(--wu-sip-duration) * 1.2);
+}
+
+.animated .wakeup-sip__splash.need-animate {
+	transform: translateX(-50%) scale(1);
+	transition-delay: 0.72s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wakeup-sip__eyebrow.need-animate,
+	.wakeup-sip__heading.need-animate,
+	.wakeup-sip__text.need-animate,
+	.wakeup-sip__glass.need-animate,
+	.wakeup-sip__product.need-animate,
+	.wakeup-sip__splash.need-animate {
+		transition: none !important;
+		opacity: 1 !important;
+	}
+
+	.wakeup-sip__product.need-animate {
+		transform: translateX(-50%) !important;
+	}
+
+	.wakeup-sip__scene--product-only .wakeup-sip__product.need-animate,
+	.wakeup-sip__glass.need-animate,
+	.wakeup-sip__splash.need-animate {
+		transform: none !important;
+	}
+}
+
+@media (min-width: 768px) {
+	.wakeup-sip__glass {
+		width: clamp(280px, 44vw, 420px);
+	}
+
+	.wakeup-sip__scene--product-only .wakeup-sip__product {
+		width: clamp(240px, 40vw, 360px);
+	}
+
+	.wakeup-sip__inner {
+		max-width: 640px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.wakeup-sip__content {
+		padding-block: var(--wu-space-7);
+	}
+
+	.wakeup-sip__glass {
+		width: clamp(300px, 26vw, 420px);
+	}
+
+	.wakeup-sip[data-product-position="left"] .wakeup-sip__scene {
+		align-self: flex-start;
+	}
+
+	.wakeup-sip[data-product-position="right"] .wakeup-sip__scene {
+		align-self: flex-end;
+	}
+}
