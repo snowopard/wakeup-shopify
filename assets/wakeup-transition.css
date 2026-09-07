@@ -1,0 +1,345 @@
+.wakeup-transition {
+	/* No overflow/isolation/transform here -- this element is the
+	   containing block .wakeup-transition__sticky sticks within, and
+	   any of those properties on it would break position: sticky. */
+	position: relative;
+	height: var(--wakeup-transition-scroll-height, 180svh);
+	color: var(--wu-ink);
+	background-color: var(--wu-bg);
+
+	/* Opening tone matches SIP's exposed end-color exactly, same
+	   cross-file continuity technique as RIP -> SIP:
+	   assets/wakeup-sip.css --wu-sip-transition-end: #2a8aa3. */
+	--wu-t-color-0: #2a8aa3;
+	--wu-t-color-2: #cdb896;
+	--wu-t-color-4: #fff1d6;
+
+	/* Exposed for RISE to pick up next step. */
+	--wu-transition-morning-end: #fff1d6;
+}
+
+.wakeup-transition__sticky {
+	position: sticky;
+	top: 0;
+	height: 100vh;
+	height: 100svh;
+	overflow: hidden;
+	overflow: clip;
+	isolation: isolate;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.wakeup-transition__layer {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+}
+
+/* will-change only while the section is actually near the viewport
+   (JS toggles this class from within the IntersectionObserver
+   callback) -- avoids permanently reserving a compositor layer for a
+   section that spends most of the page's lifetime scrolled away. */
+.wakeup-transition.is-transition-active .wakeup-transition__layer,
+.wakeup-transition.is-transition-active .wakeup-transition__overlay {
+	will-change: opacity;
+}
+
+.wakeup-transition.is-transition-active .wakeup-transition__product {
+	will-change: opacity, transform;
+}
+
+.wakeup-transition__night-picture,
+.wakeup-transition__night-picture img,
+.wakeup-transition__night-picture svg,
+.wakeup-transition__morning-picture,
+.wakeup-transition__morning-picture img,
+.wakeup-transition__morning-picture svg,
+.wakeup-transition__glow-picture,
+.wakeup-transition__glow-picture img,
+.wakeup-transition__glow-picture svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.wakeup-transition__night-picture img,
+.wakeup-transition__morning-picture img,
+.wakeup-transition__glow-picture img {
+	object-fit: cover;
+	object-position: center;
+}
+
+/* Three stacked layers, each with its own always-present color wash
+   (so the section still evolves visually with zero images uploaded)
+   plus an optional photo on top. Progress drives opacity only --
+   transform/opacity are the only scroll-linked properties anywhere in
+   this file, per the performance brief. */
+.wakeup-transition__night {
+	background-color: var(--wu-t-color-0);
+	opacity: calc(1 - var(--wu-transition-progress, 0));
+}
+
+.wakeup-transition__morning {
+	background-color: var(--wu-t-color-4);
+	opacity: var(--wu-transition-progress, 0);
+}
+
+/* Bell curve peaking at progress 0.5 -- written with max() rather
+   than the newer abs() for broader browser support:
+   max(a - 0.5, 0.5 - a) is equivalent to abs(a - 0.5). */
+.wakeup-transition__glow {
+	background: radial-gradient(circle at 50% 42%, var(--wu-t-color-2), transparent 70%);
+	opacity: calc(
+		1 - (2 * max(
+			var(--wu-transition-progress, 0) - 0.5,
+			0.5 - var(--wu-transition-progress, 0)
+		))
+	);
+}
+
+.wakeup-transition__overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, transparent 55%);
+	opacity: calc(
+		(var(--wu-transition-night-overlay, 0.45) * (1 - var(--wu-transition-progress, 0))) +
+		(var(--wu-transition-morning-overlay, 0.2) * var(--wu-transition-progress, 0))
+	);
+	pointer-events: none;
+}
+
+.wakeup-transition__product {
+	position: absolute;
+	z-index: 2;
+	top: 60%;
+	left: 50%;
+	width: clamp(120px, 30vw, 200px);
+	opacity: calc(0.5 + (var(--wu-transition-progress, 0) * 0.5));
+	filter:
+		brightness(calc(0.8 + (var(--wu-transition-progress, 0) * 0.2)))
+		drop-shadow(0 16px 32px rgba(0, 0, 0, 0.4));
+	/* Explicitly no transition: JS already writes --wu-transition-progress
+	   once per animation frame, so a CSS transition here would just add
+	   lag against the scroll position instead of tracking it directly. */
+	transition: none;
+	transform:
+		translate(-50%, -50%)
+		translateY(calc(20px - (var(--wu-transition-progress, 0) * 20px)))
+		scale(calc(var(--wu-transition-product-scale, 1) * (0.9 + (var(--wu-transition-progress, 0) * 0.1))));
+}
+
+.wakeup-transition__product-picture,
+.wakeup-transition__product-picture img,
+.wakeup-transition__product-picture svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.wakeup-transition[data-product-position="left"] .wakeup-transition__product {
+	left: 22%;
+}
+
+.wakeup-transition[data-product-position="right"] .wakeup-transition__product {
+	left: 78%;
+}
+
+.wakeup-transition__labels {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-block: var(--wu-space-5);
+	pointer-events: none;
+}
+
+.wakeup-transition[data-content-alignment="left"] .wakeup-transition__labels {
+	align-items: flex-start;
+}
+
+/* Contrast for this text can't depend on scroll progress -- the scene
+   behind it ranges from near-black night to near-white morning, and
+   the legibility overlay is deliberately weak by design once morning
+   is dominant. A fixed dark chip keeps it readable at every stage
+   instead of trying to interpolate text color against a moving
+   background. */
+.wakeup-transition__labels-inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--wu-space-2);
+	text-align: center;
+	width: fit-content;
+	max-width: 100%;
+	background: rgba(7, 6, 12, 0.75);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border-radius: var(--wu-radius-soft, 20px);
+	padding: var(--wu-space-3) var(--wu-space-4);
+}
+
+.wakeup-transition[data-content-alignment="left"] .wakeup-transition__labels-inner {
+	align-items: flex-start;
+	text-align: left;
+}
+
+.wakeup-transition__label {
+	font-family: var(--base-font-family, inherit);
+	font-size: var(--wu-fs-eyebrow);
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--wu-night-ink, #f5f3ff);
+	transition: none;
+}
+
+.wakeup-transition__label--night {
+	opacity: calc(1 - var(--wu-transition-progress, 0));
+}
+
+.wakeup-transition__label--morning {
+	opacity: var(--wu-transition-progress, 0);
+}
+
+.wakeup-transition__phrase {
+	font-family: var(--base-font-family, inherit);
+	font-size: var(--wu-fs-body);
+	max-width: 32ch;
+	color: var(--wu-night-ink, #f5f3ff);
+	transition: none;
+	opacity: calc(
+		1 - (2 * max(
+			var(--wu-transition-progress, 0) - 0.5,
+			0.5 - var(--wu-transition-progress, 0)
+		))
+	);
+}
+
+/* Static/blended fallback, shared by three independent triggers:
+   - html.no-js (JS never ran)
+   - [data-enable-motion="false"] (merchant opted out)
+   - prefers-reduced-motion: reduce (visitor opted out), in its own
+     @media block below since a plain selector can't join a media query */
+html.no-js .wakeup-transition,
+.wakeup-transition[data-enable-motion="false"] {
+	height: auto;
+	min-height: 100svh;
+}
+
+html.no-js .wakeup-transition__sticky,
+.wakeup-transition[data-enable-motion="false"] .wakeup-transition__sticky {
+	position: relative;
+	top: auto;
+	height: auto;
+	min-height: 100svh;
+}
+
+html.no-js .wakeup-transition__night,
+.wakeup-transition[data-enable-motion="false"] .wakeup-transition__night {
+	opacity: 0.35;
+}
+
+html.no-js .wakeup-transition__glow,
+.wakeup-transition[data-enable-motion="false"] .wakeup-transition__glow {
+	opacity: 0.5;
+}
+
+html.no-js .wakeup-transition__morning,
+.wakeup-transition[data-enable-motion="false"] .wakeup-transition__morning {
+	opacity: 0.85;
+}
+
+html.no-js .wakeup-transition__product,
+.wakeup-transition[data-enable-motion="false"] .wakeup-transition__product {
+	opacity: 1;
+	filter: none;
+	transform: translate(-50%, -50%) scale(var(--wu-transition-product-scale, 1));
+}
+
+html.no-js .wakeup-transition__label--night,
+.wakeup-transition[data-enable-motion="false"] .wakeup-transition__label--night {
+	opacity: 0.4;
+}
+
+html.no-js .wakeup-transition__label--morning,
+.wakeup-transition[data-enable-motion="false"] .wakeup-transition__label--morning {
+	opacity: 1;
+}
+
+html.no-js .wakeup-transition__phrase,
+.wakeup-transition[data-enable-motion="false"] .wakeup-transition__phrase {
+	opacity: 1;
+}
+
+html.no-js .wakeup-transition__overlay,
+.wakeup-transition[data-enable-motion="false"] .wakeup-transition__overlay {
+	opacity: calc((var(--wu-transition-night-overlay, 0.45) + var(--wu-transition-morning-overlay, 0.2)) / 2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wakeup-transition {
+		height: auto;
+		min-height: 100svh;
+	}
+
+	.wakeup-transition__sticky {
+		position: relative;
+		top: auto;
+		height: auto;
+		min-height: 100svh;
+	}
+
+	.wakeup-transition__night {
+		opacity: 0.35;
+	}
+
+	.wakeup-transition__glow {
+		opacity: 0.5;
+	}
+
+	.wakeup-transition__morning {
+		opacity: 0.85;
+	}
+
+	.wakeup-transition__product {
+		opacity: 1;
+		filter: none;
+		transform: translate(-50%, -50%) scale(var(--wu-transition-product-scale, 1));
+	}
+
+	.wakeup-transition__label--night {
+		opacity: 0.4;
+	}
+
+	.wakeup-transition__label--morning {
+		opacity: 1;
+	}
+
+	.wakeup-transition__phrase {
+		opacity: 1;
+	}
+
+	.wakeup-transition__overlay {
+		opacity: calc((var(--wu-transition-night-overlay, 0.45) + var(--wu-transition-morning-overlay, 0.2)) / 2);
+	}
+}
+
+@media (min-width: 768px) {
+	.wakeup-transition__product {
+		width: clamp(160px, 22vw, 240px);
+	}
+}
+
+@media (min-width: 1024px) {
+	.wakeup-transition__product {
+		width: clamp(200px, 16vw, 280px);
+	}
+
+	.wakeup-transition__labels {
+		padding-block: var(--wu-space-6);
+	}
+}

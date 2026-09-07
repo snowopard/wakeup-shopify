@@ -1,0 +1,320 @@
+{%- comment -%}
+------------------------------------------------------------------------------
+	Section: Wake Up — NIGHT -> MORNING transition
+------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign night_image                    = section.settings.night_image | default: section.settings.night_image_mobile -%}
+{%- assign night_image_mobile             = section.settings.night_image_mobile -%}
+{%- assign morning_image                  = section.settings.morning_image | default: section.settings.morning_image_mobile -%}
+{%- assign morning_image_mobile           = section.settings.morning_image_mobile -%}
+{%- assign product_image                  = section.settings.product_image -%}
+{%- assign atmosphere_image                = section.settings.atmosphere_image -%}
+
+{%- assign night_overlay_strength         = section.settings.night_overlay_strength -%}
+{%- assign morning_overlay_strength       = section.settings.morning_overlay_strength -%}
+{%- assign transition_height              = section.settings.transition_height -%}
+{%- assign product_position               = section.settings.product_position -%}
+{%- assign product_scale                  = section.settings.product_scale -%}
+{%- assign content_alignment              = section.settings.content_alignment -%}
+{%- assign enable_motion                  = section.settings.enable_motion -%}
+
+{%- assign night_label                    = section.settings.night_label -%}
+{%- assign morning_label                  = section.settings.morning_label -%}
+{%- assign transition_phrase              = section.settings.transition_phrase -%}
+
+{%- assign enable_color_scheme_inheritance = section.settings.enable_color_scheme_inheritance -%}
+{%- assign color_scheme                    = section.settings.color_scheme -%}
+
+{%- if enable_color_scheme_inheritance -%}
+	{%- assign color_scheme = settings.main_color_scheme -%}
+{%- endif -%}
+
+{{ 'wakeup-transition.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'wakeup-transition.js' | asset_url }}" defer="defer"></script>
+
+{%- capture transition_styles -%}
+	--wakeup-transition-scroll-height: {{ transition_height }}svh;
+	--wu-transition-night-overlay: {{ night_overlay_strength | divided_by: 100.0 }};
+	--wu-transition-morning-overlay: {{ morning_overlay_strength | divided_by: 100.0 }};
+	--wu-transition-product-scale: {{ product_scale | divided_by: 100.0 }};
+{%- endcapture -%}
+
+<section
+	class="wakeup-transition {% if color_scheme != blank %}color-{{ color_scheme.id }}{% endif %}"
+	data-wu-theme="night"
+	data-product-position="{{ product_position }}"
+	data-content-alignment="{{ content_alignment }}"
+	data-enable-motion="{{ enable_motion }}"
+	aria-label="Night to morning transition"
+	style="{{ transition_styles | strip_newlines }}"
+>
+	<div class="wakeup-transition__sticky">
+		<div class="wakeup-transition__layer wakeup-transition__night" aria-hidden="true">
+			{%- render 'theme-image',
+				image: night_image,
+				mobile_image: night_image_mobile,
+				mobile_breakpoint: '767',
+				img_class: 'wakeup-transition__night-img',
+				picture_class: 'wakeup-transition__night-picture',
+				alt: '',
+				lazy: true,
+				src_width: 1600,
+				src_crop: 'center',
+				breakpoints: '480, 767, 1024, 1440, 1920',
+				widths: '480, 767, 1024, 1440, 1920',
+				svg_placeholder_name: 'lifestyle-2'
+			-%}
+		</div>
+
+		<div class="wakeup-transition__layer wakeup-transition__glow" aria-hidden="true">
+			{%- if atmosphere_image != blank -%}
+				{%- render 'theme-image',
+					image: atmosphere_image,
+					img_class: 'wakeup-transition__glow-img',
+					picture_class: 'wakeup-transition__glow-picture',
+					alt: '',
+					lazy: true,
+					src_width: 1600,
+					svg_placeholder_name: 'lifestyle-1'
+				-%}
+			{%- endif -%}
+		</div>
+
+		<div class="wakeup-transition__layer wakeup-transition__morning" aria-hidden="true">
+			{%- render 'theme-image',
+				image: morning_image,
+				mobile_image: morning_image_mobile,
+				mobile_breakpoint: '767',
+				img_class: 'wakeup-transition__morning-img',
+				picture_class: 'wakeup-transition__morning-picture',
+				alt: '',
+				lazy: true,
+				src_width: 1600,
+				src_crop: 'center',
+				breakpoints: '480, 767, 1024, 1440, 1920',
+				widths: '480, 767, 1024, 1440, 1920',
+				svg_placeholder_name: 'lifestyle-1'
+			-%}
+		</div>
+
+		<div class="wakeup-transition__overlay" aria-hidden="true"></div>
+
+		{%- if product_image != blank -%}
+			<div class="wakeup-transition__product">
+				{%- render 'theme-image',
+					image: product_image,
+					img_class: 'wakeup-transition__product-img',
+					picture_class: 'wakeup-transition__product-picture',
+					alt: product_image.alt,
+					lazy: true,
+					src_width: 500,
+					svg_placeholder_name: 'product-1'
+				-%}
+			</div>
+		{%- endif -%}
+
+		{%- if night_label != blank or morning_label != blank or transition_phrase != blank -%}
+			<div class="wu-container wakeup-transition__labels">
+				<div class="wakeup-transition__labels-inner">
+					{%- if night_label != blank -%}
+						<span class="wakeup-transition__label wakeup-transition__label--night">{{- night_label -}}</span>
+					{%- endif -%}
+
+					{%- if morning_label != blank -%}
+						<span class="wakeup-transition__label wakeup-transition__label--morning">{{- morning_label -}}</span>
+					{%- endif -%}
+
+					{%- if transition_phrase != blank -%}
+						<p class="wakeup-transition__phrase">{{- transition_phrase -}}</p>
+					{%- endif -%}
+				</div>
+			</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- schema -%}
+{
+	"name": "Wake Up: Night to Morning",
+	"class": "shopify-section--wakeup-transition",
+	"disabled_on": {
+		"groups": ["header", "footer", "custom.popup"]
+	},
+	"settings": [
+		{
+			"type": "header",
+			"content": "Media"
+		},
+		{
+			"type": "image_picker",
+			"id": "night_image",
+			"label": "Night image (desktop)",
+			"info": "Dark nightlife atmosphere. 2400px width recommended."
+		},
+		{
+			"type": "image_picker",
+			"id": "night_image_mobile",
+			"label": "Night image (mobile)",
+			"info": "Optional. Falls back to the desktop image if not set."
+		},
+		{
+			"type": "image_picker",
+			"id": "morning_image",
+			"label": "Morning image (desktop)",
+			"info": "Warm, bright daylight atmosphere. 2400px width recommended."
+		},
+		{
+			"type": "image_picker",
+			"id": "morning_image_mobile",
+			"label": "Morning image (mobile)",
+			"info": "Optional. Falls back to the desktop image if not set."
+		},
+		{
+			"type": "image_picker",
+			"id": "product_image",
+			"label": "Product / sachet image",
+			"info": "Optional. 1000px width recommended."
+		},
+		{
+			"type": "image_picker",
+			"id": "atmosphere_image",
+			"label": "Atmosphere / light overlay image",
+			"info": "Optional. A soft light/flare/dawn image that appears mid-transition. A CSS gradient is used automatically if this is left blank."
+		},
+		{
+			"type": "range",
+			"id": "night_overlay_strength",
+			"label": "Night overlay strength",
+			"min": 0,
+			"max": 90,
+			"step": 5,
+			"unit": "%",
+			"default": 45
+		},
+		{
+			"type": "range",
+			"id": "morning_overlay_strength",
+			"label": "Morning overlay strength",
+			"min": 0,
+			"max": 90,
+			"step": 5,
+			"unit": "%",
+			"default": 20
+		},
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "range",
+			"id": "transition_height",
+			"label": "Scroll length",
+			"min": 120,
+			"max": 250,
+			"step": 10,
+			"unit": "svh",
+			"default": 180,
+			"info": "How much scroll distance the transformation plays out over. Taller feels more cinematic; shorter avoids scroll fatigue."
+		},
+		{
+			"type": "select",
+			"id": "product_position",
+			"label": "Product position",
+			"options": [
+				{
+					"value": "center",
+					"label": "Center"
+				},
+				{
+					"value": "left",
+					"label": "Left"
+				},
+				{
+					"value": "right",
+					"label": "Right"
+				}
+			],
+			"default": "center"
+		},
+		{
+			"type": "range",
+			"id": "product_scale",
+			"label": "Product scale",
+			"min": 70,
+			"max": 130,
+			"step": 10,
+			"unit": "%",
+			"default": 100
+		},
+		{
+			"type": "select",
+			"id": "content_alignment",
+			"label": "Label alignment",
+			"options": [
+				{
+					"value": "center",
+					"label": "Center"
+				},
+				{
+					"value": "left",
+					"label": "Left"
+				}
+			],
+			"default": "center"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_motion",
+			"label": "Enable scroll-linked motion",
+			"default": true,
+			"info": "When off (or when a visitor's device requests reduced motion), a static blended atmosphere is shown instead of a scroll-scrubbed animation."
+		},
+		{
+			"type": "header",
+			"content": "Text (optional — keep minimal)"
+		},
+		{
+			"type": "text",
+			"id": "night_label",
+			"label": "Night label",
+			"info": "Optional small label, e.g. \"NIGHT\"."
+		},
+		{
+			"type": "text",
+			"id": "morning_label",
+			"label": "Morning label",
+			"info": "Optional small label, e.g. \"MORNING\"."
+		},
+		{
+			"type": "text",
+			"id": "transition_phrase",
+			"label": "Transition phrase",
+			"info": "Optional. Appears briefly at the midpoint of the transition."
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_color_scheme_inheritance",
+			"label": "Enable color scheme inheritance",
+			"default": false,
+			"info": "This section uses its own night-to-morning palette by default. Enable this to force it to follow the theme's main color scheme instead."
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"label": "Color scheme",
+			"default": "scheme-1",
+			"info": "Only affects elements that don't already use the Wake Up palette."
+		}
+	],
+	"presets": [
+		{
+			"name": "Wake Up: Night to Morning"
+		}
+	]
+}
+{%- endschema -%}
