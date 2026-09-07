@@ -41,7 +41,7 @@
 
 .wakeup-hero__bg-picture img {
 	object-fit: cover;
-	object-position: center;
+	object-position: var(--wu-hero-focal-position, center);
 }
 
 .wakeup-hero__overlay {
@@ -231,6 +231,12 @@ html.no-js .wakeup-hero__cta.need-animate {
 
 	.wakeup-hero__inner {
 		max-width: 46%;
+	}
+
+	.wakeup-hero[data-content-alignment="center"] .wakeup-hero__inner {
+		align-items: center;
+		text-align: center;
+		margin-inline: auto;
 	}
 
 	.wakeup-hero__product {
