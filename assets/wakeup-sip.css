@@ -113,7 +113,13 @@
 .wakeup-sip__scene {
 	position: relative;
 	display: flex;
-	margin-top: var(--wu-space-5);
+	/* Generous clearance above the scene: the product floats above the
+	   glass via a negative top offset (see .wakeup-sip__product below),
+	   and with real (non-placeholder) product/glass photography this
+	   needs enough buffer to never bleed into the text block above it.
+	   Found live: a tall sachet image floating high above a modestly
+	   sized glass overlapped the supporting text. */
+	margin-top: var(--wu-space-7);
 }
 
 .wakeup-sip__glass {
@@ -132,9 +138,12 @@
 .wakeup-sip__product {
 	position: absolute;
 	z-index: 1;
-	top: -22%;
+	/* Reduced from -22%/34% -- real (tall, portrait-shaped) sachet
+	   photography rendered noticeably taller than the placeholder
+	   assumption, pushing it further above the glass than expected. */
+	top: -14%;
 	left: 50%;
-	width: 34%;
+	width: 30%;
 	transform: translateX(-50%);
 	filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.4));
 }
